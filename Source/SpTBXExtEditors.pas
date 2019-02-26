@@ -1,7 +1,7 @@
 unit SpTBXExtEditors;
 
 {==============================================================================
-Version 2.5.4
+Version 2.4.8
 
 The contents of this file are subject to the SpTBXLib License; you may
 not use or distribute this file except in compliance with the
@@ -29,17 +29,62 @@ the specific language governing rights and limitations under the License.
 The initial developer of this code is Robert Lee.
 
 Requirements:
+For Delphi/C++Builder 2009 or newer:
   - Jordan Russell's Toolbar 2000
     http://www.jrsoftware.org
+For Delphi/C++Builder 7-2007:
+  - Jordan Russell's Toolbar 2000
+    http://www.jrsoftware.org
+  - Troy Wolbrink's TNT Unicode Controls
+    http://www.tntware.com/delphicontrols/unicode/
+
+Development notes:
+  - All the Windows and Delphi bugs fixes are marked with '[Bugfix]'.
+  - All the theme changes and adjustments are marked with '[Theme-Change]'.
+
+To Do:
+  - Rotated caption painting.
+
+Known Issues:
+  -
+
+History:
+15 April 2013 - version 2.4.8
+  - No changes.
+
+7 February 2012 - version 2.4.7
+  - Minor bug fixes.
+  - Added support for Delphi XE2.
+  - Added support for 64 bit Delphi compiler.
+
+25 June 2011 - version 2.4.6
+  - No changes.
+
+12 March 2010 - version 2.4.5
+  - No changes.
+
+2 December 2009 - version 2.4.4
+  - No changes.
+
+13 September 2009 - version 2.4.3
+  - Fixed incorrect TSpTBXColorEdit behavior, when the focus
+    was changed the text wasn't validated, thanks to Stephan
+    for reporting this.
+
+8 May 2009 - version 2.4.2
+  - No changes.
+
+15 March 2009 - version 2.4.1
+  - No changes.
+
+17 January 2009 - version 2.4
+  - Initial release.
 
 ==============================================================================}
 
 interface
 
-{$BOOLEVAL OFF}   // Unit depends on short-circuit boolean evaluation
-{$IF CompilerVersion >= 25} // for Delphi XE4 and up
-  {$LEGACYIFEND ON} // XE4 and up requires $IF to be terminated with $ENDIF instead of $IFEND
-{$IFEND}
+{$BOOLEVAL OFF} // Unit depends on short-circuit boolean evaluation
 
 uses
   Windows, Messages, Classes, SysUtils, Controls, Graphics, ImgList, Forms,
@@ -198,11 +243,7 @@ var
 implementation
 
 uses
-  Dialogs, TB2Common,
-  {$IF CompilerVersion >= 25} // for Delphi XE4 and up
-  System.Types, System.UITypes,
-  {$IFEND}
-  SpTBXFormPopupMenu, SpTBXColorPickerForm;
+  Dialogs, TB2Common, SpTBXFormPopupMenu, SpTBXColorPickerForm;
 
 var
   DefaultColorPickerDropDownMenu: TSpTBXColorEditPopupMenu = nil;
@@ -301,7 +342,7 @@ begin
   if not Pushed then
     SpDrawRectangle(ACanvas, R, 0, clBtnHighlight, clBtnShadow);
 
-  InflateRect(R, -SpDPIScale(2), -SpDPIScale(2));
+  InflateRect(R, -2, -2);
   if (AColor = clNone) and CheckeredBkgndWhenTransparent then begin
     // Draw a checkered background when clNone is used
     SpDrawCheckeredBackground(ACanvas, R);
@@ -313,18 +354,18 @@ begin
   SpDrawRectangle(ACanvas, R, 0, clBtnShadow, clBtnHighlight);
 
   R := ARect;
-  R.Left := R.Right - SpDPIScale(9);
-  R.Top := R.Bottom - SpDPIScale(7);
+  R.Left := R.Right - 9;
+  R.Top := R.Bottom - 7;
   ACanvas.Brush.Color := clBtnFace;
   ACanvas.FillRect(R);
   if Pushed then
     SpDrawRectangle(ACanvas, R, 0, clBtnHighlight, clBtnFace)
   else
     SpDrawRectangle(ACanvas, R, 0, clBtnHighlight, clBtnShadow);
-  SpDrawArrow(ACanvas, R.Left + (R.Right - R.Left) div 2, R.Top + (R.Bottom - R.Top) div 2 - SpDPIScale(1), clBlack, True, False, SpDPIScale(2));
+  SpDrawArrow(ACanvas, R.Left + (R.Right - R.Left) div 2, R.Top + (R.Bottom - R.Top) div 2 - 1, clBlack, True, False, 2);
 
   R := ARect;
-  InflateRect(R, -SpDPIScale(1), -SpDPIScale(1));
+  InflateRect(R, -1, -1);
   SpDrawRectangle(ACanvas, R, 0, clBtnFace, clBtnFace);
 end;
 
@@ -442,13 +483,16 @@ end;
 
 procedure TSpTBXColorEdit.UpdateValueFromText(RevertWhenInvalid: Boolean = True);
 var
+  WS: WideString;
   PrevValue, NewValue, C: TColor;
 begin
   PrevValue := SelectedColor;
   NewValue := SelectedColor;
+  WS := Text;
 
   // Try to parse the text to get the value
-  if SpStringToColor(Trim(Text), C) then
+  WS := Trim(WS);
+  if SpStringToColor(WS, C) then
     NewValue := C;
 
   if RevertWhenInvalid or (NewValue <> PrevValue) then begin
@@ -472,11 +516,10 @@ begin
 
   Visible := False;
   SetBounds(0, 0, 0, 0);
-  Color := CurrentSkin.GetThemedSystemColor(clWindow);
+  Color := clWindow;
   FPreviewPanel := TPanel.Create(Self);
   FPreviewPanel.Parent := Self;
-  FPreviewPanel.Color := CurrentSkin.GetThemedSystemColor(clWindow);
-  FPreviewPanel.Font.Color := CurrentSkin.GetThemedSystemColor(clWindowText);
+  FPreviewPanel.Color := clWindow;
   FPreviewPanel.BevelOuter := bvNone;
   FPreviewPanel.Align := alClient;
 end;
@@ -508,7 +551,7 @@ end;
 constructor TSpTBXFontComboBox.Create(AOwner: TComponent);
 begin
   inherited Create(AOwner);
-  FAutoDropDownWidthRightMargin := SpDPIScale(60);
+  FAutoDropDownWidthRightMargin := 60;
   FFontNamePreview := True;
   FFontPreview := True;
   FMaxMRUItems := 5;
@@ -542,22 +585,22 @@ var
   W: Integer;
   P: TPoint;
   Sz: TSize;
-  S: string;
+  WS: WideString;
 begin
   inherited;
 
   if FFontPreview then begin
-    S := 'AaBbYyZz';
+    WS := 'AaBbYyZz';
     FPreviewWindow := TSpTBXFontComboBoxPreview.Create(Self);
     FPreviewWindow.ParentWindow := Application.Handle;
     FPreviewWindow.PreviewPanel.Font.Size := 14;
 
-    if Assigned(FOnFontPreview) then FOnFontPreview(Self, S);
+    if Assigned(FOnFontPreview) then FOnFontPreview(Self, WS);
 
-    FPreviewWindow.PreviewPanel.Caption := S;
-    Sz := SpGetControlTextSize(FPreviewWindow.PreviewPanel, FPreviewWindow.PreviewPanel.Font, S);
-    Inc(Sz.cx, SpDPIScale(100));
-    Inc(Sz.cy, SpDPIScale(20));
+    FPreviewWindow.PreviewPanel.Caption := WS;
+    Sz := SpGetControlTextSize(FPreviewWindow.PreviewPanel, FPreviewWindow.PreviewPanel.Font, WS);
+    Inc(Sz.cx, 100);
+    Inc(Sz.cy, 20);
 
     W := SendMessage(Handle, CB_GETDROPPEDWIDTH, 0, 0);
     P := Parent.ClientToScreen(Point(Left, Top));
@@ -579,7 +622,11 @@ end;
 procedure TSpTBXFontComboBox.DoCalcMaxDropDownWidth;
 begin
   if Items.Count <= 0 then begin
+    {$IFNDEF UNICODE}
+    SpFillFontNames(Items.AnsiStrings);
+    {$ELSE}
     SpFillFontNames(Items);
+    {$ENDIF}
   end;
 
   inherited;
@@ -707,9 +754,8 @@ begin
   I := ItemIndex;
   if I > -1 then begin
     FSelectedFont := Items[I];
-    if [csDesigning, csLoading] * ComponentState = [] then
-      if AddMRU then
-        MRUAdd(FSelectedFont);
+    if AddMRU then
+      MRUAdd(FSelectedFont);
   end
   else
     FSelectedFont := '';
@@ -807,13 +853,13 @@ begin
   if PaintStage = pstPrePaint then begin
     // Paint the color glyphs
     R := ARect;
-    R.Right := R.Left + SpDPIScale(16 + 5);
-    ARect.Left := R.Right + SpDPIScale(1);
+    R.Right := R.Left + 16 + 5;
+    ARect.Left := R.Right + 1;
     inherited DoDrawItem(ACanvas, ARect, Index, State, PaintStage, PaintDefault);
     if PaintDefault then begin
       SavedBrushColor := ACanvas.Brush.Color;
       try
-        InflateRect(R, -SpDPIScale(1), -SpDPIScale(1));
+        InflateRect(R, -1, -1);
 
         ACanvas.Brush.Color := Colors[Index];
         if (ACanvas.Brush.Color = clNone) and (clbsNoneAsTransparent in Style) then
@@ -993,7 +1039,7 @@ procedure InitializeStock;
 begin
   Screen.Cursors[crSpTBXEyeDropper] := LoadCursor(HInstance, 'CZEYEDROPPER');
 
-  FontGlyphImgList := TImageList.CreateSize(SpDPIScale(12), SpDPIScale(12));
+  FontGlyphImgList := TImageList.CreateSize(12, 12);
   FontGlyphImgList.ResInstLoad(HInstance, rtBitmap, 'SPTBXTRUETYPE', clFuchsia);
   FontGlyphImgList.ResInstLoad(HInstance, rtBitmap, 'SPTBXOPENTYPE', clFuchsia);
 

@@ -44,7 +44,6 @@ object SpTBXColorPickerForm: TSpTBXColorPickerForm
       Top = 26
       Width = 213
       Height = 141
-      Caption = ''
       ImageIndex = 3
       DesignSize = (
         213
@@ -67,7 +66,6 @@ object SpTBXColorPickerForm: TSpTBXColorPickerForm
       Top = 26
       Width = 213
       Height = 141
-      Caption = ''
       ImageIndex = 4
       DesignSize = (
         213
@@ -98,7 +96,6 @@ object SpTBXColorPickerForm: TSpTBXColorPickerForm
       Top = 26
       Width = 213
       Height = 141
-      Caption = ''
       ImageIndex = 2
       TabItem = 'SpTBXTabItem1'
       object imgPalette: TImage
@@ -2749,7 +2746,7 @@ object SpTBXColorPickerForm: TSpTBXColorPickerForm
     Left = 72
     Top = 152
     Bitmap = {
-      494C010105000A00540010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
+      494C010105000A00140010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000400000002000000001002000000000000020
       00000000000000000000000000000000000000000000A1A1A100000000000000
       0000000000000000000000000000000000000000000000000000000000000000

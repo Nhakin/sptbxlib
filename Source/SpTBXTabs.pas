@@ -1,7 +1,7 @@
 unit SpTBXTabs;
 
 {==============================================================================
-Version 2.5.4
+Version 2.4.8
 
 The contents of this file are subject to the SpTBXLib License; you may
 not use or distribute this file except in compliance with the
@@ -29,8 +29,14 @@ the specific language governing rights and limitations under the License.
 The initial developer of this code is Robert Lee.
 
 Requirements:
+For Delphi/C++Builder 2009 or newer:
   - Jordan Russell's Toolbar 2000
     http://www.jrsoftware.org
+For Delphi/C++Builder 7-2007:
+  - Jordan Russell's Toolbar 2000
+    http://www.jrsoftware.org
+  - Troy Wolbrink's TNT Unicode Controls
+    http://www.tntware.com/delphicontrols/unicode/
 
 Development Notes:
   - All the theme changes and adjustments are marked with '[Theme-Change]'.
@@ -41,14 +47,221 @@ Development Notes:
 TODO:
   - Tabbed docking
 
+History:
+15 April 2013 - version 2.4.8
+  - No changes.
+
+7 February 2012 - version 2.4.7
+  - Minor bug fixes.
+  - Added support for Delphi XE2.
+  - Added support for 64 bit Delphi compiler.
+
+25 June 2011 - version 2.4.6
+  - Changed tab close button behavior, the tab will close
+    when the mouse button is released, thanks to Simon H. for
+    reporting this.
+  - Added TabCloseMiddleClick property to SpTBXTabSet and
+    TSpTBXTabControl, when set to true a middle mouse button
+    on a tab item will close it.
+
+12 March 2010 - version 2.4.5
+  - Fixed incorrect TabControl behavior, when changing the
+    active tab the focused control was not correctly saved,
+    thanks to Dmitry Belkevich for reporting this.
+
+2 December 2009 - version 2.4.4
+  - Fixed TabControl flicker when changing the caption of a tab
+    item, thanks to Simon H. for reporting this.
+
+13 September 2009 - version 2.4.3
+  - Fixed TabControl flicker when closing/selecting/scrolling
+    tab items.
+  - Fixed incorrect TabControl painting when transparent
+    child controls get invalidated, thanks for Alfred Vink
+    for reporting this.
+  - Fixed incorrect TabControl scrolling, thanks to Henner
+    Drewes for reporting this.
+
+8 May 2009 - version 2.4.2
+  - Fixed incorrect TabControl behavior, when deleting
+    the tabs the ActiveTabIndex is incorrectly set if
+    there are regular Items on the control, thanks to
+    Jonah for reporting this.
+
+15 March 2009 - version 2.4.1
+  - No changes.
+
+17 January 2009 - version 2.4
+  - No changes.
+
+26 September 2008 - version 2.3
+  - No changes.
+
+29 July 2008 - version 2.2
+  - No changes.
+
+26 June 2008 - version 2.1
+  - No changes.
+
+3 May 2008 - version 2.0
+  - Fixed incorrect close button painting on tab items,
+    thanks to Miha for reporting this.
+
+2 April 2008 - version 1.9.5
+  - Fixed incorrect TabControl behavior, when deleting the
+    only visible Tab all the auto-hidden tabs will not
+    be showed on resize, thanks to Jim for reporting this.
+
+3 February 2008 - version 1.9.4
+  - Fixed AV on TabControl when scrolling tabs, thanks
+    to Beta Xiong and Yucel Yavuz for reporting this.
+  - Fixed incorrect TabControl.ScrollState behavior
+    thanks to Michele for reporting this.
+
+19 January 2008 - version 1.9.3
+  - Fixed recursion on TSpTBXTabToolbar.RightAlignItems,
+    thanks to Jim for reporting this.
+
+26 December 2007 - version 1.9.2
+  - Minor bug fixes.
+
+1 December 2007 - version 1.9.1
+  - Added OnTabClosing event to TSpTBXTabItem.
+  - Fixed incorrect tab items painting when TabPosition was
+    ttpBottom, thanks to Marko Savolainen for reporting this.
+
+20 November 2007 - version 1.9
+  - Added TabBackgroundBorders property to TSpTBXTabSet and
+    TSpTBXTabControl, when set to true the tabs area is
+    painted with borders.
+  - Added TabCloseButton and TabCloseButtonImageIndex properties
+    to SpTBXTabSet and TSpTBXTabControl to control the close
+    button visibility on the tab items.
+  - Added TabMaxSize property to SpTBXTabSet and TSpTBXTabControl
+    to control the maximum size of the tab items.
+  - Improved tab scrolling, thanks to Kevin Lu for
+    reporting this.
+
+8 February 2007 - version 1.8.3
+  - Added accel char handling to TSpTBXTabSet and TSpTBXTabControl
+
+17 December 2006 - version 1.8.2
+  - No changes.
+
+24 November 2006 - version 1.8.1
+  - Fixed incorrect Tab painting when the Default theme was used
+    and the ThemeType was tttFlat.
+
+27 August 2006 - version 1.8
+  - Fixed incorrect OnActiveTabChanging handling when
+    ActiveTabIndex is changed on this event, thanks to
+    Serg Chechenin for reporting this.
+
+15 June 2006 - version 1.7
+  - Fixed incorrect Tab painting when the default theme was used,
+    the captions were painted in a pushed state, thanks to
+    Mikalai Arapau for reporting this.
+  - Fixed incorrect Tab aligning when Autofit was used and the
+    tab control was parented by a Frame, thanks to
+    Henk van Kampen for reporting this.
+
+12 April 2006 - version 1.5
+  - Fixed incorrect Tab painting when TabAutofit was true.
+
+27 February 2006 - version 1.4
+  - Fixed flicker when reordering TSpTBXTabSet and TSpTBXTabControl
+    tabs, thanks to Alexey Naumov for reporting this.
+  - Fixed incorrect context menu handling in TSpTBXTabSet and
+    TSpTBXTabControl, thanks to Boris Yankov for reporting this.
+  - Added OnActiveTabReorder event to TSpTBXTabSet and TSpTBXTabControl.
+
+10 February 2006 - version 1.3
+  - Added TabDragReorder property to TSpTBXTabSet and TSpTBXTabControl,
+    when this property is true it allows tabs reordering with
+    drag and drop.
+  - Added TabAutofit and TabAutofitMaxSize properties to TSpTBXTabSet
+    and TSpTBXTabControl. When TabAutofit is true the tabs are resized
+    to fit the tabset.
+
+28 December 2005 - version 1.2
+  - Fixed incorrect TSpTBXTabControl background painting on some themes.
+  - Fixed incorrect OnActiveTabChange call when the component is being
+    loaded, thanks to Leroy Casterline for reporting this.
+  - Fixed incorrect tab scrolling when an item is deleted, thanks to
+    Daniel Rikowski for reporting this.
+
+18 October 2005 - version 1.1
+  - Fixed incorrect TSpTBXTabItem painting on some themes.
+  - Added Margins property to TSpTBXPageControl.
+
+18 August 2005 - version 1.0
+  - Added TabVisible property to TSpTBXTabSet and TSpTBXPageControl.
+  - Added OnActiveTabChanging event to TSpTBXTabSet and TSpTBXPageControl.
+
+10 June 2005 - version 0.9
+  - SpTBXLib may now alternatively, at your option, be used and/or
+    distributed under the terms of the SpTBXLib License.
+    Please see the updated LICENSE.TXT file for more information.
+  - Fixed AV in TSpTBXTabSet and TSpTBXPageControl when used in a Frame
+    with TabPosition setted to dpBottom, thanks to Cyril Velter for the fix.
+
+20 May 2005 - version 0.8
+  - Fixed tab scrolling of TSpTBXTabSet and TSpTBXPageControl, the tabs
+    were not allowed to scroll when one single tab was visible, thanks
+    to Anders Olsson for the fix.
+  - Added MakeVisible method to the TSpTBXTabSet and TSpTBXPageControl,
+    it scrolls the tabset, if necessary, to ensure a Tab is in view.
+
+16 February 2005 - version 0.7
+  - No changes.
+
+23 December 2004 - version 0.6
+  - Fixed TSpTBXTabControl reordering bug.
+  - Changed the order of the TSpTBXTabThemeType enumerated type.
+  - Added ActivePage property to the TSpTBXTabControl.
+  - Added Caption, ImageIndex, TabVisible and PopupMenu properties
+    to TSpTBXTabControl.
+
+30 August 2004 - version 0.5
+  - No changes.
+
+21 July 2004 - version 0.4
+  - Fixed TSpTBXTabControl design time bug, it was allowing to drop
+    components when ActiveTabIndex = -1
+  - Fixed TSpTBXTabSet and TSpTBXTabControl design time bug, the
+    hidden items were not streamed to the DFM.
+  - Changed TSpTBXTabControl.OnTabClick event for OnActiveTabChange.
+  - Added GetPage method to TSpTBXTabControl to get the TSpTBXTabSheet
+    linked to a TSpTBXTabItem.
+
+12 July 2004 - version 0.3.1
+  - Fixed nasty AV when setting TBXSwitcher.EnableXPStyles to false,
+    thanks to Alfred for reporting this.
+    Note: TBXThemeManager unloads the theme library and the theme
+    parts when some conditions are met, we must handle extra theme
+    parts outside TBXThemeManager space.
+  - Fixed incorrect TSpTBXTabSet.ActiveTabIndex property update at
+    design time.
+  - Fixed incorrect TSpTBXTabSet painting on some TBX themes, thanks
+    to Tim for reporting this.
+
+9 July 2004 - version 0.3
+  - Fixed design time AVs when moving or deleting TabSheets.
+  - Published ThemeType and TabPosition properties for TSpTBXTabItem.
+  - New component added, TSpTBXTabSet, a fully customizable TabSet
+    with unicode and toolbar items support.
+
+28 June 2004 - version 0.2
+  - No changes.
+
+22 June 2004 - version 0.1
+  - Initial release.
+
 ==============================================================================}
 
 interface
 
-{$BOOLEVAL OFF}   // Unit depends on short-circuit boolean evaluation
-{$IF CompilerVersion >= 25} // for Delphi XE4 and up
-  {$LEGACYIFEND ON} // XE4 and up requires $IF to be terminated with $ENDIF instead of $IFEND
-{$IFEND}
+{$BOOLEVAL OFF} // Unit depends on short-circuit boolean evaluation
 
 uses
   Windows, Messages, Classes, SysUtils, Controls, Graphics, ImgList, Forms,
@@ -170,7 +383,7 @@ type
     procedure DoDrawButton(ACanvas: TCanvas; ARect: TRect; ItemInfo: TSpTBXMenuItemInfo;
       const PaintStage: TSpTBXPaintStage; var PaintDefault: Boolean); override;
     procedure DoDrawCaption(ACanvas: TCanvas; ClientAreaRect: TRect; State: TSpTBXSkinStatesType;
-      var ACaption: string; var CaptionRect: TRect; var CaptionFormat: Cardinal;
+      var ACaption: WideString; var CaptionRect: TRect; var CaptionFormat: Cardinal;
       IsTextRotated: Boolean; const PaintStage: TSpTBXPaintStage; var PaintDefault: Boolean); override;
     procedure DoDrawImage(ACanvas: TCanvas; State: TSpTBXSkinStatesType;
       const PaintStage: TSpTBXPaintStage; var AImageList: TCustomImageList;
@@ -274,7 +487,7 @@ type
 
   { TSpTBXTabSheet }
 
-  TSpTBXTabSheet = class(TSpTBXCustomContainer)
+  TSpTBXTabSheet = class(TCustomControl)
   private
     FTabControl: TSpTBXCustomTabControl;
     FItem: TSpTBXTabItem;
@@ -282,17 +495,19 @@ type
     FPrevFocused: TWincontrol;
     procedure ReadItemName(Reader: TReader);
     procedure WriteItemName(Writer: TWriter);
-    function GetCaption: string;
+    function GetCaption: WideString;
     function GetTabVisible: Boolean;
-    procedure SetCaption(const Value: string);
+    procedure SetCaption(const Value: WideString);
     procedure SetTabVisible(const Value: Boolean);
     function GetImageIndex: Integer;
     procedure SetImageIndex(const Value: Integer);
     procedure CMVisiblechanged(var Message: TMessage); message CM_VISIBLECHANGED;
+    procedure WMEraseBkgnd(var Message: TMessage); message WM_ERASEBKGND;
+    procedure WMWindowPosChanged(var Message: TWMWindowPosChanged); message WM_WINDOWPOSCHANGED;
   protected
+    procedure CreateParams(var Params: TCreateParams); override;
     procedure AdjustClientRect(var Rect: TRect); override;
     procedure DefineProperties(Filer: TFiler); override;
-    procedure DrawBackground(ACanvas: TCanvas; ARect: TRect); override;
     procedure Notification(AComponent: TComponent; Operation: TOperation); override;
     procedure ReadState(Reader: TReader); override;
     procedure VisibleChanging; override;
@@ -304,11 +519,13 @@ type
     property Item: TSpTBXTabItem read FItem write FItem;
     property TabControl: TSpTBXCustomTabControl read FTabControl write FTabControl;
   published
+    {$IF CompilerVersion > 17}  // For Delphi 2006 and up
     property Padding;
     property OnAlignInsertBefore;
     property OnAlignPosition;
+    {$IFEND}
     property PopupMenu;
-    property Caption: string read GetCaption write SetCaption;
+    property Caption: WideString read GetCaption write SetCaption;
     property ImageIndex: Integer read GetImageIndex write SetImageIndex;
     property TabVisible: Boolean read GetTabVisible write SetTabVisible default True;
   end;
@@ -322,6 +539,8 @@ type
     FTabVisible: Boolean;
     FLoadingActiveIndex: Integer;
     FUpdatingIndex: Boolean;
+    FResizing: Boolean;
+    FOnDrawBackground: TSpTBXDrawEvent;
     FOnActiveTabChange: TSpTBXTabChangeEvent;
     FOnActiveTabChanging: TSpTBXTabChangingEvent;
     FOnActiveTabReorder: TSpTBXTabChangeEvent;
@@ -354,10 +573,16 @@ type
     procedure SetTabVisible(const Value: Boolean);
     function GetTabToolbar: TSpTBXTabToolbar;
     procedure CMColorchanged(var Message: TMessage); message CM_COLORCHANGED;
+    procedure CMSpTBXControlsInvalidate(var Message: TMessage); message CM_SPTBXCONTROLSINVALIDATE;
+    procedure WMEraseBkgnd(var Message: TMessage); message WM_ERASEBKGND;
     procedure WMInvalidateTabBackground(var Message: TMessage); message WM_INVALIDATETABBACKGROUND;
+    procedure WMWindowPosChanged(var Message: TWMWindowPosChanged); message WM_WINDOWPOSCHANGED;
   protected
+    FBackground: TBitmap;
     // Painting
-    procedure DrawBackground(ACanvas: TCanvas; ARect: TRect); override;
+    procedure DoDrawBackground(ACanvas: TCanvas; ARect: TRect;
+      const PaintStage: TSpTBXPaintStage; var PaintDefault: Boolean); virtual;
+    function GetFullRepaint: Boolean; virtual;
 
     // Tabs
     function CanActiveTabChange(const TabIndex, NewTabIndex: Integer): Boolean; virtual;
@@ -392,12 +617,15 @@ type
     property OnActiveTabChanging: TSpTBXTabChangingEvent read FOnActiveTabChanging write FOnActiveTabChanging;
     property OnActiveTabReorder: TSpTBXTabChangeEvent read FOnActiveTabReorder write FOnActiveTabReorder;
     property OnActiveTabReordering: TSpTBXTabChangingEvent read FOnActiveTabReordering write FOnActiveTabReordering;
+    property OnDrawBackground: TSpTBXDrawEvent read FOnDrawBackground write FOnDrawBackground;
   public
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
-    function Add(ACaption: string): TSpTBXTabItem;
-    function Insert(NewIndex: Integer; ACaption: string): TSpTBXTabItem;
+    function Add(ACaption: WideString): TSpTBXTabItem;
+    function Insert(NewIndex: Integer; ACaption: WideString): TSpTBXTabItem;
+    function DrawBackground(DC: HDC; ARect: TRect): Boolean;
     function GetTabSetHeight: Integer;
+    procedure InvalidateBackground(InvalidateChildren: Boolean = True); override;
     procedure MakeVisible(ATab: TSpTBXTabItem);
     procedure ScrollLeft;
     procedure ScrollRight;
@@ -428,8 +656,10 @@ type
     property PopupMenu;
     property ShowHint;
     property Visible;
+    {$IF CompilerVersion > 17}  // For Delphi 2006 and up
     property OnAlignInsertBefore;
     property OnAlignPosition;
+    {$IFEND}
     property OnCanResize;
     property OnContextPopup;
     property OnDockDrop;
@@ -479,10 +709,12 @@ type
     function GetPages(Index: Integer): TSpTBXTabSheet;
     function GetPagesCount: Integer;
     procedure SetActivePage(const Value: TSpTBXTabSheet);
+    procedure CMSpTBXControlsInvalidate(var Message: TMessage); message CM_SPTBXCONTROLSINVALIDATE;
     procedure WMSpSkinChange(var Message: TMessage); message WM_SPSKINCHANGE;
   protected
     FPages: TList;
     procedure DoActiveTabChange(const ItemIndex: Integer); override;
+    function GetFullRepaint: Boolean; override;
     procedure TabInserted(Item: TSpTBXTabItem); override;
     procedure TabDeleting(Item: TSpTBXTabItem; FreeTabSheet: Boolean = True); override;
   public
@@ -560,11 +792,7 @@ procedure SpDrawXPTabControlBackground(ACanvas: TCanvas; ARect: TRect; AColor: T
 implementation
 
 uses
-  Themes, UxTheme,
-  {$IF CompilerVersion >= 25} // for Delphi XE4 and up
-  System.UITypes,
-  {$IFEND}
-  Types;
+  Themes, UxTheme, Types;
 
 type
   TTBItemViewerAccess = class(TTBItemViewer);
@@ -621,7 +849,8 @@ begin
 
   B := TBitmap.Create;
   try
-    B.SetSize(ARect.Right - ARect.Left, ARect.Bottom - ARect.Top);
+    B.Width := ARect.Right - ARect.Left;
+    B.Height := ARect.Bottom - ARect.Top;
     R := Rect(0, 0, B.Width, B.Height);
     if SkinType = sknDelphiStyle then
       B.Canvas.Brush.Color := CurrentSkin.GetThemedSystemColor(clBtnFace)
@@ -696,7 +925,8 @@ var
 begin
   B := TBitmap.Create;
   try
-    B.SetSize(ARect.Right - ARect.Left, ARect.Bottom - ARect.Top);
+    B.Width := ARect.Right - ARect.Left;
+    B.Height := ARect.Bottom - ARect.Top;
     R := Rect(0, 0, B.Width, B.Height);
 
     // Draw the top/bottom border
@@ -704,8 +934,6 @@ begin
       sknNone:
         begin
           BottomTabs := False; // Don't flip
-          if AColor = clNone then
-            AColor := clBtnFace;
           B.Canvas.Brush.Color := AColor;
           B.Canvas.FillRect(R);
           ExtCtrls.Frame3D(B.Canvas, R, clWindow, clWindowFrame, 1);
@@ -755,7 +983,7 @@ begin
   DisplayMode := nbdmImageAndText;
   GroupIndex := C_SpTBXTabGroupIndex;
   Wrapping := twEndEllipsis;
-  Margins := SpDPIScale(4);
+  Margins := 4;
 end;
 
 procedure TSpTBXTabItem.Click;
@@ -955,8 +1183,8 @@ begin
   Result := ARect;
   if not Item.Checked then
     case TabPosition of
-      ttpTop:    OffsetRect(Result, 0, SpDPIScale(2));
-      ttpBottom: OffsetRect(Result, 0, -SpDPIScale(2));
+      ttpTop:    OffsetRect(Result, 0, 2);
+      ttpBottom: OffsetRect(Result, 0, -2);
     end;
 end;
 
@@ -978,8 +1206,8 @@ begin
 
     // Match the bottom of the Tab with the bottom of the TabSet
     case Position of
-      ttpTop:    ARect.Bottom := ARect.Bottom + SpDPIScale(1);
-      ttpBottom: ARect.Top := ARect.Top - SpDPIScale(1);
+      ttpTop:    ARect.Bottom := ARect.Bottom + 1;
+      ttpBottom: ARect.Top := ARect.Top - 1;
     end;
     R := ARect;
 
@@ -990,8 +1218,8 @@ begin
           not CurrentSkin.Options(skncTab, sknsNormal).Borders.IsEmpty then
         begin
           case Position of
-            ttpTop:    Inc(R.Bottom, SpDPIScale(5));
-            ttpBottom: Dec(R.Top, SpDPIScale(5));
+            ttpTop:    Inc(R.Bottom, 5);
+            ttpBottom: Dec(R.Top, 5);
           end;
           DrawTab(ACanvas, R, Item.Enabled, Item.Checked, IsHoverItem, Position);
         end
@@ -1017,16 +1245,16 @@ begin
             // The left border of the Tab will be painted by the Left tab if
             // its the first tab
             if Assigned(LeftT) or (Item.IsFirstVisible) then
-              R.Left := R.Left - SpDPIScale(2);
+              R.Left := R.Left - 2;
             // The right border of the Tab will be painted by the Right tab
             if Assigned(RightT) then
-              R.Right := R.Right + SpDPIScale(2);
+              R.Right := R.Right + 2;
           end
           else begin
             // Non checked tabs should be smaller
             case Position of
-              ttpTop:    Inc(R.Top, SpDPIScale(2));
-              ttpBottom: Dec(R.Bottom, SpDPIScale(2));
+              ttpTop:    Inc(R.Top, 2);
+              ttpBottom: Dec(R.Bottom, 2);
             end;
           end;
 
@@ -1038,15 +1266,15 @@ begin
             R := ARect;
             // Draw the left border
             if Assigned(LeftT) and LeftT.Item.Checked then begin
-              R.Right := R.Left + SpDPIScale(2);
-              R.Left := R.Right - SpDPIScale(10);
+              R.Right := R.Left + 2;
+              R.Left := R.Right - 10;
               DrawTab(ACanvas, R, LeftT.Item.Enabled, True, IsHoverItem, Position);
             end
             else
               // Draw the right border
               if Assigned(RightT) and RightT.Item.Checked then begin
-                R.Left := R.Right - SpDPIScale(2);
-                R.Right := R.Left + SpDPIScale(10);
+                R.Left := R.Right - 2;
+                R.Right := R.Left + 10;
                 DrawTab(ACanvas, R, RightT.Item.Enabled, True, IsHoverItem, Position);
               end;
           end;
@@ -1056,7 +1284,7 @@ begin
 end;
 
 procedure TSpTBXTabItemViewer.DoDrawCaption(ACanvas: TCanvas; ClientAreaRect: TRect;
-  State: TSpTBXSkinStatesType; var ACaption: string; var CaptionRect: TRect;
+  State: TSpTBXSkinStatesType; var ACaption: WideString; var CaptionRect: TRect;
   var CaptionFormat: Cardinal; IsTextRotated: Boolean;
   const PaintStage: TSpTBXPaintStage; var PaintDefault: Boolean);
 begin
@@ -1086,6 +1314,7 @@ procedure TSpTBXTabItemViewer.DrawBottomBorder(ACanvas: TCanvas; ARect: TRect);
 var
   CR, R: TRect;
   Edge: TSpTBXTabEdge;
+  LeftT, RightT: Boolean;
   Position: TSpTBXTabPosition;
   B: TBitmap;
 begin
@@ -1097,25 +1326,41 @@ begin
 
   case Position of
     ttpTop:
-      Inc(CR.Bottom, SpDPIScale(2));
+      Inc(CR.Bottom, 2);
     ttpBottom:
-      Dec(CR.Top, SpDPIScale(2));
+      begin
+        // When sknNone the bottom border size is 2
+        if SkinManager.GetSkinType = sknNone then
+          Dec(CR.Top, 2)
+        else
+          Dec(CR.Top, 2);
+      end;
   end;
 
   if SkinManager.GetSkinType in [sknWindows, sknDelphiStyle] then begin
+    LeftT := Assigned(SpGetNextTabItemViewer(View, Self, False, sivtInmediateSkipNonVisible));
+    RightT := Assigned(SpGetNextTabItemViewer(View, Self, True, sivtInmediateSkipNonVisible));
+
     if Item.IsFirstVisible then  // Is first IV?
       Edge := tedLeft;
-    // Grow the left border if it's the first visible or there is a left tab
-    if Item.IsFirstVisible or Assigned(SpGetNextTabItemViewer(View, Self, False, sivtInmediateSkipNonVisible)) then
-      CR.Left := CR.Left - CDefaultToolbarBorderSize;
-    // Grow the right border if there is a right tab
-    if Assigned(SpGetNextTabItemViewer(View, Self, True, sivtInmediateSkipNonVisible)) then
-      CR.Right := CR.Right + CDefaultToolbarBorderSize;
+
+    if Edge = tedLeft then begin
+      CR.Left := CR.Left - 2;
+      if RightT then
+        CR.Right := CR.Right + 2;
+    end
+    else begin
+      if LeftT then
+        CR.Left := CR.Left - 2;
+      if RightT then
+        CR.Right := CR.Right + 2;
+    end;
   end;
 
   B := TBitmap.Create;
   try
-    B.SetSize(CR.Right - CR.Left, CR.Bottom - CR.Top + SpDPIScale(4)); // Larger than CR
+    B.Width := CR.Right - CR.Left;
+    B.Height := CR.Bottom - CR.Top + 4; // Larger than CR
     R := Rect(0, 0, B.Width, B.Height);
     DrawTab(B.Canvas, R, True, True, False, Position, False, Edge);
 
@@ -1123,7 +1368,7 @@ begin
       ttpTop:
         R  := Bounds(0, 0, CR.Right - CR.Left, CR.Bottom - CR.Top); // Copy from Y = 0
       ttpBottom:
-        R  := Bounds(0, SpDPIScale(2), CR.Right - CR.Left, CR.Bottom - CR.Top + SpDPIScale(2)); // Copy from Y = 2
+        R  := Bounds(0, 2, CR.Right - CR.Left, CR.Bottom - CR.Top + 2); // Copy from Y = 2
     end;
 
     ACanvas.CopyRect(CR, B.Canvas, R);
@@ -1166,7 +1411,7 @@ begin
     PaintDefault := True;
     if ImgList = MDIButtonsImgList then begin
       PatternColor := GetTextColor(ItemInfo.State);
-      SpDrawGlyphPattern(ACanvas, ARect, TSpTBXGlyphPattern(ImgIndex), PatternColor);
+      SpDrawGlyphPattern(ACanvas, ARect, ImgIndex, PatternColor);
     end
     else
       DoDrawTabCloseButton(ACanvas, ItemInfo.State, pstPostPaint, ImgList, ImgIndex, ARect, PaintDefault);
@@ -1180,7 +1425,7 @@ procedure TSpTBXTabItemViewer.DrawTab(ACanvas: TCanvas; ARect: TRect; AEnabled,
   ASeparator: Boolean; AEdge: TSpTBXTabEdge);
 begin
   if ASeparator then begin
-    ARect.Left := ARect.Right - SpDPIScale(2);
+    ARect.Left := ARect.Right - 2;
     SpDrawXPMenuSeparator(ACanvas, ARect, False, True)
   end
   else begin
@@ -1201,7 +1446,7 @@ var
 begin
   RightGlyphSize := GetRightImageSize;
   R := BoundsRect;
-  InflateRect(R, -SpDPIScale(4), -SpDPIScale(4));  // Apply borders
+  InflateRect(R, -4, -4);  // Apply borders
 
   Result.Left := R.Right - RightGlyphSize.cx;
   Result.Right := Result.Left + RightGlyphSize.cx;
@@ -1221,8 +1466,8 @@ begin
   GetTabCloseButtonImgList(ImgList, ImgIndex);
   if Assigned(ImgList) then
     if ImgList = MDIButtonsImgList then begin
-      Result.cx := SpDPIScale(15);
-      Result.cy := SpDPIScale(15);
+      Result.cx := 15;
+      Result.cy := 15;
     end
     else if (ImgIndex >= 0) and (ImgIndex < ImgList.Count) then begin
       Result.cx := ImgList.Width;
@@ -1383,7 +1628,7 @@ begin
     T := TSpTBXTabToolbar(Owner);
     if Assigned(T.FOwnerTabControl) then begin
       SendMessage(T.FOwnerTabControl.Handle, WM_SETREDRAW, 1, 0);
-      T.FOwnerTabControl.InvalidateBackground(True);
+      SpInvalidateSpTBXControl(T.FOwnerTabControl, True, False);
     end;
   end;
 end;
@@ -1401,7 +1646,7 @@ begin
     FOwnerTabControl := nil;
   FActiveTabIndex := -1;
   FTabBackgroundBorders := False;
-  FTabAutofitMaxSize := SpDPIScale(200);
+  FTabAutofitMaxSize := 200;
   FTabCloseButtonImageIndex := -1;  
   FTabColor := clBtnFace;
   FTabMaxSize := -1;
@@ -1442,19 +1687,19 @@ procedure TSpTBXTabToolbar.InternalDrawBackground(ACanvas: TCanvas; ARect: TRect
   PaintOnNCArea: Boolean; PaintBorders: Boolean = True);
 var
   B: TBitmap;
-  R, DestR: TRect;
+  R, BitmapR, DestR: TRect;
   Tab: TSpTBXTabItem;
   IV: TTBItemViewer;
   PrevDelta, NextDelta: Integer;
 begin
-  // Draw on NC area of the toolbar:
-  // 1) Left border of the first tab if it's active
-  // 2) Bottom border of the tabset
   if PaintOnNCArea and Assigned(FOwnerTabControl) then begin
     B := TBitmap.Create;
+    B.Canvas.Lock;
     try
-      B.SetSize(ARect.Right - ARect.Left, ARect.Bottom - ARect.Top);
-      R := Rect(0, 0, B.Width, B.Height);
+      R := ARect;
+      B.Width := R.Right - R.Left;
+      B.Height := R.Bottom - R.Top;
+
       SpDrawXPToolbar(Self, B.Canvas, R, PaintOnNCArea, FTabBackgroundBorders and (SkinManager.GetSkinType <> sknNone), skncTabToolbar);
 
       // Draw the bottom border of the active tab
@@ -1464,40 +1709,49 @@ begin
         if Assigned(IV) then begin
           FActiveTabRect := IV.BoundsRect;
           DestR := IV.BoundsRect;
-          // Add the toolbar margins to DestR
-          OffsetRect(DestR, CDefaultToolbarBorderSize, CDefaultToolbarBorderSize);
-          // Draw the bottom border (and the left border if it's the first active tab)
+          OffsetRect(DestR, 2, 2);  // Add the toolbar margins
           TSpTBXTabItemViewer(IV).DrawBottomBorder(B.Canvas, DestR);
         end;
-
-        // Exclude clip rect of the bottom borders
-        PrevDelta := 1;
-        NextDelta := 1;
         if SkinManager.GetSkinType in [sknWindows, sknDelphiStyle] then begin
-          // Grow the size of the clip rect when using Windows theme
-          PrevDelta := -SpDPIScale(PrevDelta); // -PrevDelta;
-          NextDelta := -SpDPIScale(NextDelta); // -NextDelta;
-          // Special case: the right side of the last tab is not bigger
-          if not Assigned(Tab.GetNextTab(True, sivtInmediateSkipNonVisible)) then
-            NextDelta := 1;
-        end;
-        if FTabPosition = ttpTop then
-          ExcludeClipRect(B.Canvas.Handle, DestR.Left + PrevDelta, R.Bottom - SpDPIScale(2), DestR.Right - NextDelta, R.Bottom + SpDPIScale(4))
+          if Tab.IsFirstVisible or Assigned(Tab.GetNextTab(False, sivtInmediateSkipNonVisible)) then
+            PrevDelta := 1
+          else
+            PrevDelta := -1;
+          if Assigned(Tab.GetNextTab(True, sivtInmediateSkipNonVisible)) then
+            NextDelta := 1
+          else
+            NextDelta := -1;
+          if FTabPosition = ttpTop then
+            ExcludeClipRect(B.Canvas.Handle, DestR.Left - PrevDelta, R.Bottom - 2, DestR.Right + NextDelta, R.Bottom + 4)
+          else
+            ExcludeClipRect(B.Canvas.Handle, DestR.Left - PrevDelta, R.Top + 2, DestR.Right + NextDelta, R.Top - 4);
+        end
         else
-          ExcludeClipRect(B.Canvas.Handle, DestR.Left + PrevDelta, R.Top + SpDPIScale(2), DestR.Right - NextDelta, R.Top - SpDPIScale(4));
+          if FTabPosition = ttpTop then
+            ExcludeClipRect(B.Canvas.Handle, DestR.Left + 1, R.Bottom - 2, DestR.Right - 1, R.Bottom + 4)
+          else
+            ExcludeClipRect(B.Canvas.Handle, DestR.Left + 1, R.Top + 2, DestR.Right -1 , R.Top - 4);
       end;
 
       // Draw the bottom border of the tabs pane
-      // We just need the top or bottom borders, instead of painting the whole
-      // tabcontrol background just paint a 10 pixel height area, don't need to scale
-      if FTabPosition = ttpTop then
-        DestR := Bounds(R.Left, R.Bottom - CDefaultToolbarBorderSize, R.Right - R.Left, 10)
-      else
-        DestR := Bounds(R.Left, R.Top - (10 - CDefaultToolbarBorderSize), R.Right - R.Left, 10);
-      SpDrawXPTabControlBackground(B.Canvas, DestR, Color, FTabPosition = ttpBottom);
+      BitmapR := Rect(0, 0, FOwnerTabControl.FBackground.Width, FOwnerTabControl.FBackground.Height);
+      case FTabPosition of
+        ttpTop:
+          begin
+            DestR := Rect(R.Left, R.Bottom - 2, R.Right, R.Bottom);
+            BitmapR.Bottom := BitmapR.Top + 2;
+          end;
+        ttpBottom:
+          begin
+            DestR := Rect(R.Left, R.Top, R.Right, R.Top + 2);
+            BitmapR.Top := BitmapR.Bottom - 2;
+          end;
+      end;
 
-      ACanvas.Draw(ARect.Left, ARect.Top, B);
+      B.Canvas.CopyRect(DestR, FOwnerTabControl.FBackground.Canvas, BitmapR);
+      ACanvas.Draw(0, 0, B);
     finally
+      B.Canvas.UnLock;
       B.Free;
     end;
   end
@@ -1595,7 +1849,7 @@ begin
           Inc(TabsCount)
         else
           if IV.Item is TSpTBXRightAlignSpacerItem then
-            Inc(RightAlignWidth, SpDPIScale(20))
+            Inc(RightAlignWidth, 20)
           else begin
             R := SpGetBoundsRect(IV, Items);
             Inc(NonTabsArea, R.Right - R.Left);
@@ -1605,7 +1859,7 @@ begin
 
     // Get TabsArea
     if TabsCount > 0 then begin
-      TabsArea := CurrentDock.ClientWidth - SpDPIScale(4) - NonTabsArea - RightAlignWidth;
+      TabsArea := CurrentDock.ClientWidth - 4 - NonTabsArea - RightAlignWidth;
       TabsWidth := TabsArea div TabsCount;
       if TabsWidth > FTabAutofitMaxSize then
         TabsWidth := FTabAutofitMaxSize;
@@ -1661,20 +1915,20 @@ begin
     Spacer := SpGetRightAlignedItems(View, RightAlignedList, IsRotated, VisibleWidth, RightAlignedWidth);
     if Assigned(Spacer) then begin
       SpacerW := Spacer.BoundsRect.Right - Spacer.BoundsRect.Left;
-      RightAlignedBorder := CurrentDock.Width - SpDPIScale(2) - RightAlignedWidth + SpacerW;
+      RightAlignedBorder := CurrentDock.Width - 2 - RightAlignedWidth + SpacerW;
       VisibleWidth := VisibleWidth - SpacerW;
-      SpacerW := CurrentDock.Width - VisibleWidth - SpDPIScale(4);
+      SpacerW := CurrentDock.Width - VisibleWidth - 4;
     end
     else begin
       SpacerW := 0;
-      RightAlignedBorder := CurrentDock.Width - SpDPIScale(2);
+      RightAlignedBorder := CurrentDock.Width - 2;
     end;
 
     // Show items
     VisibleTabsCount := GetTabsCount(True);
     IsFirstPartiallyVisible := False;
     if VisibleTabsCount = 1 then begin
-      if VisibleWidth > CurrentDock.Width - SpDPIScale(2) then
+      if VisibleWidth > CurrentDock.Width - 2 then
         IsFirstPartiallyVisible := True;
     end;
 
@@ -1699,7 +1953,7 @@ begin
             H := 0;
             TTBItemViewerAccess(IV).CalcSize(Canvas, W, H);
             VisibleWidth := VisibleWidth + W;
-            if (VisibleTabsCount = 0) or (VisibleWidth < CurrentDock.Width - SpDPIScale(2)) then begin
+            if (VisibleTabsCount = 0) or (VisibleWidth < CurrentDock.Width - 2) then begin
               SpacerW := SpacerW - W;
               FHiddenTabs.Delete(J);
               IV.Item.Visible := True;
@@ -1721,7 +1975,7 @@ begin
             H := 0;
             TTBItemViewerAccess(IV).CalcSize(Canvas, W, H);
             VisibleWidth := VisibleWidth + W;
-            if (VisibleTabsCount = 0) or (VisibleWidth < CurrentDock.Width - SpDPIScale(2)) then begin
+            if (VisibleTabsCount = 0) or (VisibleWidth < CurrentDock.Width - 2) then begin
               SpacerW := SpacerW - W;
               FHiddenTabs.Delete(J);
               IV.Item.Visible := True;
@@ -1825,7 +2079,7 @@ var
         H := 0;
         TTBItemViewerAccess(IV).CalcSize(Canvas, W, H);
         if ToRight then begin
-          while Assigned(FirstIV) and (VisibleWidth + W >= CurrentDock.ClientWidth - SpDPIScale(2)) do begin
+          while Assigned(FirstIV) and (VisibleWidth + W >= CurrentDock.ClientWidth - 2) do begin
             VisibleWidth := VisibleWidth - (FirstIV.BoundsRect.Right - FirstIV.BoundsRect.Left);
             FHiddenTabs.Add(FirstIV.Item);
             FirstIV.Item.Visible := False;
@@ -1834,7 +2088,7 @@ var
           end;
         end
         else begin
-          while Assigned(LastIV) and (VisibleWidth + W >= CurrentDock.ClientWidth - SpDPIScale(2)) do begin
+          while Assigned(LastIV) and (VisibleWidth + W >= CurrentDock.ClientWidth - 2) do begin
             VisibleWidth := VisibleWidth - (LastIV.BoundsRect.Right - LastIV.BoundsRect.Left);
             FHiddenTabs.Add(LastIV.Item);
             LastIV.Item.Visible := False;
@@ -1845,7 +2099,7 @@ var
 
         // Try to show all the necessary clipped tabs
         IVIndex := IV.Index;
-        while Assigned(IV) and (ClippedIndex > -1) and ((VisibleTabsCount = 0) or (VisibleWidth + W <= CurrentDock.ClientWidth - SpDPIScale(2))) do begin
+        while Assigned(IV) and (ClippedIndex > -1) and ((VisibleTabsCount = 0) or (VisibleWidth + W <= CurrentDock.ClientWidth - 2)) do begin
           VisibleWidth := VisibleWidth + W;
           IV.Item.Visible := True;
           FHiddenTabs.Delete(ClippedIndex);
@@ -2127,7 +2381,7 @@ begin
         if FTabDragReorder and not IsCustomizing and IV.Item.Checked then begin
           Result := True; // Bypass the inherited mouse down
           FBeginDragIV := IV;
-          BeginDrag(False, SpDPIScale(2));
+          BeginDrag(False, 2);
         end;
       end;
     end
@@ -2169,7 +2423,7 @@ begin
       if Assigned(RightAlignIV) then
         RightAlignPos := Items.IndexOf(RightAlignIV.Item)
       else
-        RightAlignPos := -SpDPIScale(1);
+        RightAlignPos := -1;
       if (OrigPos <> DestPos) and (DestPos > -1) and (DestPos < Items.Count) and (OrigItem <> DestIV.Item) and
         not ((RightAlignPos > -1) and (DestPos >= RightAlignPos)) then
       begin
@@ -2237,9 +2491,20 @@ end;
 constructor TSpTBXTabSheet.Create(AOwner: TComponent);
 begin
   inherited;
-  Color := clBtnFace;
+  ControlStyle := ControlStyle + [csAcceptsControls, csSetCaption];
   Align := alClient;
   Visible := False;
+end;
+
+procedure TSpTBXTabSheet.CreateParams(var Params: TCreateParams);
+begin
+  inherited CreateParams(Params);
+  if not (csDesigning in ComponentState) then begin
+    with Params do
+      Style := Style or WS_CLIPCHILDREN;
+    with Params.WindowClass do
+      Style := Style and not (CS_HREDRAW or CS_VREDRAW);
+  end;
 end;
 
 procedure TSpTBXTabSheet.DefineProperties(Filer: TFiler);
@@ -2262,19 +2527,6 @@ begin
   FTabControl := nil;
   FItem := nil;
   inherited;
-end;
-
-procedure TSpTBXTabSheet.DrawBackground(ACanvas: TCanvas; ARect: TRect);
-begin
-  if Assigned(FTabControl) and Visible then begin
-    if FTabControl.TabVisible then begin
-      case FTabControl.TabPosition of
-        ttpTop:    dec(ARect.Top, SpDPIScale(4));
-        ttpBottom: inc(ARect.Bottom, SpDPIScale(4));
-      end;
-    end;
-    FTabControl.DrawBackground(ACanvas, ARect);
-  end;
 end;
 
 procedure TSpTBXTabSheet.Notification(AComponent: TComponent;
@@ -2326,7 +2578,7 @@ begin
   inherited;
 end;
 
-function TSpTBXTabSheet.GetCaption: string;
+function TSpTBXTabSheet.GetCaption: WideString;
 begin
   if Assigned(FItem) then Result := FItem.Caption
   else Result := '';
@@ -2344,7 +2596,7 @@ begin
   else Result := False;
 end;
 
-procedure TSpTBXTabSheet.SetCaption(const Value: string);
+procedure TSpTBXTabSheet.SetCaption(const Value: WideString);
 begin
   if Assigned(FItem) then FItem.Caption := Value;
 end;
@@ -2363,7 +2615,9 @@ procedure TSpTBXTabSheet.ReadItemName(Reader: TReader);
 begin
   case Reader.NextValue of
     vaLString, vaString:
-      FItemName := Reader.ReadString;
+     FItemName := Reader.ReadString;
+  else
+    FItemName := Reader.ReadWideString;
   end;
 end;
 
@@ -2371,7 +2625,7 @@ procedure TSpTBXTabSheet.WriteItemName(Writer: TWriter);
 begin
   if Assigned(Item) then
     FItemName := Item.Name;
-  Writer.WriteString(FItemName);
+  Writer.WriteWideString(FItemName);
 end;
 
 procedure TSpTBXTabSheet.ReadState(Reader: TReader);
@@ -2401,21 +2655,55 @@ begin
   end;
 end;
 
+procedure TSpTBXTabSheet.WMEraseBkgnd(var Message: TMessage);
+var
+  R: TRect;
+begin
+  Message.Result := 1;
+
+  if Assigned(FTabControl) and Visible then begin
+    if not DoubleBuffered or (Message.wParam = WPARAM(Message.lParam)) then begin
+      R := ClientRect;
+      if FTabControl.TabVisible then begin
+        case FTabControl.TabPosition of
+          ttpTop:    dec(R.Top, 4);
+          ttpBottom: inc(R.Bottom, 4);
+        end;
+      end;
+      FTabControl.DrawBackground(TWMEraseBkgnd(Message).DC, R);
+    end;
+  end;
+end;
+
+procedure TSpTBXTabSheet.WMWindowPosChanged(var Message: TWMWindowPosChanged);
+begin
+  inherited;
+  SpInvalidateSpTBXControl(Self, True, True);
+end;
+
 //WMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWM
 { TSpTBXCustomTabSet }
 
 constructor TSpTBXCustomTabSet.Create(AOwner: TComponent);
 begin
   inherited;
+  ControlStyle := ControlStyle + [csAcceptsControls, csOpaque];
+
   FTabVisible := True;
+  FBackground := TBitmap.Create;
+
   Width := 289;
-  Height := FDock.Height + SpDPIScale(2);
+  Height := FDock.Height + 2;
+  ParentColor := False;
+  Color := clBtnFace;
+
   FToolbar.Items.RegisterNotification(ItemNotification);
 end;
 
 destructor TSpTBXCustomTabSet.Destroy;
 begin
   FToolbar.Items.UnRegisterNotification(ItemNotification);
+  FreeAndNil(FBackground);
   inherited;
 end;
 
@@ -2476,7 +2764,12 @@ begin
   Result := TSpTBXTabToolbar;
 end;
 
-function TSpTBXCustomTabSet.Add(ACaption: string): TSpTBXTabItem;
+function TSpTBXCustomTabSet.GetFullRepaint: Boolean;
+begin
+  Result := True;
+end;
+
+function TSpTBXCustomTabSet.Add(ACaption: WideString): TSpTBXTabItem;
 var
   I: Integer;
   SpacerIV: TSpTBXItemViewer;
@@ -2499,7 +2792,7 @@ begin
   end;
 end;
 
-function TSpTBXCustomTabSet.Insert(NewIndex: Integer; ACaption: string): TSpTBXTabItem;
+function TSpTBXCustomTabSet.Insert(NewIndex: Integer; ACaption: WideString): TSpTBXTabItem;
 begin
   Result := TSpTBXTabItem.Create(Self);
   try
@@ -2763,9 +3056,63 @@ begin
     Result := 0;
 end;
 
-procedure TSpTBXCustomTabSet.DrawBackground(ACanvas: TCanvas; ARect: TRect);
+procedure TSpTBXCustomTabSet.DoDrawBackground(ACanvas: TCanvas;
+  ARect: TRect; const PaintStage: TSpTBXPaintStage;
+  var PaintDefault: Boolean);
 begin
-  SpDrawXPTabControlBackground(ACanvas, ARect, Color, TabPosition = ttpBottom);
+  if Assigned(FOnDrawBackground) then FOnDrawBackground(Self, ACanvas, ARect, PaintStage, PaintDefault);
+end;
+
+function TSpTBXCustomTabSet.DrawBackground(DC: HDC; ARect: TRect): Boolean;
+var
+  ACanvas: TCanvas;
+  PaintDefault: Boolean;
+  R: TRect;
+begin
+  Result := False;
+  if (csDestroying in ComponentState) or not Assigned(FDock) or
+    not Assigned(FBackground) or IsRectEmpty(ARect) then Exit;
+
+  ACanvas := TCanvas.Create;
+  try
+    ACanvas.Handle := DC;
+    ACanvas.Lock;
+    R := Rect(0, 0, ARect.Right - ARect.Left, ARect.Bottom - ARect.Top);
+
+    if (FBackground.Width = R.Right) and (FBackground.Height = R.Bottom) and not Assigned(FOnDrawBackground) then
+      ACanvas.Draw(ARect.Left, ARect.Top, FBackground)
+    else begin
+      FBackground.Width := R.Right;
+      FBackground.Height := R.Bottom;
+      FBackground.Canvas.Brush.Color := clWhite;
+      FBackground.Canvas.FillRect(R);
+
+      PaintDefault := True;
+      DoDrawBackground(FBackground.Canvas, R, pstPrePaint, PaintDefault);
+      if PaintDefault then
+        SpDrawXPTabControlBackground(FBackground.Canvas, R, Color, TabPosition = ttpBottom);
+      PaintDefault := True;
+      DoDrawBackground(FBackground.Canvas, R, pstPostPaint, PaintDefault);
+
+      ACanvas.Draw(ARect.Left, ARect.Top, FBackground);
+    end;
+
+    Result := True;
+  finally
+    ACanvas.Unlock;
+    ACanvas.Handle := 0;
+    ACanvas.Free;
+  end;
+end;
+
+procedure TSpTBXCustomTabSet.InvalidateBackground(InvalidateChildren: Boolean);
+begin
+  // Force background repaint
+  if not (csDestroying in ComponentState) and Assigned(FToolbar) then begin
+    if Assigned(FBackground) then
+      FBackground.Width := 1;
+    SpInvalidateSpTBXControl(Self, InvalidateChildren, FResizing);
+  end;
 end;
 
 procedure TSpTBXCustomTabSet.ItemNotification(Ancestor: TTBCustomItem;
@@ -2935,8 +3282,35 @@ end;
 procedure TSpTBXCustomTabSet.CMColorchanged(var Message: TMessage);
 begin
   inherited;
-  if Assigned(FToolbar) then
+  if Assigned(FToolbar) then begin
     Toolbar.TabColor := Color;
+    InvalidateBackground;
+  end;
+end;
+
+procedure TSpTBXCustomTabSet.CMSpTBXControlsInvalidate(var Message: TMessage);
+begin
+  InvalidateBackground;
+  Message.Result := 1;
+end;
+
+procedure TSpTBXCustomTabSet.WMEraseBkgnd(var Message: TMessage);
+var
+  R: TRect;
+begin
+  if not DoubleBuffered or (Message.wParam = WPARAM(Message.lParam)) then begin
+    if not (csDestroying in ComponentState) and GetFullRepaint then begin
+      R := ClientRect;
+      if FTabVisible then begin
+        case TabPosition of
+          ttpTop:    Inc(R.Top, GetTabSetHeight - 2);
+          ttpBottom: Dec(R.Bottom, GetTabSetHeight - 2);
+        end;
+      end;
+      DrawBackground(TWMEraseBkgnd(Message).DC, R);
+    end;
+  end;
+  Message.Result := 1;
 end;
 
 procedure TSpTBXCustomTabSet.WMInvalidateTabBackground(var Message: TMessage);
@@ -2959,6 +3333,15 @@ begin
     if HandleAllocated then
       RedrawWindow(Handle, nil, 0, RDW_ERASE or RDW_INVALIDATE or RDW_ALLCHILDREN);
   end;
+end;
+
+procedure TSpTBXCustomTabSet.WMWindowPosChanged(var Message: TWMWindowPosChanged);
+begin
+  FResizing := True;
+  inherited;
+  if GetFullRepaint then
+    InvalidateBackground;
+  FResizing := False;
 end;
 
 //WMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWM
@@ -3010,6 +3393,15 @@ begin
     for I := 0 to C - 1 do
       Pages[I].Realign;
   end;
+end;
+
+function TSpTBXCustomTabControl.GetFullRepaint: Boolean;
+begin
+  if not (csDestroying in ComponentState) then
+    Result := not Assigned(FPages) or (FPages.Count = 0) or not Assigned(FToolbar) or
+      not Assigned(Toolbar.ActiveTab) or not Toolbar.ActiveTab.Checked
+  else
+    Result := False;
 end;
 
 function TSpTBXCustomTabControl.GetPage(Item: TSpTBXTabItem): TSpTBXTabSheet;
@@ -3116,6 +3508,20 @@ begin
       Break;
     end;
   end;
+end;
+
+procedure TSpTBXCustomTabControl.CMSpTBXControlsInvalidate(var Message: TMessage);
+var
+  I, C: Integer;
+begin
+  // Force TabControl and TabSheets background repaint
+  inherited;
+  if not (csDestroying in ComponentState) and Assigned(FToolbar) then begin
+    C := PagesCount;
+    for I := 0 to C - 1 do
+      SpInvalidateSpTBXControl(Pages[I], True, True);
+  end;
+  Message.Result := 1;
 end;
 
 procedure TSpTBXCustomTabControl.WMSpSkinChange(var Message: TMessage);

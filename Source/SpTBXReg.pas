@@ -27,16 +27,23 @@ the specific language governing rights and limitations under the License.
 The initial developer of this code is Robert Lee.
 
 Requirements:
+For Delphi/C++Builder 2009 or newer:
   - Jordan Russell's Toolbar 2000
     http://www.jrsoftware.org
-
+For Delphi/C++Builder 7-2007:
+  - Jordan Russell's Toolbar 2000
+    http://www.jrsoftware.org
+  - Troy Wolbrink's TNT Unicode Controls
+    http://www.tntware.com/delphicontrols/unicode/
 ==============================================================================}
 
 interface
 
+{$I TB2Ver.inc}
+
 uses
   Windows, Classes, Controls, SysUtils, Graphics, ImgList, Dialogs,
-  DesignIntf, DesignEditors, VCLEditors,
+  {$IFDEF JR_D6} DesignIntf, DesignEditors, VCLEditors, {$ELSE} DsgnIntf, {$ENDIF}
   TB2Reg, TB2Toolbar, TB2Item, TB2DsgnItemEditor,
   SpTBXItem, SpTBXTabs, SpTBXDkPanels, SpTBXFormPopupMenu,
   SpTBXControls, SpTBXEditors, SpTBXExtEditors, SpTBXPageScroller,
@@ -69,9 +76,6 @@ procedure Register;
 implementation
 
 uses
-  {$IF CompilerVersion >= 24} // for Delphi XE3 and up
-  System.UITypes,
-  {$IFEND}
   Forms, TypInfo;
 
 //WMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWM
@@ -210,7 +214,9 @@ end;
 
 procedure Register;
 begin
+  {$IFDEF JR_D9}
   ForceDemandLoadState(dlDisable);
+  {$ENDIF}
 
   RegisterComponents('SpTBXLib', [TSpTBXDock, TSpTBXMultiDock, TSpTBXToolbar,
     TSpTBXToolWindow, TSpTBXDockablePanel, TSpTBXTabSet, TSpTBXTabControl, TSpTBXStatusBar,

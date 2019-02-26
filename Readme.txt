@@ -1,4 +1,4 @@
----[SpTBXLib]
+[SpTBXLib]
 
 SpTBXLib is an add on package for TB2K components, it adds the following features:
 - Skins
@@ -17,7 +17,7 @@ SpTBXLib is an add on package for TB2K components, it adds the following feature
 For more info go to:
 http://www.silverpointdevelopment.com
 
----[License]
+[License]
 
 Use and/or distribution of the files requires compliance with the
 SpTBXLib License, found in SpTBXLib-LICENSE.txt or at:
@@ -29,14 +29,15 @@ the terms of the Mozilla Public License Version 1.1, found in MPL-LICENSE.txt or
 
   http://www.mozilla.org/MPL
 
----[Installation]
+
+[Installation]
 
 Requirements:
-- RAD Studio XE or newer:
-- Jordan Russell's Toolbar 2000
+- Jordan Russell's Toolbar 2000 
   http://www.jrsoftware.org
-- TB2K patch
-  http://www.silverpointdevelopment.com/sptbxlib/downloads.htm
+- Troy Wolbrink's TNT Unicode Controls (not needed for Delphi/C++Builder 2009 or newer)
+  http://www.tntware.com/delphicontrols/unicode/
+  Mirror: http://www.silverpointdevelopment.com/sptbxlib/TntUnicodeControls.zip
 
 To install SpTBXLib manually:
 - If you have a previous version of SpTBXLib installed in the IDE remove it from Component->Install Packages, select SpTBXLib from the list and press the Remove button. 
@@ -45,17 +46,18 @@ To install SpTBXLib manually:
 
 To install SpTBXLib with Silverpoint MultiInstaller (http://www.silverpointdevelopment.com/multiinstaller/index.htm):
 - Create a new folder for the installation.
-- Download all the component zips to a folder: SpTBXLib + TB2K
-- Download Silverpoint MultiInstaller and the Setup.Ini, extract them to the folder:
+- Download all the component zips to a folder: SpTBXLib + TNT + TB2K
+- Download the MultiInstaller and the Setup.Ini, extract them to the folder:
 
 The installation folder will end up with this files: 
 C:\MyInstall
        |-  SpTBXLib.zip
+       |-  TntUnicodeControls.zip
        |-  tb2k-2.2.2.zip
        |-  MultiInstaller.exe
        |-  Setup.ini 
 
-You are ready to install the component packages, just run MultiInstaller, select the destination folder, and all the components will be unziped, patched, compiled and installed on the Delphi IDE.
+You are ready to install the component packages, just run the MultiInstaller, select the destination folder, and all the components will be unziped, patched, compiled and installed on the Delphi IDE.
 
 For more info go to:
 http://www.silverpointdevelopment.com/sptbxlib/support/index.htm

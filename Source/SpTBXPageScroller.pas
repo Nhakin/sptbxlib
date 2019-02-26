@@ -1,7 +1,7 @@
 unit SpTBXPageScroller;
 
 {==============================================================================
-Version 2.5.4
+Version 2.4.8
 
 The contents of this file are subject to the SpTBXLib License; you may
 not use or distribute this file except in compliance with the
@@ -29,21 +29,45 @@ the specific language governing rights and limitations under the License.
 The initial developer of this code is Robert Lee.
 
 Requirements:
+For Delphi/C++Builder 2009 or newer:
   - Jordan Russell's Toolbar 2000
     http://www.jrsoftware.org
+For Delphi/C++Builder 7-2007:
+  - Jordan Russell's Toolbar 2000
+    http://www.jrsoftware.org
+  - Troy Wolbrink's TNT Unicode Controls
+    http://www.tntware.com/delphicontrols/unicode/
 
 Development notes:
   - All the Windows and Delphi bugs fixes are marked with '[Bugfix]'.
   - All the theme changes and adjustments are marked with '[Theme-Change]'.
 
+History:
+15 April 2013 - version 2.4.8
+  - No changes.
+
+7 February 2012 - version 2.4.7
+  - Minor bug fixes.
+  - Added support for Delphi XE2.
+  - Added support for 64 bit Delphi compiler.
+
+25 June 2011 - version 2.4.6
+  - No changes.
+
+12 March 2010 - version 2.4.5
+  - No changes.
+
+2 December 2009 - version 2.4.4
+  - No changes.
+
+13 September 2009 - version 2.4.3
+  - Initial release, initial author: Kiriakos.
+
 ==============================================================================}
 
 interface
 
-{$BOOLEVAL OFF}   // Unit depends on short-circuit boolean evaluation
-{$IF CompilerVersion >= 25} // for Delphi XE4 and up
-  {$LEGACYIFEND ON} // XE4 and up requires $IF to be terminated with $ENDIF instead of $IFEND
-{$IFEND}
+{$BOOLEVAL OFF} // Unit depends on short-circuit boolean evaluation
 
 uses
   Windows, Messages, Classes, Graphics, Controls, StdCtrls, ExtCtrls, Forms,
@@ -110,7 +134,6 @@ type
     procedure BeginScrolling(HitTest: Integer);
     function  CalcClientArea: TRect;
     function  CanAutoSize(var NewWidth, NewHeight: Integer): Boolean; override;
-    procedure ChangeScale(M, D: Integer{$if CompilerVersion >= 31}; isDpiChange: Boolean{$ifend}); override;
     procedure ConstrainedResize(var MinWidth, MinHeight, MaxWidth, MaxHeight: Integer); override;
     procedure CreateParams(var Params: TCreateParams); override;
     procedure DoSetRange(Value: Integer); virtual;
@@ -198,11 +221,7 @@ procedure SpTBXPaintPageScrollButton(ACanvas: TCanvas; const ARect: TRect; Butto
 implementation
 
 uses
-  SysUtils, Types, TB2Common,
-  {$IF CompilerVersion >= 25} // for Delphi XE4 and up
-  System.UITypes,
-  {$IFEND}
-  UxTheme, Themes;
+  SysUtils, TB2Common, UxTheme, Themes;
 
 const
   ScrollDelay = 300;
@@ -233,8 +252,7 @@ var
   R: TRect;
   Flags: Integer;
   X, Y, Sz: Integer;
-  C: TColor;
-  Details: TThemedElementDetails;
+  LColorRef: TColorRef;
 begin
   R := ARect;
   case SkinManager.GetSkinType of
@@ -250,32 +268,29 @@ begin
         end;
         Windows.DrawFrameControl(ACanvas.Handle, R, DFC_SCROLL, Flags);
       end;
-    sknWindows, sknDelphiStyle:
+    sknWindows:
       begin
-        if Hot then
-          Details := SpTBXThemeServices.GetElementDetails(tbPushButtonHot)
-        else
-          Details := SpTBXThemeServices.GetElementDetails(tbPushButtonNormal);
-
-        CurrentSkin.PaintThemedElementBackground(ACanvas, ARect, Details);
-        CurrentSkin.GetThemedElementTextColor(Details, C);
+        if Hot then Flags := TS_PRESSED
+        else Flags := TS_HOT;
+        DrawThemeBackground(SpTBXThemeServices.Theme[teToolBar], ACanvas.Handle, TP_BUTTON, Flags, ARect, nil);
+        GetThemeColor(SpTBXThemeServices.Theme[teToolBar], TP_BUTTON, Flags, TMT_TEXTCOLOR, LColorRef);
+        ACanvas.Pen.Color := LColorRef;
       end;
-    sknSkin:
+    sknSkin :
       begin
         SpDrawXPButton(ACanvas, R, True, False, Hot, False, False, False);
         if Hot then
-          C := CurrentSkin.GetTextColor(skncButton, sknsHotTrack)
+          ACanvas.Pen.Color := CurrentSkin.GetTextColor(skncButton, sknsHotTrack)
         else
-          C := CurrentSkin.GetTextColor(skncButton, sknsNormal);
+          ACanvas.Pen.Color := CurrentSkin.GetTextColor(skncButton, sknsNormal);
       end;
   end;
 
-  if SkinManager.GetSkinType <> sknNone then begin
+  if SkinManager.GetSkinType in [sknWindows, sknSkin] then begin
     X := (R.Left + R.Right) div 2;
     Y := (R.Top + R.Bottom) div 2;
     Sz := Min(X - R.Left, Y - R.Top) * 3 div 4;
-    ACanvas.Brush.Color := C;
-    ACanvas.Pen.Color := C;
+    ACanvas.Brush.Color := ACanvas.Pen.Color;
     case ButtonType of
       tpsbtUp:
         begin
@@ -462,13 +477,6 @@ begin
   Result := NewHeight > FButtonSize * 3;
 end;
 
-procedure TSpTBXCustomPageScroller.ChangeScale(M, D: Integer
-  {$if CompilerVersion >= 31}; isDpiChange: Boolean{$ifend});
-begin
-  inherited;
-  FButtonSize := MulDiv(FButtonSize, M, D);
-end;
-
 procedure TSpTBXCustomPageScroller.ConstrainedResize(var MinWidth, MinHeight, MaxWidth, MaxHeight: Integer);
 begin
   // do not call inherited here
@@ -563,17 +571,17 @@ begin
         BR := R;
         if Orientation = tpsoVertical then BR.Bottom := BR.Top + ButtonSize
         else BR.Right := BR.Left + ButtonSize;
-        SpTBXPaintPageScrollButton(ACanvas, BR, CBtns[Orientation, False], FScrollDirection < 0);
+        SpTBXPaintPageScrollButton(ACanvas, BR, CBtns[Orientation, False],
+          FScrollDirection < 0);
       end;
       if tpsbNext in FVisibleButtons then
       begin
         BR := R;
         if Orientation = tpsoVertical then BR.Top := BR.Bottom - ButtonSize
         else BR.Left := BR.Right - ButtonSize;
-        SpTBXPaintPageScrollButton(ACanvas, BR, CBtns[Orientation, True], FScrollDirection > 0);
+        SpTBXPaintPageScrollButton(ACanvas, BR, CBtns[Orientation, True],
+          FScrollDirection > 0);
       end;
-      ACanvas.Brush.Color := clBlue;
-      ACanvas.Pen.Color := clBlue;
     finally
       ACanvas.Handle := 0;
       ACanvas.Free;

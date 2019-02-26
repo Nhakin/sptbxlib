@@ -3,13 +3,13 @@ unit Unit1;
 interface
 
 uses
-  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
-  ExtCtrls, StdCtrls, Actions, ActnList, ImgList, ExtDlgs, ComCtrls,
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms,
+  Dialogs, ExtCtrls, StdCtrls, ActnList, ImgList, ExtDlgs, ComCtrls,
   // TB2K
   TB2Item, TB2Toolbar, TB2Dock, TB2ExtItems,
   // SpTBXLib
   SpTBXSkins, SpTBXItem, SpTBXDkPanels, SpTBXTabs, SpTBXEditors, SpTBXControls,
-  SpTBXExtEditors;
+  SpTBXExtEditors, System.Actions;
 
 type
   TForm1 = class(TForm)
@@ -104,6 +104,7 @@ type
     SpTBXEdit1: TSpTBXEdit;
     SpTBXSpinEdit1: TSpTBXSpinEdit;
     LangListBox: TSpTBXListBox;
+    rgSkinType: TSpTBXRadioGroup;
     SpTBXGroupBox1: TSpTBXGroupBox;
     SpTBXGroupBox2: TSpTBXGroupBox;
     trackTickmarks: TSpTBXRadioGroup;
@@ -120,10 +121,6 @@ type
     SpTBXSpeedButton3: TSpTBXSpeedButton;
     SpTBXColorEdit1: TSpTBXColorEdit;
     SpTBXFontComboBox1: TSpTBXFontComboBox;
-    SpTBXGroupBox3: TSpTBXGroupBox;
-    radiobuttonSkin1: TSpTBXRadioButton;
-    radiobuttonSkin2: TSpTBXRadioButton;
-    radiobuttonSkin3: TSpTBXRadioButton;
     procedure FormShow(Sender: TObject);
     procedure tabCloseClick(Sender: TObject);
     procedure ActionList1Update(Action: TBasicAction;
@@ -133,7 +130,7 @@ type
     procedure SpTBXTabControl2Resize(Sender: TObject);
     procedure rgSkinTypeClick(Sender: TObject);
     procedure hintLabelDrawHint(Sender: TObject;
-      AHintBitmap: TBitmap; var AHint: string;
+      AHintBitmap: TBitmap; var AHint: WideString;
       var PaintDefault: Boolean);
     procedure progressDecClick(Sender: TObject);
     procedure progressIncClick(Sender: TObject);
@@ -164,7 +161,7 @@ var
 implementation
 
 uses
-  Themes, Registry, ShlObj;
+  Registry;
 
 {$R *.dfm}
 
@@ -183,51 +180,6 @@ begin
   end
   else
     Result := '';
-end;
-
-function SpGetCommonDocumentsFolder: string;
-// Gets All Users\Documents folder.
-// Gets Public\Documents folder on Vista
-var
-  TargetPIDL: PItemIDList;
-  S: string;
-begin
-  Result := '';
-  if Succeeded(SHGetSpecialFolderLocation(Application.Handle, CSIDL_COMMON_DOCUMENTS, TargetPIDL)) then
-  begin
-    SetLength(S, MAX_PATH);
-    FillChar(PChar(S)^, MAX_PATH, #0);
-    if SHGetPathFromIDList(TargetPIDL, PChar(S)) then begin
-      SetLength(S, StrLen(PChar(S)));
-      Result := IncludeTrailingPathDelimiter(S);
-    end;
-  end;
-end;
-
-function SpIDEBDSCommonDir(RADStudioIDENumber: Integer): string;
-var
-  S: string;
-begin
-  Result := '';
-  S := SpGetCommonDocumentsFolder + 'RAD Studio\' + IntToStr(RADStudioIDENumber) + '.0\Styles'; // RAD Studio\5.0
-  if DirectoryExists(S) then
-    Result := S;
-end;
-
-function SpGetDelphiStylesFolder: string;
-var
-  I: Integer;
-  S: string;
-begin
-  Result := '';
-  // XE2 = 9
-  for I := 20 downto 9 do begin
-    S := SpIDEBDSCommonDir(I);
-    if DirectoryExists(S) then begin
-      Result := S;
-      Exit;
-    end;
-  end;
 end;
 
 function SpGetWinAmpDir: String;
@@ -268,22 +220,21 @@ var
   I: Integer;
 begin
   // Add the Languages to the Languages menu item and TabControl
-  if subLang.Count = 0 then
-    for I := 0 to LangListBox.Items.Count - 1 do begin
-      A := TSpTBXItem.Create(nil);
-      try
-        A.Caption := LangListBox.Items[I];
-        A.GroupIndex := 100;
-        A.AutoCheck := True;
-        A.Tag := I;
-        A.OnClick := LangClick;
-        subLang.Add(A);
-        with SpTBXTabControl1.Add(LangListBox.Items[I]) do
-          Tag := I;
-      except
-        A.Free;
-      end;
+  for I := 0 to LangListBox.Items.Count - 1 do begin
+    A := TSpTBXItem.Create(nil);
+    try
+      A.Caption := LangListBox.Items[I];
+      A.GroupIndex := 100;
+      A.AutoCheck := True;
+      A.Tag := I;
+      A.OnClick := LangClick;
+      subLang.Add(A);
+      with SpTBXTabControl1.Add(LangListBox.Items[I]) do
+        Tag := I;
+    except
+      A.Free;
     end;
+  end;
 
   // Select the first Language
   subLang.Items[0].Click;
@@ -305,9 +256,6 @@ begin
     SpTBXLabel6.LinkText := D + 'winamp.exe';
   if FileExists(AppPath + 'unit1.pas') then
     SpTBXLabel7.LinkTextParams := '"' + AppPath + 'unit1.pas' + '"';
-
-  // Init Skin Type
-  radiobuttonSkin2.Enabled := CompilerVersion >= 23;  // Delphi XE2 or up
 end;
 
 procedure TForm1.LangClick(Sender: TObject);
@@ -347,9 +295,9 @@ end;
 procedure TForm1.WMSpSkinChange(var Message: TMessage);
 begin
   if SkinManager.GetSkinType = sknSkin then
-    radiobuttonSkin3.Checked := True
+    rgSkinType.ItemIndex := 1
   else
-    radiobuttonSkin1.Checked := True;
+    rgSkinType.ItemIndex := 0;
 end;
 
 //WMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWM
@@ -359,60 +307,37 @@ procedure TForm1.rgSkinTypeClick(Sender: TObject);
 var
   SkinType: TSpTBXSkinType;
 begin
-  SkinType := sknNone;
-  if Sender = radiobuttonSkin1 then SkinType := sknWindows
-  else if Sender = radiobuttonSkin2 then SkinType := sknDelphiStyle
-  else if Sender = radiobuttonSkin3 then SkinType := sknSkin;
-
+  SkinType := TSpTBXSkinType(rgSkinType.ItemIndex + 1);
   if SkinType <> SkinManager.GetSkinType then
-    case SkinType of
-      sknWindows:
-        begin
-          if not SkinManager.IsDefaultSkin then begin
-            FLastSkin := SkinManager.CurrentSkinName;
-            SkinManager.SetSkin('Default');
-          end;
-          {$IF CompilerVersion >= 23} //for Delphi XE2 and up
-          TStyleManager.SetStyle(TStyleManager.SystemStyle);
-          {$IFEND}
-        end;
-      sknSkin:
-        SkinManager.SetSkin(FLastSkin);
-      sknDelphiStyle:
-        begin
-          OpenDialog1.InitialDir := SpGetDelphiStylesFolder;
-          OpenDialog1.Filter := 'VCL Styles|*.vsf';
-          if OpenDialog1.Execute then
-            if FileExists(OpenDialog1.FileName) then begin
-              SkinManager.SetToDefaultSkin;
-              {$IF CompilerVersion >= 23} //for Delphi XE2 and up
-              TStyleManager.SetStyle(TStyleManager.LoadFromFile(OpenDialog1.FileName));
-              {$IFEND}
-            end;
-        end;
-    end;
+    if SkinType = sknSkin then
+      SkinManager.SetSkin(FLastSkin)
+    else
+      if not SkinManager.IsDefaultSkin then begin
+        FLastSkin := SkinManager.CurrentSkinName;
+        SkinManager.SetSkin('Default');
+      end;
 end;
 
 procedure TForm1.skinButtonClick(Sender: TObject);
 var
   S: string;
+  I: Integer;
 begin
   S := AppPath + 'Skins';
   if DirectoryExists(S) then
     OpenDialog1.InitialDir := S;
-  OpenDialog1.Filter := 'Skin files|*.skn';
 
   if OpenDialog1.Execute then
     if FileExists(OpenDialog1.FileName) then begin
       // Load the skin file and add it to the SkinList
-      S := SkinManager.AddSkinFromFile(OpenDialog1.FileName);
-      if S <> '' then begin
+      I := SkinManager.SkinsList.AddSkinFromFile(OpenDialog1.FileName);
+      if I > -1 then begin
         // Set the new skin
-        FLastSkin := S;
+        FLastSkin := SkinManager.SkinsList[I];
         SkinManager.SetSkin(FLastSkin);
         // Recreate the SkinGroupItem
         SpTBXSkinGroupItem1.Recreate;
-        radiobuttonSkin3.Checked := True;
+        rgSkinType.ItemIndex := 2;
       end;
     end;
 end;
@@ -440,7 +365,7 @@ end;
 { StatusBar }
 
 procedure TForm1.hintLabelDrawHint(Sender: TObject;
-  AHintBitmap: TBitmap; var AHint: string; var PaintDefault: Boolean);
+  AHintBitmap: TBitmap; var AHint: WideString; var PaintDefault: Boolean);
 var
   R, GR, TR: TRect;
   WS: WideString;

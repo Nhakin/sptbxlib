@@ -1,7 +1,7 @@
 unit SpTBXDkPanels;
 
 {==============================================================================
-Version 2.5.4
+Version 2.4.8
 
 The contents of this file are subject to the SpTBXLib License; you may
 not use or distribute this file except in compliance with the
@@ -29,8 +29,14 @@ the specific language governing rights and limitations under the License.
 The initial developer of this code is Robert Lee.
 
 Requirements:
+For Delphi/C++Builder 2009 or newer:
   - Jordan Russell's Toolbar 2000
     http://www.jrsoftware.org
+For Delphi/C++Builder 7-2007:
+  - Jordan Russell's Toolbar 2000
+    http://www.jrsoftware.org
+  - Troy Wolbrink's TNT Unicode Controls
+    http://www.tntware.com/delphicontrols/unicode/
 
 Development notes:
   - All the Windows and Delphi bugs fixes are marked with '[Bugfix]'.
@@ -44,14 +50,122 @@ Limitations:
   - MultiDocks doesn't have lateral splitters, you can solve this by
     adding a TSpTBXSplitter on the Form.
 
+History:
+15 April 2013 - version 2.4.8
+  - No changes.
+
+7 February 2012 - version 2.4.7
+  - Minor bug fixes.
+  - Added support for Delphi XE2.
+  - Added support for 64 bit Delphi compiler.
+
+25 June 2011 - version 2.4.6
+  - Improved Toolbar Load/Save Position helpers to fix the
+    locked toolbars restoring TB2K issue.
+
+12 March 2010 - version 2.4.5
+  - Fixed incorrect TSpTBXDockablePanel split resizing when
+    the mouse was moved too quickly, thanks to Mattias
+    Andersson for reporting this.
+  - Fixed incorrect TSpTBXSplitter sizing when AlignWithMargin
+    was set to true, thanks to Dany Marmur for reporting this.
+  - Fixed TSpTBXDockablePanel bug, the adjacent splitter is
+    misaligned when the DP is hidden at designtime, thanks to
+    Irina for reporting this.
+
+2 December 2009 - version 2.4.4
+  - No changes.
+
+13 September 2009 - version 2.4.3
+  - Added OnCanResize event to TSpTBXDockablePanel.
+  - Changed TSpTBXDockablePanel docking behavior, when the
+    panel is docked and it's DockPos isn't specified it
+    will be appended to the bottom of the MultiDock.
+  - Fixed incorrect TSpTBXDockablePanel split resizing when
+    FixedDockedSize was true, thanks to Gilles Arcas for
+    reporting this.
+
+8 May 2009 - version 2.4.2
+  - Fixed incorrect TSpTBXDockablePanel floating border
+    painting on Vista with Aero enabled, thanks to Mattias
+    Andersson for reporting this.
+
+15 March 2009 - version 2.4.1
+  - Fixed TSpTBXSplitter bug, it wasn't correctly minimized
+    when MinSize was 1, 2 or 3, thanks to Sertac Akyuz for
+    fixing this.
+  - Fixed TSpTBXSplitter bug, it wasn't correctly restored
+    when SpTBIniLoadPositions was called.
+  - Fixed incorrect TSpTBXDockablePanel behavior, when DockMode
+    is dmCannotFloat the DP should be able to be re-docked,
+    thanks to Ivan Petrovic for reporting this.
+  - Fixed incorrect TSpTBXDockablePanel behavior, it wasn't
+    correctly resized when using the embedded splitter, thanks
+    to Gilles Arcas for reporting this.
+  - Fixed incorrect TSpTBXDockablePanel painting,
+    OnDrawCaptionPanel wasn't called when painting the NC
+    area borders, thanks to Mikael Stalvik for reporting this.
+
+17 January 2009 - version 2.4
+  - Added FloatingClientWidth and FloatingClientHeight public
+    properties to TSpTBXDockablePanel.
+  - Added TaskPaneStyleResize property to TSpTBXDockablePanel,
+    when this property is set to True the Minimize/Restore
+    behavior will be the same as the Windows Task Pane (the
+    DockablePanel is minimized from bottom to top).
+  - Changed TSpTBXDockablePanel undocking behavior the panel
+    will remember the previous floating size when it is
+    undocked.
+  - Changed TSpTBXDockablePanel docking behavior, when the
+    panel is docked on an empty MultiDock it will use the
+    DefaultDockedSize property to set its size.
+    If DefaultDockedSize is 0 it will use the floating size.
+
+26 September 2008 - version 2.3
+  - Added DefaultDockedSize property to TSpTBXDockablePanel,
+    this property is used to set the DockablePanel size when
+    it's docked on an empty MultiDock.
+  - Added ShowVerticalCaption property to TSpTBXDockablePanel,
+    this property is used to rotate the caption panel vertically.
+    When the DockablePanel is floating or docked on a vertical
+    MultiDock the caption will be horizontal regardless of the
+    value of ShowVerticalCaption.
+  - Fixed TSpTBXDockablePanel bug, anchored children were not
+    correctly resized when the Form was loaded, thanks to
+    Alex Neznanov for reporting this.
+  - Fixed TSpTBXDockablePanel bug, hiding/restoring a DP
+    misaligned the adjacent splitter, thanks to Alexander for
+    reporting this (related to Delphi's zero size align bug).
+  - Fixed TSpTBXDockablePanel bug, dragging a floating DP
+    with CTRL key pressed should not dock the DP.
+
+29 July 2008 - version 2.2
+  - Fixed TSpTBXDockablePanel bug, an AV was raised when the
+    DockablePanel was undocked when it was minimized by an
+    adjacent splitter, thanks to Minoru Yoshida for reporting this.
+
+26 June 2008 - version 2.1
+  - Added AutoSplitterVisibility property to TSpTBXMultiDock,
+    use this property to automatically hide the adjacent
+    splitter when the MultiDock is empty.
+  - Added OnWindowStateChanged event to TSpTBXDockablePanel,
+    this event is fired when the DockablePanel gets minimized,
+    maximized or restored.
+  - Fixed TSpTBXDockablePanel bug, the floating panel was able to be
+    dragged offscreen leaving no way to move it back, thanks to
+    Minoru Yoshida for reporting this.
+  - Fixed TSpTBXSplitter bug, incorrect alignment when the split
+    control was minimized and the Form was resized, thanks to
+    Den and Minoru Yoshida for reporting this.
+
+3 May 2008 - version 2.0
+  - Decoupled from TBX.
+
 ==============================================================================}
 
 interface
 
-{$BOOLEVAL OFF}   // Unit depends on short-circuit boolean evaluation
-{$IF CompilerVersion >= 25} // for Delphi XE4 and up
-  {$LEGACYIFEND ON} // XE4 and up requires $IF to be terminated with $ENDIF instead of $IFEND
-{$IFEND}
+{$BOOLEVAL OFF} // Unit depends on short-circuit boolean evaluation
 
 uses
   Windows, Messages, Classes, SysUtils, Controls, Graphics, ImgList, Forms,
@@ -77,10 +191,11 @@ type
   );
 
   TSpTBXDPResizeType = (
-    dprtManualResize,       // Resize current DP and resize next sibling (or the previous sibling)
-    dprtMinimizeOrRestore,  // Resize current DP and resize previous sibling (or the next sibling)
-    dprtSplitResize,        // Resize after splitter is moved, and resize the next sibling (or the previous sibling)
-    dprtAppendResize        // Resize after DP was appended, and resize the 1st sibling)
+    dprtManualResize,
+    dprtMinimizeOrRestore,
+    dprtMinimizeOrRestoreTaskPaneStyle,
+    dprtSplitResize,
+    dprtAppendResize
   );
 
   TSpTBXWindowStateChangedEvent = procedure(Sender: TObject; AWindowState: TWindowState) of object;
@@ -135,6 +250,8 @@ type
   { TSpTBXDockablePanelButtonOptions }
 
   TSpTBXDockablePanelButtonOptions = class(TSpTBXButtonOptions)
+  private
+    FTaskPaneStyleResize: Boolean;
   protected
     FDockablePanel: TSpTBXCustomDockablePanel;
     procedure ButtonsClick(Sender: TObject); override;
@@ -146,6 +263,7 @@ type
   published
     property Maximize default False;
     property Minimize default False;
+    property TaskPaneStyleResize: Boolean read FTaskPaneStyleResize write FTaskPaneStyleResize default False;
     property TitleBarMaxSize default 19;
   end;
 
@@ -217,7 +335,6 @@ type
     FDockForms: TList;
 
     // Component
-    procedure ChangeScale(M, D: Integer{$if CompilerVersion >= 31}; isDpiChange: Boolean{$ifend}); override;
     procedure CreateParams(var Params: TCreateParams); override;
     procedure Notification(AComponent: TComponent; Operation: TOperation); override;
     procedure Loaded; override;
@@ -258,6 +375,7 @@ type
     procedure DoneReadingPositionData(const Data: TTBReadPositionData); override;
     procedure ReadPositionData(const Data: TTBReadPositionData); override;
     procedure WritePositionData(const Data: TTBWritePositionData); override;
+    procedure InvalidateBackground(InvalidateChildren: Boolean = True); override;
     function IsResizable: Boolean;
     function IsVerticalTitleBar: Boolean;
     function Maximize: Boolean; virtual;
@@ -378,7 +496,6 @@ type
     procedure WMEraseBkgnd(var Message: TWmEraseBkgnd); message WM_ERASEBKGND;
   protected
     FRestorePos: Integer;
-    procedure ChangeScale(M, D: Integer{$if CompilerVersion >= 31}; isDpiChange: Boolean{$ifend}); override;
     procedure DoDrawBackground(ACanvas: TCanvas; ARect: TRect; const PaintStage: TSpTBXPaintStage; var PaintDefault: Boolean); virtual;
     procedure DoMoved; virtual;
     function DoMoving(var NewSize: Integer): Boolean; virtual;
@@ -390,7 +507,6 @@ type
     procedure Paint; override;
     procedure RequestAlign; override;
     property AutoCalcMaxSize: Boolean read FAutoCalcMaxSize write FAutoCalcMaxSize default True;
-    property Color default clNone;
     property GripSize: Integer read FGripSize write SetGripSize default 50;
     property GripHotTrack: Boolean read FGripHotTrack write FGripHotTrack default True;
     property MinSize: Integer read FMinSize write SetMinSize default 0;
@@ -455,13 +571,10 @@ procedure SpTBIniSavePositions(const OwnerComponent: TComponent; const IniFile: 
 implementation
 
 uses
-  Types,
-  {$IF CompilerVersion >= 25} // for Delphi XE4 and up
-  System.UITypes,
-  {$IFEND}
-  Themes, ComCtrls, Registry, TB2Consts, TB2Common;
+  Types, Themes, ComCtrls, Registry, TB2Consts, TB2Common;
 
 const
+  DockedBorderSize = 2;
   HT_TB2k_Border = 2000;
   HT_DP_SPLITRESIZELEFT = 86;
   HT_DP_SPLITRESIZERIGHT = 87;
@@ -482,6 +595,7 @@ type
   TTBDockAccess = class(TTBDock);
   TControlAccess = class(TControl);
   TWinControlAccess = class(TWinControl);
+
 
 //WMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWM
 { Helpers }
@@ -862,7 +976,7 @@ begin
                 DPSibling.Width := DPSibling.Width - NewSize;
               MultiDock.UpdateDockablePanelsDockPos;
             end;
-          dprtManualResize, dprtMinimizeOrRestore:
+          dprtManualResize, dprtMinimizeOrRestore, dprtMinimizeOrRestoreTaskPaneStyle:
             begin
               if MultiDock.IsVertical then begin
                 PrevSize := DP.Height;
@@ -884,9 +998,9 @@ begin
                 Exit;
 
               if MultiDock.IsVertical then
-                MinSize := DPSibling.MinClientHeight + (CDefaultToolbarBorderSize * 2)
+                MinSize := DPSibling.MinClientHeight + (DockedBorderSize * 2)
               else
-                MinSize := DPSibling.MinClientWidth + (CDefaultToolbarBorderSize * 2);
+                MinSize := DPSibling.MinClientWidth + (DockedBorderSize * 2);
 
               // If DP can't be resized find another sibling
               if not (csDesigning in MultiDock.ComponentState) and DP.FixedDockedSize then begin
@@ -903,16 +1017,16 @@ begin
 
                 if MultiDock.IsVertical then begin
                   NewSize := DP.Height - Delta;
-                  if (DPSibling.Height + Delta < DPSibling.MinClientHeight + (CDefaultToolbarBorderSize * 2)) or
-                     (NewSize < DP.MinClientHeight + (CDefaultToolbarBorderSize * 2)) then
+                  if (DPSibling.Height + Delta < DPSibling.MinClientHeight + (DockedBorderSize * 2)) or
+                     (NewSize < DP.MinClientHeight + (DockedBorderSize * 2)) then
                   begin
                     Exit;
                   end;
                 end
                 else begin
                   NewSize := DP.Width - Delta;
-                  if (DPSibling.Width + Delta < DPSibling.MinClientWidth + (CDefaultToolbarBorderSize * 2)) or
-                     (NewSize < DP.MinClientWidth + (CDefaultToolbarBorderSize * 2)) then
+                  if (DPSibling.Width + Delta < DPSibling.MinClientWidth + (DockedBorderSize * 2)) or
+                     (NewSize < DP.MinClientWidth + (DockedBorderSize * 2)) then
                   begin
                     Exit;
                   end;
@@ -960,7 +1074,7 @@ begin
 
       MultiDock.EndUpdate;
 
-      // Resize the DP after it was appended
+      // Resize the DP after the it was appended
       if ResizeType = dprtAppendResize then
         SpDPResize(DP, NewSize, dprtManualResize);
     end;
@@ -1019,25 +1133,26 @@ var
   R: TRect;
 begin
   Result := nil;
-  for I := 0 to MultiDock.ToolbarCount - 1 do begin
-    DP := TSpTBXCustomDockablePanel(MultiDock.Toolbars[I]);
-    if OnlyOnTitleBar then begin
-      if MultiDock.IsVertical then
-        GetWindowRect(DP.FToolbar.Handle, R)
-      else begin
-        // When the DP is horizontal track 20 pixels from the left
-        R.TopLeft := DP.ClientToScreen(Point(0, 0));
-        R.BottomRight := DP.ClientToScreen(Point(20, DP.ClientHeight));
-      end;
-    end
-    else
-      GetWindowRect(DP.Handle, R);
+  for I := 0 to MultiDock.ToolbarCount - 1 do
+    if MultiDock.Toolbars[I] is TSpTBXCustomDockablePanel then begin
+      DP := TSpTBXCustomDockablePanel(MultiDock.Toolbars[I]);
+      if OnlyOnTitleBar then begin
+        if MultiDock.IsVertical then
+          GetWindowRect(DP.FToolbar.Handle, R)
+        else begin
+          // When the DP is horizontal track 20 pixels from the left
+          R.TopLeft := DP.ClientToScreen(Point(0, 0));
+          R.BottomRight := DP.ClientToScreen(Point(20, DP.ClientHeight));
+        end;
+      end
+      else
+        GetWindowRect(DP.Handle, R);
 
-    if PtInRect(R, P) then begin
-      Result := DP;
-      Break;
+      if PtInRect(R, P) then begin
+        Result := DP;
+        Break;
+      end;
     end;
-  end;
 end;
 
 //WMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWM
@@ -1079,7 +1194,7 @@ begin
         if not IsFloating then begin
           ACanvas.Brush.Color := clBtnFace;
           ACanvas.FrameRect(ARect);
-          InflateRect(ARect, -SpDPIScale(1), -SpDPIScale(1));
+          InflateRect(ARect, -1, -1);
           ACanvas.Brush.Color := clWhite;
           ACanvas.FrameRect(ARect);
         end;
@@ -1452,10 +1567,14 @@ end;
 procedure TSpTBXCustomMultiDock.GetDockablePanelList(DPList: TList);
 var
   I: Integer;
+  T: TTBCustomDockableWindow;
 begin
   DPList.Clear;
-  for I := 0 to ToolbarCount - 1 do
-    DPList.Add(Toolbars[I]);
+  for I := 0 to ToolbarCount - 1 do begin
+    T := Toolbars[I];
+    if T is TSpTBXCustomDockablePanel then
+      DPList.Add(T);
+  end;
   // Sort the list based on the dock pos
   DPList.Sort(CompareEffectiveDockPos);
 end;
@@ -1667,7 +1786,6 @@ begin
   inherited;
   Maximize := False;
   Minimize := False;
-  // Do not use SpDPIScale, scaled on TSpTBXCustomDockablePanel.ChangeScale
   TitleBarMaxSize := 19;
 end;
 
@@ -1698,7 +1816,6 @@ end;
 procedure TSpTBXDockablePanelButtonOptions.SetupButton(B: TSpTBXCustomItem);
 begin
   inherited;
-  // Do not use SpDPIScale, scaled on TSpTBXCustomDockablePanel.ChangeScale
   TSpTBXCustomItemAccess(B).CustomWidth := 15;
 end;
 
@@ -1733,7 +1850,7 @@ end;
 
 function TSpTBXDockablePanelToolbar.GetRightAlignMargin: Integer;
 begin
-  Result := SpDPIScale(4);
+  Result := 4;
 end;
 
 function TSpTBXDockablePanelToolbar.CanItemClick(Item: TTBCustomItem;
@@ -1836,18 +1953,6 @@ begin
   FreeAndNil(FDockForms);  // After inherited, Notification accesses FDockForms
 end;
 
-procedure TSpTBXCustomDockablePanel.ChangeScale(M, D: Integer{$if CompilerVersion >= 31}; isDpiChange: Boolean{$ifend});
-begin
-  inherited;
-  FOptions.TitleBarMaxSize := MulDiv(FOptions.TitleBarMaxSize, M, D);
-  if Assigned(Options.MinimizeButton) then
-    Options.MinimizeButton.CustomWidth := MulDiv(Options.MinimizeButton.CustomWidth, M, D);
-  if Assigned(Options.MaximizeButton) then
-    Options.MaximizeButton.CustomWidth := MulDiv(Options.MaximizeButton.CustomWidth, M, D);
-  if Assigned(Options.CloseButton) then
-    Options.CloseButton.CustomWidth := MulDiv(Options.CloseButton.CustomWidth, M, D);
-end;
-
 procedure TSpTBXCustomDockablePanel.Loaded;
 var
   I: Integer;
@@ -1876,15 +1981,25 @@ begin
 end;
 
 function TSpTBXCustomDockablePanel.Maximize: Boolean;
+var
+  PrevState: TWindowState;
 begin
   Result := False;
   if not Maximized then begin
     // [DockablePanel-Rule]
     // Do not maximize if it's the only DP on the dock
     if Docked and (CurrentDock.ToolbarCount > 1) then begin
+      PrevState := FState.DockedState;
       FIsManualSizing := True;
       try
-        Result := InternalMaximize(False);
+        if InternalMaximize(False) then begin
+          Result := True;
+          FState.DockedState := wsMaximized;
+          FOptions.SetupButtonIcon(FOptions.MinimizeButton);
+          FOptions.SetupButtonIcon(FOptions.MaximizeButton);
+        end
+        else
+          FState.DockedState := PrevState;
       finally
         FIsManualSizing := False;
       end;
@@ -1909,6 +2024,7 @@ var
   I, MinimizedCount: Integer;
   L: TList;
   MultiDock: TSpTBXCustomMultiDock;
+  RS: TSpTBXDPResizeType;
 begin
   Result := False;
   if Floating then begin
@@ -1922,7 +2038,7 @@ begin
     end;
   end
   else
-    if Docked and (FState.DockedState <> wsMinimized) then begin
+    if Docked and (FState.DockedState <> wsMinimized) and (CurrentDock is TSpTBXCustomMultiDock) then begin
       MultiDock := TSpTBXCustomMultiDock(CurrentDock);
       L := TList.Create;
       try
@@ -1945,7 +2061,11 @@ begin
           try
             if Height > MinClientHeight then
               FState.RestoreSize := Height;
-            if SpDPResize(Self, MinClientHeight, dprtMinimizeOrRestore) then begin
+            if Options.TaskPaneStyleResize then
+              RS := dprtMinimizeOrRestoreTaskPaneStyle
+            else
+              RS := dprtMinimizeOrRestore;
+            if SpDPResize(Self, MinClientHeight, RS) then begin
               FState.DockedState := wsMinimized;
               FOptions.SetupButtonIcon(FOptions.MinimizeButton);
               FOptions.SetupButtonIcon(FOptions.MaximizeButton);
@@ -1992,7 +2112,7 @@ begin
     // Make sure to calculate the floating form constraints taking into
     // account the borders and the close button.
     TotalBorderSize := GetFloatingBorderSize.Y * 2;
-    Parent.Constraints.MinWidth := SpDPIScale(20) + TotalBorderSize;
+    Parent.Constraints.MinWidth := 20 + TotalBorderSize;
     Parent.Constraints.MinHeight := MinClientHeight + TotalBorderSize;
     if (FState.DockedState = wsMinimized) and (Parent.ClientHeight > MinClientHeight) then begin
       FState.DockedState := wsNormal;
@@ -2011,6 +2131,7 @@ function TSpTBXCustomDockablePanel.Restore: Boolean;
 var
   I: Integer;
   DkPanel: TSpTBXCustomDockablePanel;
+  RS: TSpTBXDPResizeType;
 begin
   Result := False;
   FIsManualSizing := True;
@@ -2028,14 +2149,18 @@ begin
           wsNormal: ;
           wsMinimized:
             begin
-              Result := SpDPResize(Self, FState.RestoreSize, dprtMinimizeOrRestore);
+              if Options.TaskPaneStyleResize then
+                RS := dprtMinimizeOrRestoreTaskPaneStyle
+              else
+                RS := dprtMinimizeOrRestore;
+              Result := SpDPResize(Self, FState.RestoreSize, RS);
               if Result then begin
                 FState.DockedState := wsNormal;
 
                 // If a sibling was Maximized restore it
                 if Assigned(CurrentDock) then begin
                   for I := 0 to CurrentDock.ToolbarCount - 1 do
-                    if CurrentDock.Toolbars[I] <> Self then begin
+                    if (CurrentDock.Toolbars[I] <> Self) and (CurrentDock.Toolbars[I] is TSpTBXCustomDockablePanel) then begin
                       DkPanel := TSpTBXCustomDockablePanel(CurrentDock.Toolbars[I]);
                       if DkPanel.Maximized then begin
                         DkPanel.FState.DockedState := wsNormal;
@@ -2049,6 +2174,8 @@ begin
           wsMaximized:
             begin
               Result := InternalMaximize(True);
+              if Result then
+                FState.DockedState := wsNormal;
             end;
         end;
       end;
@@ -2351,7 +2478,7 @@ var
   M: TSpTBXCustomMultiDock;
   L: TList;
 begin
-  Result := Docked and HandleAllocated;
+  Result := Docked and (CurrentDock is TSpTBXCustomMultiDock) and HandleAllocated;
 
   if not Result then Exit;
 
@@ -2396,7 +2523,7 @@ begin
   if MaxClientHeight > 0 then MaxHeight := MaxClientHeight + Sz.Y;
 
   // Disallow lateral Width change when the DP is docked
-  if Docked then begin
+  if Docked and (CurrentDock is TSpTBXCustomMultiDock) then begin
     M := TSpTBXCustomMultiDock(CurrentDock);
     if M.IsVertical then begin
       if not M.UpdatingLateralSize then
@@ -2427,22 +2554,17 @@ begin
     PaintDefault := False;
 
     if Docked and not Floating then begin
-      // When the DP is docked it draws the CaptionBar borders on the NC area
+      // When the DP is not floating draws the CaptionBar borders on the NC area
       // of the DockablePanel, see InternalDrawBackground
-      // Map left, top and right from client to parent, Bottom should remain the same
-      // DDDDDDDDDDDDDDDDDDDDDDDDDDD
-      // DTTTTTTTTTTTTTTTTTTTTTTTTTD
-      // DT                       TD
-      // DT                       TD
-      // DTTTTTTTTTTTTTTTTTTTTTTTTTD
-      // DDDDDDDDDDDDDDDDDDDDDDDDDDD
+      // Just draw 1 pixel from the left and right, and 2 pixels from the top
+      // ARect.Bottom should remain the same
       if IsVerticalTitleBar then begin
-        InflateRect(ARect, 0, CDefaultToolbarBorderSize);
-        ARect.Left := ARect.Left - CDefaultToolbarBorderSize;
+        InflateRect(ARect, 0, 1);
+        ARect.Left := ARect.Left - DockedBorderSize;
       end
       else begin
-        InflateRect(ARect, CDefaultToolbarBorderSize, 0);
-        ARect.Top := ARect.Top - CDefaultToolbarBorderSize;
+        InflateRect(ARect, 1, 0);
+        ARect.Top := ARect.Top - DockedBorderSize;
       end;
     end;
 
@@ -2494,7 +2616,7 @@ begin
       FPanel.Height := FToolbarDock.Height;
       if Floating and Assigned(Parent) then begin
         Parent.Constraints.MinWidth := 0;
-        Parent.Constraints.MinHeight := FPanel.Height + GetFloatingBorderSize.Y * SpDPIScale(2);
+        Parent.Constraints.MinHeight := FPanel.Height + GetFloatingBorderSize.Y * 2;
       end;
     end;
     MinClientWidth := 0;
@@ -2619,10 +2741,16 @@ begin
   if PaintOnNCArea and FPanel.Visible then begin
     // Draw the CaptionBar borders on the NC Area of the embedded Dock
     // See DockDrawBackground.
-    if IsVerticalTitleBar then
-      ARect.Right := ARect.Left + CaptionPanelSize.X + CDefaultToolbarBorderSize
-    else
-      ARect.Bottom := ARect.Top + CaptionPanelSize.Y + CDefaultToolbarBorderSize;
+    // Just draw 1 pixel from the left and right, and 2 pixels from the top
+    // ARect.Top should remain the same
+    if IsVerticalTitleBar then begin
+      ARect.Right := ARect.Left + CaptionPanelSize.X + 2;
+      InflateRect(ARect, 0, -(DockedBorderSize - 1));
+    end
+    else begin
+      ARect.Bottom := ARect.Top + CaptionPanelSize.Y + 2;
+      InflateRect(ARect, -(DockedBorderSize - 1), 0);
+    end;
 
     DefaultPainting := True;
     DoDrawCaptionPanel(ACanvas, ARect, pstPrePaint, DefaultPainting);
@@ -2644,28 +2772,34 @@ var
   MultiDock: TSpTBXCustomMultiDock;
 begin
   Result := False;
-  if not Docked or (CurrentDock.Position in [dpTop, dpBottom]) or
-    (CurrentDock.ToolbarCount < 2) then Exit;
+  if not Docked or not (CurrentDock is TSpTBXCustomMultiDock) or (CurrentDock.Position in [dpTop, dpBottom]) then Exit;
   MultiDock := TSpTBXCustomMultiDock(CurrentDock);
 
   L := TList.Create;
   PrevRestoreSize := TList.Create;
-  MultiDock.BeginUpdate;
   try
     MultiDock.GetDockablePanelList(L);
+    if L.Count < 2 then Exit;
+
     if Restore then begin
       // Restore the minimized DPs, from down-to-top
-      for I := L.Count - 1 downto 0 do begin
+      for I := L.Count - 1 downto 0 do
         if L[I] <> Self then begin
           DP := TSpTBXCustomDockablePanel(L[I]);
           if DP.Minimized then begin
-            Height := Height - (DP.FState.RestoreSize - DP.Height);
-            DP.Height := DP.FState.RestoreSize;
+            DP.FIsManualSizing := True;
+            if SpDPResize(DP, DP.FState.RestoreSize, dprtMinimizeOrRestore) then
+              PrevRestoreSize.Add(DP);
+            DP.FIsManualSizing := False;
           end;
         end;
+      // Now set the DockedState
+      for I := 0 to PrevRestoreSize.Count - 1 do begin
+        DP := TSpTBXCustomDockablePanel(PrevRestoreSize[I]);
+        DP.FState.DockedState := wsNormal;
+        DP.Options.SetupButtonIcon(DP.Options.MinimizeButton);
+        DP.Options.SetupButtonIcon(DP.Options.MaximizeButton);
       end;
-      // Restore the DP
-      FState.DockedState := wsNormal;
     end
     else begin
       // Remember the previous Height of the DPs
@@ -2673,33 +2807,34 @@ begin
         DP := TSpTBXCustomDockablePanel(L[I]);
         PrevRestoreSize.Add(Pointer(DP.Height));
       end;
-      // Minimize the siblings
-      for I := 0 to L.Count - 1 do begin
+      // Minimize the DPs
+      for I := 0 to L.Count - 1 do
         if L[I] <> Self then begin
           DP := TSpTBXCustomDockablePanel(L[I]);
           if not DP.Minimized then begin
-            DP.FState.RestoreSize := Integer(PrevRestoreSize[I]);
-            DP.Height := DP.CaptionPanelSize.Y;
+            if not DP.Maximized then begin
+              DP.FState.RestoreSize := Integer(PrevRestoreSize[I]);
+            end;
+            DP.FIsManualSizing := True;
+            SpDPResize(DP, DP.CaptionPanelSize.Y, dprtMinimizeOrRestore);
+            DP.FIsManualSizing := False;
             DP.FState.DockedState := wsMinimized;
-            DP.FOptions.SetupButtonIcon(DP.FOptions.MinimizeButton);
-            DP.FOptions.SetupButtonIcon(DP.FOptions.MaximizeButton);
+            DP.Options.SetupButtonIcon(DP.Options.MinimizeButton);
+            DP.Options.SetupButtonIcon(DP.Options.MaximizeButton);
           end;
         end;
-      end;
-      // Maximize the DP
-      Height := CurrentDock.Height;
-      FState.DockedState := wsMaximized;
     end;
 
-    FOptions.SetupButtonIcon(FOptions.MinimizeButton);
-    FOptions.SetupButtonIcon(FOptions.MaximizeButton);
-    MultiDock.UpdateDockablePanelsDockPos;
     Result := True;
   finally
     L.Free;
     PrevRestoreSize.Free;
-    MultiDock.EndUpdate;
   end;
+end;
+
+procedure TSpTBXCustomDockablePanel.InvalidateBackground(InvalidateChildren: Boolean);
+begin
+  SpInvalidateSpTBXControl(Self, True, True);
 end;
 
 function TSpTBXCustomDockablePanel.IsResizable: Boolean;
@@ -2774,7 +2909,7 @@ end;
 
 procedure TSpTBXCustomDockablePanel.SetEffectiveHeight(const Value: Integer);
 begin
-  if Docked and IsVertical then
+  if Docked and IsVertical and (CurrentDock is TSpTBXCustomMultiDock) then
     SpDPResize(Self, Value)
   else
     Height := Value;
@@ -2782,7 +2917,7 @@ end;
 
 procedure TSpTBXCustomDockablePanel.SetEffectiveWidth(const Value: Integer);
 begin
-  if Docked and not IsVertical then
+  if Docked and not IsVertical and (CurrentDock is TSpTBXCustomMultiDock) then
     SpDPResize(Self, Value)
   else
     Width := Value;
@@ -2852,7 +2987,7 @@ begin
           end
           else begin
             if not Docked then // If it's not docked compute the borders
-              EffectiveWidth := D.ClientWidth - (CDefaultToolbarBorderSize * 2)
+              EffectiveWidth := D.ClientWidth - (DockedBorderSize * 2)
             else
               EffectiveWidth := D.ClientWidth;
             // Append the DP to the bottom if it's being docked by code
@@ -2868,7 +3003,7 @@ begin
           end
           else begin
             if not Docked then // If it's not docked compute the borders
-              EffectiveHeight := D.ClientHeight - (CDefaultToolbarBorderSize * 2)
+              EffectiveHeight := D.ClientHeight - (DockedBorderSize * 2)
             else
               EffectiveHeight := D.ClientHeight;
             // Append the DP to the bottom if it's being docked by code
@@ -3031,7 +3166,7 @@ begin
   Message.Result := 0;
   if Docked then
     with Message.CalcSize_Params^ do
-      InflateRect(rgrc[0], -CDefaultToolbarBorderSize, -CDefaultToolbarBorderSize);
+      InflateRect(rgrc[0], -DockedBorderSize, -DockedBorderSize);
 end;
 
 procedure TSpTBXCustomDockablePanel.WMNCHitTest(var Message: TWMNCHitTest);
@@ -3046,14 +3181,14 @@ begin
     GetWindowRect(Handle, R);
 
     if IsVertical then begin
-      if (P.Y >= R.Bottom - CDefaultToolbarBorderSize) and CanSplitResize(dpBottom) then
+      if (P.Y >= R.Bottom - DockedBorderSize) and CanSplitResize(dpBottom) then
         Message.Result := HT_DP_SPLITRESIZEBOTTOM
-      else if (P.Y <= R.Top + CDefaultToolbarBorderSize) and CanSplitResize(dpTop) then
+      else if (P.Y <= R.Top + DockedBorderSize) and CanSplitResize(dpTop) then
         Message.Result := HT_DP_SPLITRESIZETOP;
     end
     else begin
-      if (P.X >= R.Right - CDefaultToolbarBorderSize) and CanSplitResize(dpRight) then Message.Result := HT_DP_SPLITRESIZERIGHT
-      else if (P.X <= R.Left + CDefaultToolbarBorderSize) and CanSplitResize(dpLeft) then Message.Result := HT_DP_SPLITRESIZELEFT;
+      if (P.X >= R.Right - DockedBorderSize) and CanSplitResize(dpRight) then Message.Result := HT_DP_SPLITRESIZERIGHT
+      else if (P.X <= R.Left + DockedBorderSize) and CanSplitResize(dpLeft) then Message.Result := HT_DP_SPLITRESIZELEFT;
     end;
   end;
 end;
@@ -3118,7 +3253,6 @@ begin
   Height := 100;
   Align := alLeft;
   Cursor := crSizeWE;
-  Color := clNone;
   FResizeStyle := rsUpdate;
   FOldSize := -1;
   FMinSize := 0;
@@ -3163,9 +3297,13 @@ begin
 
   P := Point(Left, Top);
   RMargins := Rect(0, 0, 0, 0);
+  {$IF CompilerVersion > 15}
   bAlignWithMargins := AlignWithMargins;
   if bAlignWithMargins then
     RMargins := Rect(Margins.Left, Margins.Top, Margins.Right, Margins.Bottom);
+  {$ELSE}
+  bAlignWithMargins := False;
+  {$IFEND}
 
   // Fix from QC#68209, when the Splitter has bAlignWithMargins set to true
   case Align of
@@ -3204,6 +3342,7 @@ begin
     begin
       R := C.BoundsRect;
       // Fix from QC#68209, when the control has bAlignWithMargins set to true
+      {$IF CompilerVersion > 15}
       if C.AlignWithMargins then
       begin
         R.Left   := R.Left - C.Margins.Left;
@@ -3211,6 +3350,7 @@ begin
         R.Top    := R.Top - C.Margins.Top;
         R.Bottom := R.Bottom + C.Margins.Bottom;
       end;
+      {$IFEND}
 
       case Align of
         alLeft, alRight:
@@ -3250,13 +3390,6 @@ end;
 procedure TSpTBXCustomSplitter.WMSpSkinChange(var Message: TMessage);
 begin
   Invalidate;
-end;
-
-procedure TSpTBXCustomSplitter.ChangeScale(M, D: Integer{$if CompilerVersion >= 31}; isDpiChange: Boolean{$ifend});
-begin
-  inherited;
-  FGripSize := MulDiv(FGripSize, M, D);
-  FRestorePos := MulDiv(FRestorePos, M, D);
 end;
 
 procedure TSpTBXCustomSplitter.MouseAllocateLineDC;
@@ -3484,16 +3617,16 @@ begin
         Canvas.Brush.Color := CurrentSkin.GetThemedSystemColor(clBtnFace)
       else
         Canvas.Brush.Color := Color;
-      SpFillRect(Canvas, ClientR, Canvas.Brush.Color);
+      Canvas.FillRect(ClientR);
     end;
 
     // Paint grip
     R := GripRect;
     DragHandleR := R;
     if IsVertical then
-      InflateRect(DragHandleR, -SpDPIScale(1), -SpDPIScale(10))
+      InflateRect(DragHandleR, -1, -10)
     else
-      InflateRect(DragHandleR, -SpDPIScale(10), -SpDPIScale(1));
+      InflateRect(DragHandleR, -10, -1);
 
     if SkinManager.GetSkinType = sknSkin then begin
       if FMouseOverGrip then

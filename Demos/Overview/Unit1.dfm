@@ -18,29 +18,30 @@ object Form1: TForm1
   TextHeight = 13
   object SpTBXSplitter1: TSpTBXSplitter
     Left = 273
-    Top = 76
-    Height = 452
+    Top = 72
+    Height = 457
     Cursor = crSizeWE
-    ParentColor = False
+    ExplicitHeight = 456
   end
   object SpTBXSplitter2: TSpTBXSplitter
     Left = 575
-    Top = 76
-    Height = 452
+    Top = 72
+    Height = 457
     Cursor = crSizeWE
     Align = alRight
-    ParentColor = False
+    ExplicitHeight = 456
   end
   object SpTBXMultiDock1: TSpTBXMultiDock
     Left = 0
-    Top = 76
+    Top = 72
     Width = 273
-    Height = 452
+    Height = 457
+    ExplicitHeight = 456
     object SpTBXDockablePanel1: TSpTBXDockablePanel
       Left = 0
       Top = 154
       Width = 273
-      Height = 298
+      Height = 303
       Caption = 'Options Panel'
       DockPos = 154
       TabOrder = 0
@@ -53,10 +54,11 @@ object Form1: TForm1
         Left = 0
         Top = 19
         Width = 269
-        Height = 275
+        Height = 280
         Align = alClient
         OnResize = SpTBXTabControl2Resize
         ActiveTabIndex = 0
+        ExplicitHeight = 279
         HiddenItems = <>
         object SpTBXTabItem1: TSpTBXTabItem
           Caption = 'Controls'
@@ -68,22 +70,91 @@ object Form1: TForm1
         object SpTBXTabItem3: TSpTBXTabItem
           Caption = 'Misc'
         end
-        object SpTBXTabSheet6: TSpTBXTabSheet
+        object SpTBXTabSheet3: TSpTBXTabSheet
           Left = 0
-          Top = 25
+          Top = 23
           Width = 269
-          Height = 250
-          Caption = 'Editors'
+          Height = 257
+          Caption = 'Misc'
           ImageIndex = -1
+          ExplicitHeight = 256
           DesignSize = (
             269
-            250)
+            257)
+          TabItem = 'SpTBXTabItem3'
+          object SpTBXGroupBox5: TSpTBXGroupBox
+            Left = 8
+            Top = 8
+            Width = 252
+            Height = 177
+            Caption = 'Links'
+            Anchors = [akLeft, akTop, akRight]
+            TabOrder = 0
+            object SpTBXLabel2: TSpTBXLabel
+              Left = 8
+              Top = 24
+              Width = 151
+              Height = 19
+              Caption = 'Go to Silverpoint Development'
+              LinkText = 'http://www.silverpointdevelopment.com'
+            end
+            object SpTBXLabel3: TSpTBXLabel
+              Left = 8
+              Top = 48
+              Width = 156
+              Height = 19
+              Caption = 'Go to Toolbar2000 newsgroups'
+              LinkText = 'news://news.jrsoftware.org'
+            end
+            object SpTBXLabel4: TSpTBXLabel
+              Left = 8
+              Top = 72
+              Width = 128
+              Height = 19
+              Caption = 'Open the Windows folder'
+            end
+            object SpTBXLabel7: TSpTBXLabel
+              Left = 8
+              Top = 144
+              Width = 105
+              Height = 19
+              Cursor = crHandPoint
+              Caption = 'View the sourcecode'
+              LinkText = 'notepad.exe'
+            end
+            object SpTBXLabel5: TSpTBXLabel
+              Left = 8
+              Top = 96
+              Width = 106
+              Height = 19
+              Caption = 'Open it with the tree'
+            end
+            object SpTBXLabel6: TSpTBXLabel
+              Left = 8
+              Top = 120
+              Width = 74
+              Height = 19
+              Caption = 'Open WinAmp'
+            end
+          end
+        end
+        object SpTBXTabSheet6: TSpTBXTabSheet
+          Left = 0
+          Top = 23
+          Width = 269
+          Height = 257
+          Caption = 'Editors'
+          ImageIndex = -1
+          ExplicitHeight = 256
+          DesignSize = (
+            269
+            257)
           TabItem = 'SpTBXTabItem6'
           object SpTBXPanel2: TSpTBXPanel
             Left = 8
             Top = 112
             Width = 252
-            Height = 49
+            Height = 135
             Anchors = [akLeft, akTop, akRight, akBottom]
             TabOrder = 4
             HotTrack = True
@@ -91,7 +162,7 @@ object Form1: TForm1
               Left = 2
               Top = 22
               Width = 248
-              Height = 25
+              Height = 111
               Align = alClient
               BorderStyle = bsNone
               Lines.Strings = (
@@ -102,6 +173,7 @@ object Form1: TForm1
                 '4) Set the control BorderStyle to bsNone'
                 '4) Change the skin to other than Default')
               TabOrder = 0
+              ExplicitHeight = 480
             end
             object Panel2: TPanel
               Left = 2
@@ -197,89 +269,23 @@ object Form1: TForm1
             Width = 121
             Height = 21
             ItemHeight = 23
-            ItemIndex = 6
+            ItemIndex = 0
             TabOrder = 6
             Text = 'Arial'
             SelectedFont = 'Arial'
           end
         end
-        object SpTBXTabSheet3: TSpTBXTabSheet
-          Left = 0
-          Top = 25
-          Width = 269
-          Height = 250
-          Caption = 'Misc'
-          ImageIndex = -1
-          DesignSize = (
-            269
-            250)
-          TabItem = 'SpTBXTabItem3'
-          object SpTBXGroupBox5: TSpTBXGroupBox
-            Left = 8
-            Top = 8
-            Width = 252
-            Height = 177
-            Caption = 'Links'
-            Anchors = [akLeft, akTop, akRight]
-            TabOrder = 0
-            object SpTBXLabel2: TSpTBXLabel
-              Left = 8
-              Top = 24
-              Width = 151
-              Height = 19
-              Caption = 'Go to Silverpoint Development'
-              LinkText = 'http://www.silverpointdevelopment.com'
-            end
-            object SpTBXLabel3: TSpTBXLabel
-              Left = 8
-              Top = 48
-              Width = 156
-              Height = 19
-              Caption = 'Go to Toolbar2000 newsgroups'
-              LinkText = 'news://news.jrsoftware.org'
-            end
-            object SpTBXLabel4: TSpTBXLabel
-              Left = 8
-              Top = 72
-              Width = 128
-              Height = 19
-              Caption = 'Open the Windows folder'
-            end
-            object SpTBXLabel7: TSpTBXLabel
-              Left = 8
-              Top = 144
-              Width = 105
-              Height = 19
-              Cursor = crHandPoint
-              Caption = 'View the sourcecode'
-              LinkText = 'notepad.exe'
-            end
-            object SpTBXLabel5: TSpTBXLabel
-              Left = 8
-              Top = 96
-              Width = 106
-              Height = 19
-              Caption = 'Open it with the tree'
-            end
-            object SpTBXLabel6: TSpTBXLabel
-              Left = 8
-              Top = 120
-              Width = 74
-              Height = 19
-              Caption = 'Open WinAmp'
-            end
-          end
-        end
         object SpTBXTabSheet1: TSpTBXTabSheet
           Left = 0
-          Top = 25
+          Top = 23
           Width = 269
-          Height = 250
+          Height = 257
           Caption = 'Controls'
           ImageIndex = -1
+          ExplicitHeight = 256
           DesignSize = (
             269
-            250)
+            257)
           TabItem = 'SpTBXTabItem1'
           object progressAnimate: TSpTBXButton
             Left = 80
@@ -411,52 +417,26 @@ object Form1: TForm1
       DesignSize = (
         269
         150)
-      object SpTBXGroupBox3: TSpTBXGroupBox
-        Left = 13
-        Top = 26
-        Width = 241
-        Height = 113
+      object rgSkinType: TSpTBXRadioGroup
+        Left = 8
+        Top = 32
+        Width = 252
+        Height = 105
         Caption = 'Skin Type'
-        Anchors = [akLeft, akTop, akRight, akBottom]
-        TabOrder = 2
-        object radiobuttonSkin1: TSpTBXRadioButton
-          Left = 16
-          Top = 24
-          Width = 67
-          Height = 21
-          Caption = 'Windows'
-          TabOrder = 0
-          TabStop = True
-          OnClick = rgSkinTypeClick
-          Checked = True
-          GroupIndex = 1
-        end
-        object radiobuttonSkin2: TSpTBXRadioButton
-          Left = 16
-          Top = 51
-          Width = 74
-          Height = 21
-          Caption = 'VCL Styles'
-          TabOrder = 1
-          OnClick = rgSkinTypeClick
-          GroupIndex = 1
-        end
-        object radiobuttonSkin3: TSpTBXRadioButton
-          Left = 16
-          Top = 78
-          Width = 48
-          Height = 21
-          Caption = 'Skins'
-          TabOrder = 2
-          OnClick = rgSkinTypeClick
-          GroupIndex = 1
-        end
+        Anchors = [akLeft, akTop, akRight]
+        TabOrder = 1
+        TabStop = True
+        OnClick = rgSkinTypeClick
+        ItemIndex = 0
+        Items.Strings = (
+          '&Windows'
+          '&Skins')
       end
       object skinButton: TSpTBXSpeedButton
-        Left = 99
-        Top = 104
+        Left = 72
+        Top = 103
         Width = 86
-        Height = 21
+        Height = 18
         Caption = 'Load Skin ...'
         OnClick = skinButtonClick
       end
@@ -466,7 +446,7 @@ object Form1: TForm1
     Left = 0
     Top = 0
     Width = 716
-    Height = 76
+    Height = 72
     object SpTBXToolbar1: TSpTBXToolbar
       Left = 0
       Top = 0
@@ -512,7 +492,7 @@ object Form1: TForm1
     end
     object SpTBXToolbar3: TSpTBXToolbar
       Left = 0
-      Top = 25
+      Top = 23
       DockPos = 0
       DockRow = 1
       ShrinkMode = tbsmNone
@@ -520,7 +500,7 @@ object Form1: TForm1
       TabOrder = 1
       Caption = 'SpTBXToolbar3'
       DesignSize = (
-        708
+        706
         22)
       object SpTBXLabelItem3: TSpTBXLabelItem
         Caption = '&Address:'
@@ -539,7 +519,7 @@ object Form1: TForm1
         Images = ImageList1
       end
       object SpTBXComboBox1: TSpTBXComboBox
-        Left = 55
+        Left = 53
         Top = 0
         Width = 605
         Height = 21
@@ -553,7 +533,7 @@ object Form1: TForm1
     end
     object SpTBXToolbar2: TSpTBXToolbar
       Left = 0
-      Top = 51
+      Top = 49
       DockPos = 8
       DockRow = 2
       ShrinkMode = tbsmNone
@@ -575,15 +555,16 @@ object Form1: TForm1
   end
   object SpTBXMultiDock3: TSpTBXMultiDock
     Left = 580
-    Top = 76
+    Top = 72
     Width = 136
-    Height = 452
+    Height = 457
     Position = dpxRight
+    ExplicitHeight = 456
     object DP1: TSpTBXDockablePanel
       Left = 0
       Top = 286
       Width = 136
-      Height = 166
+      Height = 171
       Caption = 'Panel1'
       DockPos = 286
       TabOrder = 0
@@ -706,12 +687,13 @@ object Form1: TForm1
   end
   object Panel1: TPanel
     Left = 278
-    Top = 76
+    Top = 72
     Width = 297
-    Height = 452
+    Height = 457
     Align = alClient
     BevelOuter = bvNone
     TabOrder = 2
+    ExplicitHeight = 456
     object Image1: TImage
       Left = 16
       Top = 248
@@ -1403,10 +1385,11 @@ object Form1: TForm1
       Left = 0
       Top = 0
       Width = 297
-      Height = 452
+      Height = 457
       Align = alClient
       ActiveTabIndex = -1
       Images = ImageList1
+      ExplicitHeight = 456
       HiddenItems = <>
       object SpTBXRightAlignSpacerItem1: TSpTBXRightAlignSpacerItem
         CustomWidth = 210
@@ -1431,12 +1414,12 @@ object Form1: TForm1
   end
   object SpTBXStatusBar1: TSpTBXStatusBar
     Left = 0
-    Top = 528
+    Top = 529
     Width = 716
-    Height = 27
+    Height = 26
     ParentShowHint = False
     ShowHint = True
-    ExplicitTop = 530
+    ExplicitTop = 532
     object TBControlItem2: TTBControlItem
       Control = SpTBXProgressBar2
     end
@@ -1466,7 +1449,7 @@ object Form1: TForm1
     end
     object SpTBXProgressBar2: TSpTBXProgressBar
       Left = 0
-      Top = 2
+      Top = 1
       Width = 140
       Height = 19
       Caption = '30%'
@@ -1512,7 +1495,7 @@ object Form1: TForm1
     Left = 408
     Top = 352
     Bitmap = {
-      494C01010A000E00340010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
+      494C01010A000E002C0010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000400000003000000001002000000000000030
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000

@@ -27,30 +27,34 @@ the specific language governing rights and limitations under the License.
 The initial developer of this code is Robert Lee.
 
 Requirements:
+For Delphi/C++Builder 2009 or newer:
   - Jordan Russell's Toolbar 2000
     http://www.jrsoftware.org
+For Delphi/C++Builder 7-2007:
+  - Jordan Russell's Toolbar 2000
+    http://www.jrsoftware.org
+  - Troy Wolbrink's TNT Unicode Controls
+    http://www.tntware.com/delphicontrols/unicode/
 
 Development notes:
   - All the Windows and Delphi bugs fixes are marked with '[Bugfix]'.
   - All the theme changes and adjustments are marked with '[Theme-Change]'.
 
+History:
+  -
+
 ==============================================================================}
 
 interface
 
-{$BOOLEVAL OFF}   // Unit depends on short-circuit boolean evaluation
-{$IF CompilerVersion >= 25} // for Delphi XE4 and up
-  {$LEGACYIFEND ON} // XE4 and up requires $IF to be terminated with $ENDIF instead of $IFEND
-{$IFEND}
+{$BOOLEVAL OFF} // Unit depends on short-circuit boolean evaluation
 
 uses
-  Windows, Messages, Classes, SysUtils, Controls, Graphics, Forms,
-  Menus, StdCtrls, ExtCtrls, ActnList, Dialogs, ImgList,
+  Windows, Messages, Classes, SysUtils, Controls, Graphics, ImgList, Forms,
+  Menus, StdCtrls, ExtCtrls, ActnList, Dialogs,
   TB2Dock, TB2Toolbar, TB2Item, TB2ExtItems,
   SpTBXSkins, SpTBXItem, SpTBXControls, SpTBXEditors, SpTBXFormPopupMenu,
   SpTBXExtEditors, SpTBXTabs;
-  // Delphi XE8 and up will automatically add System.ImageList, make sure to delete it
-  // Adding a compiler conditional doesn't work
 
 type
   { TSpTBXColorPickerDragObject }
@@ -150,7 +154,7 @@ implementation
 {$R *.dfm}
 
 uses
-  Themes, UxTheme, Types;
+  Themes, UxTheme;
 
 //WMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWM
 { Helpers }
@@ -204,7 +208,6 @@ begin
 
     // Draw the crosshair
     if DrawCrosshair then begin
-      DestCanvas.Pen.Color := CurrentSkin.GetThemedSystemColor(clHighlight);
       DestCanvas.MoveTo(CenterP.X - (CenterP.X div 2), CenterP.Y);
       DestCanvas.LineTo(CenterP.X + (CenterP.X div 2), CenterP.Y);
       DestCanvas.MoveTo(CenterP.X, CenterP.Y - (CenterP.Y div 2));
@@ -246,9 +249,8 @@ end;
 procedure TSpTBXColorPickerForm.FormCreate(Sender: TObject);
 begin
   btnColorPicker.Caption := SSpTBXClickAndDrag;
+  SpTBXTabControl1.DoubleBuffered := True;
   imgPalette.Cursor := crSpTBXEyeDropper;
-
-  SpDPIScaleImageList(ImageList1);
 end;
 
 procedure TSpTBXColorPickerForm.FormDestroy(Sender: TObject);
@@ -262,17 +264,9 @@ begin
 end;
 
 procedure TSpTBXColorPickerForm.FormShow(Sender: TObject);
-Var
-  Bitmap : TBitmap;
 begin
-  Bitmap := TBitmap.Create;
-  try
-    Bitmap.Assign(imgPalette.Picture.Bitmap);
-    SpDPIResizeBitmap(Bitmap, SpDPIScale(ImgPalette.Width), SpDPIScale(ImgPalette.Height));
-    imgPalette.Picture.Assign(Bitmap);
-  finally
-    Bitmap.Free;
-  end;
+  if SkinManager.GetSkinType <> sknSkin then
+    SpTBXTabControl1.TabBackgroundColor := clBtnFace;
   UpdateColorLabel(GetSelectedColor);
   CenterImages;
 end;
@@ -297,7 +291,7 @@ procedure TSpTBXColorPickerForm.btnColorDraw(Sender: TObject;
 begin
   if PaintStage = pstPrePaint then begin
     PaintDefault := False;
-    InflateRect(ARect, -SpDPIScale(3), -SpDPIScale(3));
+    InflateRect(ARect, -3, -3);
     if btnColor.CaptionGlowColor = clNone then
       SpDrawCheckeredBackground(ACanvas, ARect)
     else begin
@@ -435,7 +429,6 @@ end;
 procedure TSpTBXColorPickerForm.SpTBXTabControl1ActiveTabChange(Sender: TObject;
   TabIndex: Integer);
 begin
-  SpTBXTabControl1.InvalidateBackground;
   CenterImages;
 end;
 

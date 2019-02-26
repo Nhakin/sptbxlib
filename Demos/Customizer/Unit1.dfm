@@ -14,26 +14,27 @@ object Form1: TForm1
   ShowHint = True
   OnCreate = FormCreate
   OnDestroy = FormDestroy
+  OnShow = FormShow
   PixelsPerInch = 96
   TextHeight = 13
   object SpTBXSplitter1: TSpTBXSplitter
     Left = 142
-    Top = 77
-    Height = 343
+    Top = 75
+    Height = 347
     Cursor = crSizeWE
   end
   object SpTBXSplitter2: TSpTBXSplitter
     Left = 614
-    Top = 77
-    Height = 343
+    Top = 75
+    Height = 347
     Cursor = crSizeWE
     Align = alRight
   end
   object SpTBXTabControl1: TSpTBXTabControl
     Left = 147
-    Top = 77
+    Top = 75
     Width = 467
-    Height = 343
+    Height = 347
     Align = alClient
     Font.Charset = ANSI_CHARSET
     Font.Color = clWindowText
@@ -55,9 +56,9 @@ object Form1: TForm1
     end
     object SpTBXTabSheet3: TSpTBXTabSheet
       Left = 0
-      Top = 25
+      Top = 23
       Width = 467
-      Height = 318
+      Height = 324
       Caption = 'Translations.txt'
       ImageIndex = -1
       TabItem = 'SpTBXTabItem3'
@@ -65,7 +66,7 @@ object Form1: TForm1
         Left = 2
         Top = 0
         Width = 461
-        Height = 314
+        Height = 320
         Align = alClient
         BorderStyle = bsNone
         ScrollBars = ssVertical
@@ -74,9 +75,9 @@ object Form1: TForm1
     end
     object SpTBXTabSheet2: TSpTBXTabSheet
       Left = 0
-      Top = 25
+      Top = 23
       Width = 467
-      Height = 318
+      Height = 324
       Caption = 'Advanced Techniques.txt'
       ImageIndex = -1
       TabItem = 'SpTBXTabItem2'
@@ -84,7 +85,7 @@ object Form1: TForm1
         Left = 2
         Top = 0
         Width = 461
-        Height = 314
+        Height = 320
         Align = alClient
         BorderStyle = bsNone
         ScrollBars = ssVertical
@@ -93,9 +94,9 @@ object Form1: TForm1
     end
     object SpTBXTabSheet1: TSpTBXTabSheet
       Left = 0
-      Top = 25
+      Top = 23
       Width = 467
-      Height = 318
+      Height = 324
       Caption = 'FAQ.txt'
       ImageIndex = -1
       TabItem = 'SpTBXTabItem1'
@@ -103,7 +104,7 @@ object Form1: TForm1
         Left = 2
         Top = 0
         Width = 461
-        Height = 314
+        Height = 320
         Align = alClient
         BorderStyle = bsNone
         ScrollBars = ssVertical
@@ -115,11 +116,11 @@ object Form1: TForm1
     Left = 0
     Top = 0
     Width = 748
-    Height = 77
+    Height = 75
     PopupMenu = SpTBXPopupMenu1
     object tbStandard: TSpTBXToolbar
       Left = 0
-      Top = 25
+      Top = 23
       DockPos = 0
       DockRow = 1
       Images = ImageList1
@@ -188,7 +189,7 @@ object Form1: TForm1
         Control = tLanguages
       end
       object tLanguages: TSpTBXComboBox
-        Left = 289
+        Left = 282
         Top = 0
         Width = 145
         Height = 21
@@ -201,7 +202,7 @@ object Form1: TForm1
     end
     object tbFormat: TSpTBXToolbar
       Left = 0
-      Top = 51
+      Top = 49
       DockPos = 0
       DockRow = 2
       Images = ImageList1
@@ -457,8 +458,8 @@ object Form1: TForm1
       end
     end
     object tbLayouts: TSpTBXToolbar
-      Left = 444
-      Top = 25
+      Left = 437
+      Top = 23
       DockPos = 433
       DockRow = 1
       Images = ImageList1
@@ -477,7 +478,7 @@ object Form1: TForm1
         OnClick = tLayoutSaveClick
       end
       object tLayouts: TSpTBXComboBox
-        Left = 51
+        Left = 48
         Top = 0
         Width = 100
         Height = 21
@@ -490,14 +491,14 @@ object Form1: TForm1
   end
   object SpTBXMultiDock1: TSpTBXMultiDock
     Left = 0
-    Top = 77
+    Top = 75
     Width = 142
-    Height = 343
+    Height = 347
     object dpLog: TSpTBXDockablePanel
       Left = 0
       Top = 156
       Width = 142
-      Height = 187
+      Height = 191
       Caption = 'Commands Log'
       DockPos = 156
       TabOrder = 0
@@ -505,7 +506,7 @@ object Form1: TForm1
         Left = 0
         Top = 19
         Width = 138
-        Height = 164
+        Height = 168
         Align = alClient
         BorderStyle = bsNone
         ReadOnly = True
@@ -525,21 +526,21 @@ object Form1: TForm1
   end
   object SpTBXMultiDock2: TSpTBXMultiDock
     Left = 619
-    Top = 77
+    Top = 75
     Width = 129
-    Height = 343
+    Height = 347
     Position = dpxRight
     object dpHelp: TSpTBXDockablePanel
       Left = 0
       Top = 0
       Width = 129
-      Height = 343
+      Height = 347
       Caption = 'Help'
       DockPos = 0
       TabOrder = 0
       DesignSize = (
         125
-        339)
+        343)
       object SpTBXLabel1: TSpTBXLabel
         Left = 7
         Top = 32
@@ -554,9 +555,9 @@ object Form1: TForm1
   end
   object SpTBXDock2: TSpTBXDock
     Left = 0
-    Top = 420
+    Top = 422
     Width = 748
-    Height = 41
+    Height = 39
     PopupMenu = SpTBXPopupMenu1
     Position = dpBottom
     object tbNavigation: TSpTBXToolbar
@@ -604,7 +605,7 @@ object Form1: TForm1
     Left = 192
     Top = 352
     Bitmap = {
-      494C01011A001D00080010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
+      494C01011A001D00040010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000400000007000000001002000000000000070
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000

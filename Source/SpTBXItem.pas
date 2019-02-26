@@ -1,7 +1,7 @@
 unit SpTBXItem;
 
 {==============================================================================
-Version 2.5.4
+Version 2.4.8
 
 The contents of this file are subject to the SpTBXLib License; you may
 not use or distribute this file except in compliance with the
@@ -29,8 +29,14 @@ the specific language governing rights and limitations under the License.
 The initial developer of this code is Robert Lee.
 
 Requirements:
+For Delphi/C++Builder 2009 or newer:
   - Jordan Russell's Toolbar 2000
     http://www.jrsoftware.org
+For Delphi/C++Builder 7-2007:
+  - Jordan Russell's Toolbar 2000
+    http://www.jrsoftware.org
+  - Troy Wolbrink's TNT Unicode Controls
+    http://www.tntware.com/delphicontrols/unicode/
 
 Wish list for TB2K:
   - tboSameHeight option for toolbar items, used to stretch the item
@@ -49,6 +55,7 @@ Wish list for TB2K:
 Development notes:
   - All the Windows and Delphi bugs fixes are marked with '[Bugfix]'.
   - All the theme changes and adjustments are marked with '[Theme-Change]'.
+  - All the compatibility changes are marked with '[Backward-Compatibility]'.
   - TSpTBXCompoundItemsControl is used as the base class for TB2K items enabled
     Controls, it uses the ITBItems interface and streams the items to the DFM.
   - When a control is dropped on the toolbar a TTBControlItem is created by
@@ -60,20 +67,349 @@ Development notes:
     the parent in the DFM), and finally reset the TTBControlItem.Control
     parentship to the Toolbar in TSpTBXCompoundItemsControl.Loaded.
 
+To Do:
+  -
+
+History:
+15 April 2013 - version 2.4.8
+  - Minor bug fixes.
+  - Removed SkinType property from all components.
+  - Added support for Delphi XE3.
+
+7 February 2012 - version 2.4.7
+  - Minor bug fixes.
+  - Added support for Delphi XE2.
+  - Added support for 64 bit Delphi compiler.
+  - Added support for Delphi Styles.
+
+25 June 2011 - version 2.4.6
+  - Fixed TSpTBXTitleBar bug, OnSystemMenuPopup was not fired
+    when the system menu was showed, thanks to Sebastien for
+    reporting this.
+
+12 March 2010 - version 2.4.5
+  - Fixed TSpTBXToolbar flicker when changing the floating toolbar
+    caption, thanks to Albert Wiersch for reporting this.
+  - Fixed incorrect TSpTBXDockablePanel floating border
+    painting on Aero when Resizable was set to false, thanks to
+    Erwin Denissen for reporting this.
+
+2 December 2009 - version 2.4.4
+  - Fixed bug in SpSetFormWindowState utility function, the Form
+    was not restored correctly, thanks to Alex Yagolnik for
+    reporting this.
+  - Fixed incorrect TSpTBXPopupWindow items margins, thanks to
+    Pedro Vugluskra for reporting this.
+
+13 September 2009 - version 2.4.3
+  - Fixed incorrect menu items painting on Vista, thanks to
+    Maël Hörz and Sertac Akyuz for reporting this.
+  - Fixed TSpTBXToolbar flicker when adding/deleting items.
+  - Fixed incorrect TSpTBXStatusBar painting when XP theming was
+    disabled, thanks to Warren Postma for reporting this.
+  - Fixed incorrect TSpTBXDock painting when the Background
+    property was used.
+  - Made the NC area of the TSpTBXTitleBar clickeable when the
+    form is maximized.
+
+8 May 2009 - version 2.4.2
+  - Added Dutch translation for the Customizer demo, thanks to
+    Alfred Vink.
+  - Added Tooltips Vista theming.
+
+15 March 2009 - version 2.4.1
+  - Fixed incorrect TntAction checking, thanks to Costas Stergiou
+    for reporting this.
+
+17 January 2009 - version 2.4
+  - Replaced the default Windows taskbar PopupMenu with a skninned
+    PopupMenu when TSpTBXTitleBar is used on the Main form.
+  - Fixed incorrect menu separator painting when it was used on
+    a ToolBoxPopup submenu, thanks to Yury Plashenkov for
+    reporting this.
+  - Fixed incorrect menu item margins, thanks to Eduardo Mauro
+    for reporting this.
+
+26 September 2008 - version 2.3
+  - New Toolbar item added, TSpTBXColorItem.
+  - Fixed incorrect Alt-Space handling on TSpTBXTitleBar, the
+    System PopupMenu was still showed even when SystemMenu was
+    setted to False, thanks to Ilya Zaytsev for reporting this.
+  - Fixed incorrect items text sizing when SystemFont was setted
+    to False, thanks to Minoru Yoshida for reporting this.
+  - Fixed a Delphi 7 bug, D7 hints didn't support multi-monitors,
+    thanks to Costas Stergiou for reporting this.
+
+29 July 2008 - version 2.2
+  - Fixed AV raised when Screen.MonitorFromWindow failed, thanks
+    to Andrew Denton for reporting this.
+  - Added OnClosePopup event to TSpTBXPopupMenu.
+
+26 June 2008 - version 2.1
+  - Added Turkish translation for the Customizer demo, thanks to
+    Zylar.
+  - Fixed incorrect keyboard handling on TSpTBXTitleBar, Alt+Space
+    didn't popup the system menu, thanks to Costas Stergiou for
+    reporting this.
+
+3 May 2008 - version 2.0
+  - SpTBXLib is now decoupled from TBX and uses the latest version
+    of TB2K, with NO PATCHES REQUIRED.
+  - Added HideEmptyPopup property to TSpTBXSubmenuItem, when
+    the submenu has no items and this property is set the
+    popup window will not be showed.
+  - Added Swedish translation for the Customizer demo, thanks to
+    Mattias Andersson.
+
+2 April 2008 - version 1.9.5
+  - Fixed incorrect item stretching when the toolbar was
+    vertical and tboImageAboveCaption was set, thanks to
+    John for reporting this.
+  - Fixed incorrect item painting when no themes were
+    used, thanks to Denis for reporting this.
+  - Fixed incorrect TSpTBXToolPalette.Images handling, thanks
+    to Minoru Yoshida for reporting this.
+  - Fixed incorrect menu gutter painting when hints were showed,
+    thanks to Michele and Beta Xiong for reporting this.
+  - Fixed incorrect floating border painting when the default
+    size was changed thanks to Costas Stergiou and Serge
+    for reporting this.
+  - Fixed incorrect floating border painting on Vista,
+    the borders should not be transparent, thanks to
+    Costas Stergiou for reporting this.
+
+3 February 2008 - version 1.9.4
+  - No changes.
+
+19 January 2008 - version 1.9.3
+  - Completed the Brazilian Portuguese translation of the Customizer
+    demo, thanks to Mauricio Magnani.
+  - Added TSpTBXToolWindow component.
+  - Fixed incorrect gutter painting on the popup menus.
+  - Fixed item stretching problems
+
+26 December 2007 - version 1.9.2
+  - New component added: TSpTBXToolWindow, a fully customizable 
+    ToolWindow with unicode support.
+  - Added State parameter to the toolbar items OnDrawCaption event.
+  - Fixed AV on Delphi 2005, Margins and Paddings were introduced
+    on Delphi 2006, thanks to Stefan for reporting this.
+  - Minor bug fixes.
+
+1 December 2007 - version 1.9.1
+  - Added Invalidate method to TSpTBXItem.
+  - Added OnClosePopup event to TSpTBXSubmenuItem.
+  - Fixed tboNoRotation use on vertical toolbar items, when
+    tboImageAboveCaption is not set the glyph should appear
+    aligned with the caption.
+
+20 November 2007 - version 1.9
+  - New theme engine.
+  - Added SpTBXHintWindowClass global variable, it specifies which
+    THintWindow class is used to show the hints.
+  - Added TSpTBXToolPalette and TSpTBXColorPalette items.
+  - Added TSpTBXToolWindow component.
+  - Removed TSpTBXComboBoxItem, TSpTBXDropDownItem, TSpTBXStringList
+    and TSpTBXUndoList.
+
+8 February 2007 - version 1.8.3
+  - No changes.
+
+17 December 2006 - version 1.8.2
+  - Added Toolbar public property to TSpTBXStatusBar.
+
+24 November 2006 - version 1.8.1
+  - Added properties to TSpTBXRightAlignSpacer: ImageIndex, Images,
+    OnAdjustFont, OnClick, OnDrawHint, OnDrawImage, OnDrawItem.
+  - Added unicode shortcut-text support for menu items, thanks
+    Steve for reporting this.
+  - Fixed incorrect TSpTBXTitleBar positioning when the
+    taskbar is moved around the screen, thanks to
+    Costas Stergiou for reporting this.
+  - Fixed incorrect TSpTBXStatusBar size grip painting when
+    Windows XP themes are disabled, thanks to Alexey Naumov
+    for reporting this.
+
+27 August 2006 - version 1.8
+  - Fixed incorrect DropdownCombo item painting, thanks to
+    François Rivierre for reporting this.
+  - Fixed incorrect TSpTBXTitleBar SystemMenu painting,
+    GetMenuStringW doesn't work correctly on Win2K/WinXP,
+    when a DBCS code page is active (e.g. Japanese), thanks
+    to Jordan Russell for reporting this.
+    http://news.jrsoftware.org/read/article.php?id=12268&group=jrsoftware.toolbar2000.thirdparty
+  - Fixed bug in TSpTBXLabelItem, clicking a TSpTBXLabelItem
+    on a popup menu causes the menu to close, thanks to
+    Piotr Janus for reporting this.
+
+15 June 2006 - version 1.7
+  - Added vertical caption painting to toolbar items.
+  - Added CaptionGlow and CaptionGlowColor properties to
+    toolbar Items.
+  - Added Margins property to toolbar items.
+  - Fixed incorrect TSpTBXTitleBar resizing when the form is
+    maximized and the titlebar is activated and deactivated
+    multiple times, thanks to Costas Stergiou for reporting this.
+
+4 May 2006 - version 1.6
+  - Fixed incorrect TSpTBXStatusBar behavior, the size grip
+    disappeared when the parent was a TSpTBXTitleBar, thanks to
+    Costas Stergiou for reporting this.
+  - Fixed incorrect TSpTBXStatusBar's size grip painting when the
+    Default theme was used.
+  - Fixed incorrect TSpTBXLabelItem painting when the label was used
+    in a submenu, thanks to Costas Stergiou for reporting this.
+  - Added OnSystemMenuPopup event to TSpTBXTitleBar.
+
+12 April 2006 - version 1.5
+  - Fixed incorrect TSpTBXStatusBar behavior, it didn't resized
+    the form if the mouse click was on the non-client area of the
+    status bar, thanks to Frank de Groot for reporting this.
+  - Fixed incorrect mouse handling in TSpTBXTitlebar, thanks to
+    Marten Pape for reporting this.
+  - Fixed incorrect TSpTBXLabelItem alignment on menus, thanks to
+    Costas Stergiou for reporting this.
+  - Added ClickedItem parameter to TSpTBXSubmenuItem.OnClosePopup
+    event.
+
+27 February 2006 - version 1.4
+  - Added SizeGrip property to TSpTBXStatusBar.
+  - Added FullScreenMaximize property to TSpTBXTitleBar.
+
+10 February 2006 - version 1.3
+  - Fixed AV in TSpTBXTitleBar at designtime, thanks to
+    Alexey Naumov for reporting this.
+  - Fixed incorrect system popupmenu visibility in TSpTBXTitleBar.
+  - Added Active property to TSpTBXTitleBar.
+  - Added OnDrawBackground event to TSpTBXTitleBar.
+  - Added OnClosePopup event to TSpTBXSubmenuItem.
+
+28 December 2005 - version 1.2
+  - Fixed incorrect items anchoring.
+  - Fixed range check errrors.
+
+18 October 2005 - version 1.1
+  - Fixed incorrect TSpTBXStatusBar margins when the form is
+    maximazed.
+  - Fixed incorrect accel char handling in TSpTBXToolbar.
+  - Fixed incorrect TntAction support, the previous version of
+    TntActions didn't supported unicode enabled ActionLinks.
+  - Fixed incorrect tab stop chars handling in TSpTBXItem.
+  - Added MaxSize property to TSpTBXToolbar, determines
+    the maximum height the toolbar can have.
+  - Added TBX themes support to TSpTBXTitleBar's system menu.
+  - Added radio item painting support.
+
+18 August 2005 - version 1.0
+  - Added DisplayOptions property to TSpTBXToolbar, determines
+    whether the item's image is to be displayed.
+  - Added Customizable property to TSpTBXToolbar, determines
+    whether the toolbar is customizable or not.
+  - Added TitleBarSize property to the Options of the
+    TSpTBXTitlebar.
+
+10 June 2005 - version 0.9
+  - SpTBXLib may now alternatively, at your option, be used and/or
+    distributed under the terms of the SpTBXLib License.
+    Please see the updated LICENSE.TXT file for more information.
+
+20 May 2005 - version 0.8
+  - Fixed incorrect caption centering in TSpTBXItem.
+  - Fixed incorrect TSpTBXItem hint when accessing TntApplication,
+    thanks to Erik Maly for reporting this.
+  - Changed the Options property of TSpTBXTitleBar to use a base class
+    for default buttons.
+  - Added ChevronVertical property to TSpTBXToolbar, it changes the
+    layout of the chevron popup to be vertical.
+  - Added Wrapping property to TSpTBXItem, it determines the wrapping
+    type of the item's caption.
+  - Added FixedSize property to TSpTBXTitleBar, it determines if
+    the TitleBar can be resized.
+
+16 February 2005 - version 0.7
+  - Fixed TSpTBXThemeGroupItem theme sync bug, it now correctly selects
+    the current TBX theme.
+  - Fixed unicode support in W9x.
+  - Fixed TSpTBXTitleBar painting flicker.
+  - Fixed TSpTBXStatusBar right align margin.
+  - Added TBXStyleBackground property to TSpTBXTitleBar, when setted to
+    true it paints a TBX style background.
+  - Added AutoCheck property to TSpTBXItem.
+
+23 December 2004 - version 0.6
+  - Fixed hint bug, ampersands were not removed in auto-generated hints.
+  - Fixed incorrect caption painting when the font is italic, this bug
+    is present in TBX items, TLabel, TBitBtn, TSpeedButton, TGroupBox,
+    TRadioGroup, and any other control that uses DrawText to draw the
+    caption. To reproduce this, drop a TBitBtn, change the caption to
+    'WWW' and the font to italic, the last W is cropped.
+  - Fixed incorrect caption painting when the Default theme is used,
+    the caption was not painted in a down state when the toolbarstyle
+    item was pushed, thanks Daniel Rikowski for reporting this.
+  - Changed the default value of DisplayMode to nbdmDefault.
+  - New component added, TSpTBXTitleBar: a fully customizable
+    TitleBar with Unicode text and TBX themes support.
+  - New component added, TSpTBXPopupMenu: a TTBXPopupMenu descendant
+    with an OnPopupMenuInit event to setup the items before the popup
+    is showed, it could be used for example to set the focus to an
+    EditItem.
+  - Added SpChangeThemeType utility function, this makes it easier to
+    switch the theme type of any given control and its children.
+
+30 August 2004 - version 0.5
+  - Reworked the hint show event of the items.
+
+21 July 2004 - version 0.4
+  - Fixed TTBControlItem.Control streaming bug on TSpTBXStatusBar.
+  - Fixed bad sync of the items unicode caption and hint properties
+    when an Action was assigned.
+
+12 July 2004 - version 0.3.1
+  - Unchanged.
+
+9 July 2004 - version 0.3
+  - Fixed incorrect TSpTBXItem caption painting when DisplayMode
+    was nbdmDefault, thanks to Cyril for reporting this.
+  - Added anchors support for TTBControlItem items, if the associated
+    Control is client aligned or has akRight in its Anchors property.
+  - The theme items in TSpTBXThemeGroupItem are now sorted.
+  - Added OnUpdate event to TSpTBXThemeGroupItem, this event is fired
+    every time the theme items list is recreated, use this event
+    to sort or change the items properties.
+
+27 June 2004 - version 0.2
+  - Fixed Toolbar custom painting event.
+  - Fixed incorrect Shortcut painting in submenus.
+  - Fixed incorrect Shortcut hint painting.
+  - Removed thtBitmapSkin from TSpTBXThemeType.
+  - Published more properties for TSpTBXLabelItem.
+  - New Toolbar item added, TSpTBXSeparator.
+  - New component added, TSpTBXStatusBar: a fully customizable
+    StatusBar with Unicode text and TBX themes support.
+
+22 June 2004 - version 0.1
+  - Initial release.
+
 ==============================================================================}
 
 interface
 
-{$BOOLEVAL OFF}   // Unit depends on short-circuit boolean evaluation
-{$IF CompilerVersion >= 25} // for Delphi XE4 and up
-  {$LEGACYIFEND ON} // XE4 and up requires $IF to be terminated with $ENDIF instead of $IFEND
-{$IFEND}
+{$BOOLEVAL OFF} // Unit depends on short-circuit boolean evaluation
+{$I TB2Ver.inc}
 
 uses
   Windows, Messages, Classes, SysUtils, Forms, Controls, Graphics, ImgList,
   Menus, StdCtrls, ActnList,
+  {$IFNDEF UNICODE}
+  TntClasses, TntControls,
+  {$ENDIF}
   TB2Item, TB2Dock, TB2Toolbar, TB2ToolWindow,
   SpTBXSkins;
+
+{$IFDEF UNICODE}
+type
+  TTntStringList = TStringList;
+{$ENDIF}
 
 const
   C_SpTBXRadioGroupIndex = 8888;      // Default GroupItem of TSpTBXRadioGroupItem
@@ -150,19 +486,19 @@ type
     X, Y: Integer; var PaintDefault: Boolean) of object;
 
   TSpTBXDrawTextEvent = procedure(Sender: TObject; ACanvas: TCanvas;
-    ClientAreaRect: TRect; State: TSpTBXSkinStatesType; var ACaption: string;
+    ClientAreaRect: TRect; State: TSpTBXSkinStatesType; var ACaption: WideString;
     var CaptionRect: TRect; var CaptionFormat: Cardinal; IsTextRotated: Boolean;
     const PaintStage: TSpTBXPaintStage; var PaintDefault: Boolean) of object;
 
   TSpTBXDrawHintEvent = procedure(Sender: TObject; AHintBitmap: TBitmap;
-    var AHint: string; var PaintDefault: Boolean) of object;
+    var AHint: WideString; var PaintDefault: Boolean) of object;
 
   TSpTBXItemNotificationEvent = procedure(Sender: TObject;
     Ancestor: TTBCustomItem; Relayed: Boolean; Action: TTBItemChangedAction;
     Index: Integer; Item: TTBCustomItem) of object;
 
   TSpTBXRadioGroupFillStringsEvent = procedure(Sender: TObject;
-    Strings: TStringList) of object;
+    Strings: TTntStringList) of object;
 
   TSpTBXPopupEvent = procedure(Sender: TObject; PopupView: TTBView) of object;
 
@@ -220,16 +556,51 @@ type
 
   { TSpTBXCustomItemActionLink }
 
+  {$IFNDEF UNICODE}
+  TSpTBXCustomItemActionLink = class(TTBCustomItemActionLink)
+  protected
+    FUnicodeClient: TSpTBXCustomItem;
+    procedure AssignClient(AClient: TObject); override;
+    function IsCaptionLinked: Boolean; override;
+    function IsHintLinked: Boolean; override;
+    procedure SetCaption(const Value: string); override;
+    procedure SetHint(const Value: string); override;
+  end;
+  {$ELSE}
   TSpTBXCustomItemActionLink = class(TTBCustomItemActionLink);
+  {$ENDIF}
 
   { TSpTBXCustomControl }
 
+  {$IFNDEF UNICODE}
+  TSpTBXCustomControl = class(TCustomControl)
+  private
+    function IsCaptionStored: Boolean;
+    function IsHintStored: Boolean;
+    function GetCaption: TWideCaption;
+    function GetHint: WideString;
+    procedure SetCaption(const Value: TWideCaption);
+    procedure SetHint(const Value: WideString);
+  protected
+    procedure ActionChange(Sender: TObject; CheckDefaults: Boolean); override;
+    procedure CreateWindowHandle(const Params: TCreateParams); override;
+    procedure DefineProperties(Filer: TFiler); override;
+    // Don't let the streaming system store the WideStrings, use DefineProperties instead
+    property Caption: TWideCaption read GetCaption write SetCaption stored IsCaptionStored; // Hides the inherited Caption
+    property Hint: WideString read GetHint write SetHint stored IsHintStored; // Hides the inherited Hint
+  end;
+  {$ELSE}
   TSpTBXCustomControl = class(TCustomControl);
+  {$ENDIF}
 
   { TSpTBXItem }
 
   TSpTBXCustomItem = class(TTBCustomItem)
   private
+    {$IFNDEF UNICODE}
+    FCaption: WideString;
+    FHint: WideString;
+    {$ENDIF}
     FCaptionGlow: TSpGlowDirection;
     FCaptionGlowColor: TColor;
     FAlignment: TAlignment;
@@ -251,6 +622,12 @@ type
     FOnDrawHint: TSpTBXDrawHintEvent;
     FOnDrawItem: TSpTBXDrawItemEvent;
     FOnDrawImage: TSpTBXDrawImageEvent;
+    {$IFNDEF UNICODE}
+    function IsCaptionStored: Boolean;
+    function IsHintStored: Boolean;
+    procedure SetCaption(const Value: WideString);
+    procedure SetHint(const Value: WideString);
+    {$ENDIF}
     procedure FontSettingsChanged(Sender: TObject);
     procedure SetAlignment(const Value: TAlignment);
     procedure SetAnchored(const Value: Boolean);
@@ -269,12 +646,13 @@ type
   protected
     procedure ActionChange(Sender: TObject; CheckDefaults: Boolean); override;
     function DialogChar(CharCode: Word): Boolean; virtual;
+    procedure DefineProperties(Filer: TFiler); override;
     procedure DoDrawAdjustFont(AFont: TFont; State: TSpTBXSkinStatesType); virtual;
-    procedure DoDrawHint(AHintBitmap: TBitmap; var AHint: string; var PaintDefault: Boolean); virtual;
+    procedure DoDrawHint(AHintBitmap: TBitmap; var AHint: Widestring; var PaintDefault: Boolean); virtual;
     procedure DoDrawButton(ACanvas: TCanvas; ARect: TRect; ItemInfo: TSpTBXMenuItemInfo;
       const PaintStage: TSpTBXPaintStage; var PaintDefault: Boolean); virtual;
     procedure DoDrawCaption(ACanvas: TCanvas; ClientAreaRect: TRect; State: TSpTBXSkinStatesType;
-      var ACaption: string; var CaptionRect: TRect; var CaptionFormat: Cardinal;
+      var ACaption: WideString; var CaptionRect: TRect; var CaptionFormat: Cardinal;
       IsTextRotated: Boolean; const PaintStage: TSpTBXPaintStage; var PaintDefault: Boolean); virtual;
     procedure DoDrawImage(ACanvas: TCanvas; State: TSpTBXSkinStatesType;
       const PaintStage: TSpTBXPaintStage; var AImageList: TCustomImageList;
@@ -311,11 +689,18 @@ type
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
     procedure Click; override;
+    function GetShortCutText: WideString; // Reintroduce to support unicode shortcut text
     procedure InitiateAction; override;
     procedure Invalidate;
   published
+    {$IFNDEF UNICODE}
+    // Don't let the streaming system store the WideStrings, use DefineProperties instead
+    property Caption: WideString read FCaption write SetCaption stored IsCaptionStored; // Hides the inherited Caption
+    property Hint: WideString read FHint write SetHint stored IsHintStored; // Hides the inherited Hint
+    {$ELSE}
     property Caption;
     property Hint;
+    {$ENDIF}
     property Wrapping: TTextWrapping read FWrapping write SetWrapping default twWrap;
   end;
 
@@ -335,13 +720,13 @@ type
     procedure DoDrawButton(ACanvas: TCanvas; ARect: TRect; ItemInfo: TSpTBXMenuItemInfo;
       const PaintStage: TSpTBXPaintStage; var PaintDefault: Boolean); virtual;
     procedure DoDrawCaption(ACanvas: TCanvas; ClientAreaRect: TRect;
-      State: TSpTBXSkinStatesType; var ACaption: string; var CaptionRect: TRect;
+      State: TSpTBXSkinStatesType; var ACaption: WideString; var CaptionRect: TRect;
       var CaptionFormat: Cardinal; IsTextRotated: Boolean; const PaintStage: TSpTBXPaintStage;
       var PaintDefault: Boolean); virtual;
     procedure DoDrawImage(ACanvas: TCanvas; State: TSpTBXSkinStatesType;
       const PaintStage: TSpTBXPaintStage; var AImageList: TCustomImageList;
       var AImageIndex: Integer; var ARect: TRect; var PaintDefault: Boolean); virtual;
-    procedure DoDrawHint(AHintBitmap: TBitmap; CursorPos: TPoint; var CursorRect: TRect; var AHint: string; var PaintDefault: Boolean); virtual;
+    procedure DoDrawHint(AHintBitmap: TBitmap; CursorPos: TPoint; var CursorRect: TRect; var AHint: Widestring; var PaintDefault: Boolean); virtual;
 
     // Painting methods
     function CaptionShown: Boolean; override;
@@ -356,8 +741,11 @@ type
     procedure Paint(const Canvas: TCanvas; const ClientAreaRect: TRect; IsSelected, IsPushed, UseDisabledShadow: Boolean); override;
 
     // Hints
+    procedure Entering; override;
     procedure InternalMouseMove(Shift: TShiftState; X, Y: Integer); virtual;
   public
+    function GetCaptionText: WideString; reintroduce; virtual; // Hides the inherited TB2K GetCaptionText function
+    function GetHintText: Widestring; reintroduce; virtual; // Hides the inherited TB2K GetHintText function
     function IsToolbarStyle: Boolean; // Hides the inherited TB2K IsToolbarStyle function
     property Item: TSpTBXCustomItem read GetItem; // Hides the inherited TB2K Item property
   end;
@@ -587,7 +975,7 @@ type
     FOnFillStrings: TSpTBXRadioGroupFillStringsEvent;
     FOnUpdate: TNotifyEvent;
   protected
-    FStrings: TStringList;
+    FStrings: TTntStringList;
     procedure Loaded; override;
     procedure ItemClickEvent(Sender: TObject); virtual;
     procedure DoClick(AItem: TSpTBXItem); virtual;
@@ -612,11 +1000,11 @@ type
     procedure WMSpSkinChange(var Message: TMessage); message WM_SPSKINCHANGE;
   protected
     procedure DoClick(AItem: TSpTBXItem); override;
+    procedure DoSkinChange; virtual;
     procedure DoFillStrings; override;
   public
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
-    procedure DoSkinChange; virtual;
   published
     property OnSkinChange: TNotifyEvent read FOnSkinChange write FOnSkinChange;
   end;
@@ -649,14 +1037,14 @@ type
 
   TSpTBXRowColCount = 1..100;
 
-  TSpTBXTPGetCellHint = procedure(Sender: TObject; ACol, ARow: Integer; var AHint: string) of object;
+  TSpTBXTPGetCellHint = procedure(Sender: TObject; ACol, ARow: Integer; var AHint: WideString) of object;
 
   TSpTBXTPDrawCellImage = procedure(Sender: TObject; ACanvas: TCanvas;
     ARect: TRect; ACol, ARow: Integer; Selected, HotTrack, Enabled: Boolean) of object;
 
   TSpTBXTPCellClick = procedure(Sender: TObject; ACol, ARow: Integer; var Allow: Boolean) of object;
 
-  TSpTBXCPGetColorInfo = procedure(Sender: TObject; ACol, ARow: Integer; var Color: TColor; var Name: string) of object;
+  TSpTBXCPGetColorInfo = procedure(Sender: TObject; ACol, ARow: Integer; var Color: TColor; var Name: WideString) of object;
 
   TSpTBXCustomToolPalette = class(TSpTBXCustomItem)
   private
@@ -673,7 +1061,7 @@ type
     function DoCellClick(ACol, ARow: Integer): Boolean; virtual;
     procedure DoChange; virtual;
     procedure DoDrawCellImage(ACanvas: TCanvas; const ARect: TRect; ACol, ARow: Integer; ItemInfo: TSpTBXMenuItemInfo); virtual;
-    procedure DoGetCellHint(ACol, ARow: Integer; var AHint: string); virtual;
+    procedure DoGetCellHint(ACol, ARow: Integer; var AHint: WideString); virtual;
     function GetItemViewerClass(AView: TTBView): TTBItemViewerClass; override;
     procedure HandleClickCell(ACol, ARow: Integer); virtual;
     procedure SetColCount(Value: TSpTBXRowColCount); virtual;
@@ -724,8 +1112,8 @@ type
     function GetImageShown: Boolean; override;
     function GetCellAt(X, Y: Integer; out Col, Row: Integer): Boolean;
     function GetCellRect(ClientAreaRect: TRect; Col, Row: Integer): TRect; virtual;
-    function GetCellHint(Col, Row: Integer): string;
-    procedure DoDrawHint(AHintBitmap: TBitmap; CursorPos: TPoint; var CursorRect: TRect; var AHint: string; var PaintDefault: Boolean); override;
+    function GetCellHint(Col, Row: Integer): WideString;
+    procedure DoDrawHint(AHintBitmap: TBitmap; CursorPos: TPoint; var CursorRect: TRect; var AHint: Widestring; var PaintDefault: Boolean); override;
     procedure DrawCellImage(ACanvas: TCanvas; const ARect: TRect; Col, Row: Integer; ItemInfo: TSpTBXMenuItemInfo); virtual;
     procedure Entering; override;
     procedure InvalidateCell(ACol, ARow: Integer);
@@ -751,10 +1139,10 @@ type
     procedure SetCustomColors(const Value: Boolean);
   protected
     procedure DoChange; override;
-    procedure DoGetCellHint(ACol, ARow: Integer; var AHint: string); override;
+    procedure DoGetCellHint(ACol, ARow: Integer; var AHint: WideString); override;
     procedure DoDrawCellImage(ACanvas: TCanvas; const ARect: TRect; ACol, ARow: Integer; ItemInfo: TSpTBXMenuItemInfo); override;
     function GetCellColor(ACol, ARow: Integer): TColor;
-    procedure GetCellInfo(ACol, ARow: Integer; out AColor: TColor; out AName: string);
+    procedure GetCellInfo(ACol, ARow: Integer; out AColor: TColor; out AName: WideString);
     procedure SetColCount(Value: TSpTBXRowColCount); override;
     procedure SetRowCount(Value: TSpTBXRowColCount); override;
   public
@@ -874,6 +1262,13 @@ type
     FMenuBar: Boolean;
     FOnDrawBackground: TSpTBXDrawEvent;
     FOnItemNotification: TSpTBXItemNotificationEvent;
+    {$IFNDEF UNICODE}
+    function IsCaptionStored: Boolean;
+    function GetCaption: TWideCaption;
+    procedure SetCaption(const Value: TWideCaption);
+    function GetHint: WideString;
+    procedure SetHint(const Value: WideString);
+    {$ENDIF}
     procedure SetDisplayMode(const Value: TSpTBXToolbarDisplayMode);
     function GetMaxSize: Integer;
     procedure SetMaxSize(const Value: Integer);
@@ -885,7 +1280,7 @@ type
     procedure CMMouseleave(var Message: TMessage); message CM_MOUSELEAVE;
     procedure CMHintShow(var Message: TCMHintShow); message CM_HINTSHOW;
     procedure CMTextChanged(var Message: TMessage); message CM_TEXTCHANGED;
-    procedure WMEraseBkgnd(var Message: TMessage); message WM_ERASEBKGND;
+    procedure WMEraseBkgnd(var Message: TWMEraseBkgnd); message WM_ERASEBKGND;
     procedure WMSize(var Message: TWMSize); message WM_SIZE;
     procedure WMSpSkinChange(var Message: TMessage); message WM_SPSKINCHANGE;
     procedure SetCustomizable(const Value: Boolean);
@@ -893,8 +1288,11 @@ type
     FBeginDragIV: TTBItemViewer;
     FAnchoredControlItems: TSpTBXItemCacheCollection;
     FState: TSpTBXToolbarStates;
+    FDefaultToolbarBorderSize: Integer;
 
     // Component
+    procedure CreateWindowHandle(const Params: TCreateParams); override;
+    procedure DefineProperties(Filer: TFiler); override;
     procedure Resize; override;
     procedure AnchorItems(UpdateControlItems: Boolean = True); virtual;
     procedure RightAlignItems; virtual;
@@ -943,6 +1341,7 @@ type
     function IsCustomizing: Boolean;
     function IsItemMoving: Boolean;
     function IsVertical: Boolean;
+    property DefaultToolbarBorderSize: Integer read FDefaultToolbarBorderSize;
     property MaxSize: Integer read GetMaxSize write SetMaxSize default -1;
   published
     property ActivateParent;
@@ -1005,8 +1404,14 @@ type
     property OnResize;
     property OnShortCut;
     property OnVisibleChanged;
+    {$IFNDEF UNICODE}
+    // Don't let the streaming system store the WideStrings, use DefineProperties instead
+    property Caption: TWideCaption read GetCaption write SetCaption stored IsCaptionStored; // Hides the inherited Caption
+    property Hint: WideString read GetHint write SetHint stored False; // Hint is set dynamically in MouseMove, don't save it
+    {$ELSE}
     property Caption;
     property Hint;
+    {$ENDIF}
     property ChevronVertical: Boolean read FChevronVertical write FChevronVertical default True;
     property Customizable: Boolean read FCustomizable write SetCustomizable default True;
     property DisplayMode: TSpTBXToolbarDisplayMode read FDisplayMode write SetDisplayMode default tbdmSelectiveCaption;
@@ -1023,16 +1428,24 @@ type
   private
     FMinClientWidth, FMinClientHeight, FMaxClientWidth, FMaxClientHeight: Integer;
     FOnDrawBackground: TSpTBXDrawEvent;
+    {$IFNDEF UNICODE}
+    function IsCaptionStored: Boolean;
+    function GetCaption: TWideCaption;
+    procedure SetCaption(const Value: TWideCaption);
+    {$ENDIF}
     function GetClientAreaWidth: Integer;
     procedure SetClientAreaWidth(Value: Integer);
     function GetClientAreaHeight: Integer;
     procedure SetClientAreaHeight(Value: Integer);
     procedure CMTextChanged(var Message: TMessage); message CM_TEXTCHANGED;
-    procedure WMEraseBkgnd(var Message: TMessage); message WM_ERASEBKGND;
+    procedure WMEraseBkgnd(var Message: TWMEraseBkgnd); message WM_ERASEBKGND;
     procedure WMSpSkinChange(var Message: TMessage); message WM_SPSKINCHANGE;
     procedure WMWindowPosChanged(var Message: TWMWindowPosChanged); message WM_WINDOWPOSCHANGED;
   protected
     FBarSize: TSize;
+    FDefaultToolbarBorderSize: Integer;
+    procedure CreateWindowHandle(const Params: TCreateParams); override;
+    procedure DefineProperties(Filer: TFiler); override;
     function GetFloatingWindowParentClass: TTBFloatingWindowParentClass; override;
 
     // Sizing
@@ -1064,8 +1477,14 @@ type
     function IsVertical: Boolean;
     procedure ReadPositionData(const Data: TTBReadPositionData); override;
     procedure WritePositionData(const Data: TTBWritePositionData); override;
+    property DefaultToolbarBorderSize: Integer read FDefaultToolbarBorderSize;
   published
+    {$IFNDEF UNICODE}
+    // Don't let the streaming system store the WideStrings, use DefineProperties instead
+    property Caption: TWideCaption read GetCaption write SetCaption stored IsCaptionStored; // Hides the inherited Caption
+    {$ELSE}
     property Caption;
+    {$ENDIF}
     property Color default clNone;
   end;
 
@@ -1238,55 +1657,31 @@ type
     property OnClosePopup: TNotifyEvent read GetOnClosePopup write SetOnClosePopup;
   end;
 
-  { TSpTBXCustomContainer }
-
-  TSpTBXCustomContainer = class(TSpTBXCustomControl)
-  private
-    FOnDrawBackground: TSpTBXDrawEvent;
-    procedure CMColorChanged(var Message: TMessage); message CM_COLORCHANGED;
-    procedure CMFontChanged(var Message: TMessage); message CM_FONTCHANGED;
-    procedure CMTextChanged(var Message: TMessage); message CM_TEXTCHANGED;
-    procedure WMEraseBkgnd(var Message: TMessage); message WM_ERASEBKGND;
-    procedure WMSpSkinChange(var Message: TMessage); message WM_SPSKINCHANGE;
-    procedure WMWindowPosChanged(var Message: TWMWindowPosChanged); message WM_WINDOWPOSCHANGED;
-  protected
-    FIsResizing: Boolean;
-    procedure CreateParams(var Params: TCreateParams); override;
-    procedure DoDrawBackground(ACanvas: TCanvas; ARect: TRect; const PaintStage: TSpTBXPaintStage; var PaintDefault: Boolean); virtual;
-    procedure DrawBackground(ACanvas: TCanvas; ARect: TRect); virtual;
-    property ParentColor default False;
-    property OnDrawBackground: TSpTBXDrawEvent read FOnDrawBackground write FOnDrawBackground;
-  public
-    constructor Create(AOwner: TComponent); override;
-    destructor Destroy; override;
-    procedure InvalidateBackground(InvalidateChildren: Boolean = True); virtual;
-    property Color default clNone;
-  end;
-
   { TSpTBXCompoundItemsControl }
 
-  TSpTBXCompoundItemsControl = class(TSpTBXCustomContainer, ITBItems)
+  TSpTBXCompoundItemsControl = class(TSpTBXCustomControl, ITBItems)
   private
     procedure DockRequestDock(Sender: TObject; Bar: TTBCustomDockableWindow; var Accept: Boolean);
     function GetRootItems: TTBRootItem;
     function GetView: TSpTBXToolbarView;
     function GetImages: TCustomImageList;
     procedure SetImages(const Value: TCustomImageList);
+    procedure WMSpSkinChange(var Message: TMessage); message WM_SPSKINCHANGE;
   protected
     FDock: TSpTBXDock;
     FToolbar: TSpTBXToolbar;
+    procedure CreateParams(var Params: TCreateParams); override;
     function GetDockClass: TSpTBXDockClass; virtual;
     function GetToolbarClass: TSpTBXToolbarClass; virtual;
     function GetItems: TTBCustomItem; virtual;  // For ITBItems interface
     procedure Loaded; override;
-    property Color default clBtnFace;
-    property ParentColor default False;
     procedure SetName(const Value: TComponentName); override;
     property Images: TCustomImageList read GetImages write SetImages;
   public
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
     procedure GetChildren(Proc: TGetChildProc; Root: TComponent); override;  // For ITBItems interface
+    procedure InvalidateBackground(InvalidateChildren: Boolean = True); virtual;
     property View: TSpTBXToolbarView read GetView;
   published
     property Items: TTBRootItem read GetRootItems;
@@ -1324,7 +1719,7 @@ type
     FMinimizeImageIndex: Integer;
     FMaximizeImageIndex: Integer;
     FRestoreImageIndex: Integer;
-    FCaptionLabel: string;
+    FCaptionLabel: WideString;
     FCaption: Boolean;
     FClose: Boolean;
     FMinimize: Boolean;
@@ -1333,7 +1728,7 @@ type
     FTitleBarMaxSize: Integer;
     procedure SetCaptionImageIndex(Value: Integer);
     procedure SetCloseImageIndex(Value: Integer);
-    procedure SetCaptionLabel(const Value: string);
+    procedure SetCaptionLabel(const Value: WideString);
     procedure SetMaximizeImageIndex(Value: Integer);
     procedure SetRestoreImageIndex(Value: Integer);
     procedure SetMinimizeImageIndex(Value: Integer);
@@ -1366,7 +1761,7 @@ type
     property MinimizeButton: TSpTBXItem read FMinimizeButton;
     property MaximizeButton: TSpTBXItem read FMaximizeButton;
     property CloseButton: TSpTBXItem read FCloseButton;
-    property CaptionLabel: string read FCaptionLabel write SetCaptionLabel;
+    property CaptionLabel: WideString read FCaptionLabel write SetCaptionLabel;
   published
     property ButtonBorders: Boolean read FButtonBorders write FButtonBorders default True;
     property Caption: Boolean read FCaption write SetCaption default True;
@@ -1504,12 +1899,10 @@ type
     FOptions: TSpTBXTitleBarButtonOptions;
     FOldAppWndProc: Pointer;
     FNewAppWndProc: Pointer;
-    FRegion: HRGN;
-    FUpdateRegionCalled: Boolean;
+    FOnDrawBackground: TSpTBXDrawEvent;
     FOldParentFormWndProc: TWndMethod;
     procedure AppWndProc(var Msg: TMessage);
     procedure NewParentFormWndProc(var Message: TMessage);
-    procedure UpdateRegion;
     procedure SetActive(const Value: Boolean);
     procedure SetMouseActive(const Value: Boolean);
     procedure SetFullScreenMaximize(const Value: Boolean);
@@ -1517,10 +1910,8 @@ type
     procedure SetSystemMenuPopup(const Value: TSpTBXPopupEvent);
     function GetWindowState: TWindowState;
     procedure SetWindowState(const Value: TWindowState);
-    {$IF CompilerVersion >= 23} //for Delphi XE2 and up
-    procedure CMStyleChanged(var Message: TMessage); message CM_STYLECHANGED;
-    {$IFEND}
     procedure CMTextChanged(var Message: TMessage); message CM_TEXTCHANGED;
+    procedure WMEraseBkgnd(var Message: TMessage); message WM_ERASEBKGND;
     procedure WMSetCursor(var Message: TWMSetCursor); message WM_SETCURSOR;
     procedure WMSpSkinChange(var Message: TMessage); message WM_SPSKINCHANGE;
     procedure WMWindowPosChanged(var Message: TWMWindowPosChanged); message WM_WINDOWPOSCHANGED;
@@ -1537,7 +1928,8 @@ type
     // Painting
     procedure DoDrawDockBackground(ACanvas: TCanvas; ARect: TRect;
       const PaintStage: TSpTBXPaintStage; var PaintDefault: Boolean); override;
-    procedure DrawBackground(ACanvas: TCanvas; ARect: TRect); override;
+    procedure DoDrawBackground(ACanvas: TCanvas; ARect: TRect;
+      const PaintStage: TSpTBXPaintStage; var PaintDefault: Boolean); virtual;
 
     // Sizing
     procedure AdjustClientRect(var Rect: TRect); override;
@@ -1550,6 +1942,7 @@ type
     property FullScreenMaximize: Boolean read FFullScreenMaximize write SetFullScreenMaximize default False;
     property Options: TSpTBXTitleBarButtonOptions read FOptions write FOptions;
     property WindowState: TWindowState read GetWindowState write SetWindowState;
+    property OnDrawBackground: TSpTBXDrawEvent read FOnDrawBackground write FOnDrawBackground;
     property OnSystemMenuPopup: TSpTBXPopupEvent read GetSystemMenuPopup write SetSystemMenuPopup;
   public
     constructor Create(AOwner: TComponent); override;
@@ -1626,13 +2019,10 @@ type
     procedure ActivateHintData(Rect: TRect; const AHint: string; AData: Pointer); override;
   end;
 
-{ Constants }
-function CDefaultToolbarBorderSize: Integer;
-
 { Item helpers }
 procedure SpFillItemInfo(ACanvas: TCanvas; IV: TTBItemViewer; out ItemInfo: TSpTBXMenuItemInfo);
 function SpGetBoundsRect(IV: TTBItemViewer; Root: TTBRootItem): TRect;
-procedure SpGetAllItems(AParentItem: TTBCustomItem; ItemsList: TStringList; ClearFirst: Boolean = True);
+procedure SpGetAllItems(AParentItem: TTBCustomItem; ItemsList: TTntStringList; ClearFirst: Boolean = True);
 function SpGetMenuMaximumImageSize(View: TTBView): TSize;
 function SpGetItemViewerFromPoint(Root: TTBRootItem; View: TTBView; P: TPoint; ProcessGroupItems: Boolean = True): TTBItemViewer;
 function SpGetNextItemSameEdge(View: TTBView; IV: TTBItemViewer; GoForward: Boolean; SearchType: TSpTBXSearchItemViewerType): TTBItemViewer;
@@ -1662,11 +2052,10 @@ procedure SpDrawXPToolbar(ACanvas: TCanvas; ARect: TRect; Docked, Floating, Vert
 procedure SpDrawXPToolbar(W: TTBCustomDockableWindow; ACanvas: TCanvas; ARect: TRect; PaintOnNCArea: Boolean; PaintBorders: Boolean = True; SkinComponent: TSpTBXSkinComponentsType = skncToolbar); overload;
 procedure SpDrawXPToolbarGrip(W: TTBCustomDockableWindow; ACanvas: TCanvas; ARect: TRect);
 procedure SpDrawXPTooltipBackground(ACanvas: TCanvas; ARect: TRect);
-procedure SpInvalidateSpTBXControl(AControl: TWinControl; InvalidateChildren: Boolean);
 
 { Menu helpers }
 function SpCalcPopupPosition(const X, Y, Width, Height: Integer; PopupControl: TControl = nil; IsVertical: Boolean = False): TPoint;
-function SpHMenuGetCaption(Menu: HMenu; Index: Integer): string;
+function SpHMenuGetCaption(Menu: HMenu; Index: Integer): WideString;
 function SpHMenuToTBMenuItem(Menu: HMenu; ParentItem: TTBCustomItem): Boolean;
 function SpShowSystemPopupMenu(ParentForm: TCustomForm; ScreenPos: TPoint; DoDefault: Boolean = True): Integer;
 function SpFillSystemSpTBXPopup(ParentForm: TCustomForm; ParentItem: TTBCustomItem; ShowSize, ShowMinimize, ShowMaximize, ShowClose: Boolean; ClickEvent: TNotifyEvent = nil): Boolean;
@@ -1691,6 +2080,9 @@ procedure SpCustomizeAllToolbars(AParentComponent: TComponent; Reset: Boolean);
 procedure SpBeginUpdateAllToolbars(AParentComponent: TComponent);
 procedure SpEndUpdateAllToolbars(AParentComponent: TComponent);
 
+{ Unicode helpers }
+procedure SpPersistent_AfterInherited_DefineProperties(Filer: TFiler; Instance: TPersistent);
+
 var
   SmCaptionFont: TFont;
   SpStockHintBitmap: TBitmap;
@@ -1698,6 +2090,7 @@ var
   SpTBXHintWindowClass: THintWindowClass = TBitmapHint;
 
 const
+  CDefaultToolbarBorderSize = 2;       // Default size of Floating Toolbar borders
   crSpTBXNewHandPoint = 100;          // Cursor ID to replace crHandPoint for IDC_HAND
   crSpTBXCustomization = 101;         // Cursor ID used for item D&D customization accepted
   crSpTBXCustomizationCancel = 102;   // Cursor ID used for item D&D customization cancelled
@@ -1708,11 +2101,9 @@ implementation
 
 uses
   Themes, UxTheme,
-  TypInfo, Types,
-  {$IF CompilerVersion >= 25} // for Delphi XE4 and up
-  System.UITypes,
-  {$IFEND}
-  ComCtrls, CommCtrl, ShellApi, DwmApi,
+  TypInfo, Types, ComCtrls, CommCtrl, ShellApi,
+  {$IFDEF JR_D11} DwmApi, {$ENDIF}
+  {$IFNDEF UNICODE} TntWindows, TntSysUtils, TntActnList, TntForms, {$ENDIF}
   TB2Anim, TB2Common;
 
 const
@@ -1778,17 +2169,6 @@ type
   TWinControlAccess = class(TWinControl);
   TCustomFormAccess = class(TCustomForm);
   TActionLinkAccess = class(TActionLink);
-
-//WMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWM
-{ Constants }
-
-function CDefaultToolbarBorderSize: Integer;
-begin
-  // Default size of Docked and Floating Toolbar borders
-  // Constant defined on implementation section of TB2Dock
-  // as DockedBorderSize
-  Result := SpDPIScale(2);
-end;
 
 //WMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWM
 { Item Helpers }
@@ -1941,7 +2321,7 @@ begin
       Result := IV.BoundsRect;
 end;
 
-procedure SpGetAllItems(AParentItem: TTBCustomItem; ItemsList: TStringList; ClearFirst: Boolean = True);
+procedure SpGetAllItems(AParentItem: TTBCustomItem; ItemsList: TTntStringList; ClearFirst: Boolean = True);
 // Returns a StringList with all the items, subitems and linked items from AParentItem.
 // The ItemsList.Strings[] contains the items name
 // The ItemsList.Objects[] contains the items reference
@@ -2242,7 +2622,7 @@ begin
   if Assigned(Toolbar.CurrentDock) then
     if Toolbar.CurrentDock.AllowDrag then begin
       T := TTBCustomDockableWindowAccess(Toolbar);
-      Result := SpDPIScale(DragHandleSizes[T.CloseButtonWhenDocked, Ord(T.DragHandleStyle)]);
+      Result := DragHandleSizes[T.CloseButtonWhenDocked, Ord(T.DragHandleStyle)]
     end;
 end;
 
@@ -2346,6 +2726,7 @@ procedure SpDrawXPMenuItem(ACanvas: TCanvas; ARect: TRect; ItemInfo: TSpTBXMenuI
   procedure ToolbarItemDraw(ARect: TRect);
   var
     ForceRectBorders: TAnchors;
+    Details: TThemedElementDetails;
   begin
     ForceRectBorders := [];
     if ItemInfo.IsSplit then
@@ -2373,8 +2754,23 @@ procedure SpDrawXPMenuItem(ACanvas: TCanvas; ARect: TRect; ItemInfo: TSpTBXMenuI
         else
           if ItemInfo.IsOnMenuBar then begin
             if SpIsWinVistaOrUp or (ItemInfo.SkinType = sknDelphiStyle) then begin
+              // Use the new API on Windows Vista
+              Details.Element := teMenu;
+              Details.Part := MENU_BARITEM;
+              if ItemInfo.SkinType = sknDelphiStyle then begin
+                if ItemInfo.State = sknsDisabled then Details.State := 15 // tmMenuBarItemDisabled
+                else if ItemInfo.State = sknsPushed then Details.State := 14 // tmMenuBarItemPushed
+                else if ItemInfo.State = sknsHotTrack then Details.State := 13 // tmMenuBarItemHot
+                else Details.State := 12; // tmMenuBarItemNormal
+              end
+              else begin
+                if ItemInfo.State = sknsDisabled then Details.State := MBI_DISABLED
+                else if ItemInfo.State = sknsPushed then Details.State := MBI_PUSHED
+                else if ItemInfo.State = sknsHotTrack then Details.State := MBI_HOT
+                else Details.State := MBI_NORMAL;
+              end;
               if ItemInfo.State <> sknsNormal then
-                CurrentSkin.PaintThemedElementBackground(ACanvas, ARect, skncMenuBarItem, ItemInfo.State);
+                CurrentSkin.PaintThemedElementBackground(ACanvas, ARect, Details);
             end
             else
               if ItemInfo.State in [sknsHotTrack, sknsPushed, sknsChecked, sknsCheckedAndHotTrack] then
@@ -2487,24 +2883,26 @@ begin
       R := ARect;
       R.Right := R.Left + ItemInfo.MenuMargins.GutterSize;
 
+
       case ItemInfo.SkinType of
         sknNone:
           ToolbarItemDraw(R);
         sknWindows, sknDelphiStyle:
           if SpIsWinVistaOrUp or (ItemInfo.SkinType = sknDelphiStyle) then begin
+            // Use the new API on Windows Vista
             // The checkbox frame is not painted
-            // [Old-Themes]
-            {$IF CompilerVersion >= 23} //for Delphi XE2 and up
-            if ItemInfo.State = sknsDisabled then Details := SpTBXThemeServices.GetElementDetails(tmPopupCheckBackgroundDisabled)
-            else if ItemInfo.ImageShown then Details := SpTBXThemeServices.GetElementDetails(tmPopupCheckBackgroundBitmap)
-            else Details := SpTBXThemeServices.GetElementDetails(tmPopupCheckBackgroundNormal);
-            {$ELSE}
             Details.Element := teMenu;
             Details.Part := MENU_POPUPCHECKBACKGROUND;
-            if ItemInfo.State = sknsDisabled then Details.State := MCB_DISABLED
-            else if ItemInfo.ImageShown then Details.State := MCB_BITMAP
-            else Details.State := MCB_NORMAL;
-            {$IFEND}
+            if ItemInfo.SkinType = sknDelphiStyle then begin
+              if ItemInfo.State = sknsDisabled then Details.State := 24 // tmPopupCheckBackgroundDisabled
+              else if ItemInfo.ImageShown then Details.State := 26 // tmPopupCheckBackgroundBitmap
+              else Details.State := 25; // tmPopupCheckBackgroundNormal
+            end
+            else begin
+              if ItemInfo.State = sknsDisabled then Details.State := MCB_DISABLED
+              else if ItemInfo.ImageShown then Details.State := MCB_BITMAP
+              else Details.State := MCB_NORMAL;
+            end;
             CurrentSkin.PaintThemedElementBackground(ACanvas, R, Details);
           end
           else
@@ -2519,7 +2917,7 @@ begin
       if ItemInfo.SkinType = sknSkin then
         C := SkinManager.CurrentSkin.Options(skncMenuItem, ItemInfo.State).Borders.Color1
       else
-        C :=  CurrentSkin.GetThemedSystemColor(clBtnShadow);
+        C := clBtnShadow;
       R := ARect;
       R.Left := ARect.Right - 10 - 4;
       SpDrawLine(ACanvas, R.Left, R.Top + 1, R.Left, R.Bottom - 1, C);
@@ -2552,14 +2950,10 @@ begin
     sknWindows, sknDelphiStyle:
       if MenuItemStyle then begin
         if SpIsWinVistaOrUp or (SkinType = sknDelphiStyle) then begin
-          // [Old-Themes]
-          {$IF CompilerVersion >= 23} //for Delphi XE2 and up
-          Details := SpTBXThemeServices.GetElementDetails(tmPopupSeparator);
-          {$ELSE}
+          // Use the new API in Windows Vista
           Details.Element := teMenu;
           Details.Part := MENU_POPUPSEPARATOR;
-          Details.State := 0;
-          {$IFEND}
+          Details.State := 32;   // tmPopupSeparator
           VistaSeparatorSize := CurrentSkin.GetThemedElementSize(ACanvas, Details);
           R := SpCenterRectVert(R, VistaSeparatorSize.cy);
           CurrentSkin.PaintThemedElementBackground(ACanvas, R, Details);
@@ -2690,24 +3084,30 @@ begin
         SpFillRect(ACanvas, ARect, clMenu, clBtnShadow);
     sknWindows, sknDelphiStyle: // Only Windows Vista painting, XP just fills the background
       begin
+        // Use the new API in Windows Vista
         SaveIndex := SaveDC(ACanvas.Handle);
         try
-          CurrentSkin.PaintThemedElementBackground(ACanvas, ARect, skncPopup, sknsNormal);
+          Details.Element := teMenu;
+          Details.Part := MENU_POPUPBACKGROUND;
+          Details.State := 18;  // tmPopupBackground
+          CurrentSkin.PaintThemedElementBackground(ACanvas, ARect, Details);
           // Now paint the borders, clip the background
           ExcludeClipRect(ACanvas.Handle, ARect.Left + 2, ARect.Top + 2, ARect.Right - 2, ARect.Bottom - 2);
-          // [Old-Themes]
-          {$IF CompilerVersion >= 23} //for Delphi XE2 and up
-          Details := SpTBXThemeServices.GetElementDetails(tmPopupBorders);
-          {$ELSE}
-          Details.Element := teMenu;
           Details.Part := MENU_POPUPBORDERS;
-          Details.State := 0;
-          {$IFEND}
+          Details.State := 19;  // tmPopupBorders
           CurrentSkin.PaintThemedElementBackground(ACanvas, ARect, Details);
         finally
           RestoreDC(ACanvas.Handle, SaveIndex);
         end;
-        // Don't paint the gutter on Windows
+
+        // Paint the gutter
+        if DrawGutter then begin
+          CurrentSkin.GetMenuItemMargins(ACanvas, ImageSize, MarginsInfo);
+          GutterR := ARect;
+          InflateRect(GutterR, -1, -4);
+          GutterR.Right := GutterR.Left + MarginsInfo.GutterSize + MarginsInfo.LeftCaptionMargin + 1 + 4; // +1 because the popup has 2 pixel border, and +4 gutter separator has 4 pixel spacing
+          SpDrawXPMenuGutter(ACanvas, GutterR);
+        end;
       end;
     sknSkin:
       begin
@@ -2774,23 +3174,22 @@ begin
         if not IsRectEmpty(ARect) then
           CurrentSkin.PaintBackground(ACanvas, ARect, skncStatusBar, sknsNormal, True, True);
         if not IsRectEmpty(AGripRect) then begin
-          // Grip cells are 4x4 pixels
           R := AGripRect;
           C1 := SkinManager.CurrentSkin.Options(skncStatusBarGrip).Body.Color1;
           C2 := SkinManager.CurrentSkin.Options(skncStatusBarGrip).Body.Color2;
           // Draw 3 cells at the bottom
-          R.Left := R.Right - SpDPIScale(4) * 3;
-          R.Top := R.Bottom - SpDPIScale(4);
+          R.Left := R.Right - 12;
+          R.Top := R.Bottom - 4;
           SpDrawXPGrip(ACanvas, R, C1, C2);
           // Draw 2 cells at the top
           R.Bottom := R.Top;
-          R.Top := R.Bottom - SpDPIScale(4);
-          R.Left := R.Left + SpDPIScale(4);
+          R.Top := R.Bottom - 4;
+          R.Left := R.Left + 4;
           SpDrawXPGrip(ACanvas, R, C1, C2);
           // Draw 1 cell at the top
           R.Bottom := R.Top;
-          R.Top := R.Bottom - SpDPIScale(4);
-          R.Left := R.Left + SpDPIScale(4);
+          R.Top := R.Bottom - 4;
+          R.Left := R.Left + 4;
           SpDrawXPGrip(ACanvas, R, C1, C2);
         end;
       end;
@@ -2822,7 +3221,8 @@ begin
         try
           CurrentSkin.GetThemedElementDetails(skncWindowTitleBar, IsActive, False, False, False, False, False, False, Details);
           ElementSize := CurrentSkin.GetThemedElementSize(ACanvas, Details);
-          B.SetSize(ARect.Right - ARect.Left,  ElementSize.cy);
+          B.Width := ARect.Right - ARect.Left;
+          B.Height := ElementSize.cy;
           CurrentSkin.PaintThemedElementBackground(B.Canvas, Rect(0, 0, B.Width, B.Height), Details);
           ACanvas.StretchDraw(ARect, B);
         finally
@@ -2905,7 +3305,8 @@ begin
         try
           R := ARect;
           R.Bottom := R.Top + BorderSize.Y;
-          B.SetSize(R.Right - R.Left, R.Bottom - R.Top);
+          B.Width := R.Right - R.Left;
+          B.Height := R.Bottom - R.Top;
           CurrentSkin.PaintThemedElementBackground(B.Canvas, Rect(0, 0, B.Width, B.Height), Details);
           // Mirror
           MirrorR := Rect(0, B.Height - 1, B.Width, -1);
@@ -2985,16 +3386,23 @@ begin
   DrawSkinBody := True;
 
   if Toolbar.Docked then begin
-    // Draw the Dock background
+    // Prepare R
     R := Toolbar.CurrentDock.ClientRect;
     OffsetRect(R, -Toolbar.Left, -Toolbar.Top);
     if not PaintOnNCArea then begin
-      // Called by WMEraseBkgnd, map R from toolbar Canvas to dock Canvas
-      // We need to offset the border size
-      OffsetRect(R, -CDefaultToolbarBorderSize, -CDefaultToolbarBorderSize)
+      if W is TSpTBXToolbar then
+        OffsetRect(R, -TSpTBXToolbar(W).DefaultToolbarBorderSize, -TSpTBXToolbar(W).DefaultToolbarBorderSize)
+      else
+        OffsetRect(R, -CDefaultToolbarBorderSize, -CDefaultToolbarBorderSize);
+      if IsVertical then
+        Dec(R.Top, SpGetDragHandleSize(Toolbar))
+      else
+        Dec(R.Left, SpGetDragHandleSize(Toolbar));
     end;
+    // Draw the Dock background
     if Toolbar.CurrentDock is TSpTBXDock then
       TSpTBXDock(Toolbar.CurrentDock).DrawBackground(ACanvas.Handle, R);
+
     DrawSkinBody := not (Toolbar.CurrentDock.BackgroundOnToolbars and SpIsDockUsingBitmap(Toolbar.CurrentDock));
   end
   else begin
@@ -3043,15 +3451,17 @@ begin
 end;
 
 procedure SpDrawXPToolbarGrip(W: TTBCustomDockableWindow; ACanvas: TCanvas; ARect: TRect);
+const
+  Pattern: array [0..15] of Byte = (0, 0, $CC, 0, $78, 0, $30, 0, $78, 0, $CC, 0, 0, 0, 0, 0);
 var
   GripR, CloseR: TRect;
-  GripSize: Integer;
+  GripSize, Z: Integer;
   Vertical: Boolean;
-  C1, C2: TColor;
+  C1, C2, PatternColor: TColor;
+  Flags: Integer;
   Toolbar: TTBCustomDockableWindowAccess;
   State: TSpTBXSkinStatesType;
   Details: TThemedElementDetails;
-  SaveIndex: Integer;
 begin
   Toolbar := TTBCustomDockableWindowAccess(W);
 
@@ -3074,43 +3484,43 @@ begin
     if Toolbar.CloseButtonWhenDocked then begin
       if Vertical then begin
         CloseR.Left := ARect.Right - GripSize;
-        CloseR.Right := CloseR.Left + GripSize - SpDpiScale(2);
-        CloseR.Top := ARect.Top + SpDpiScale(2);
-        CloseR.Bottom := CloseR.Top + GripSize - SpDpiScale(2);
-        Dec(GripR.Right, GripSize - SpDpiScale(1));
+        CloseR.Right := CloseR.Left + GripSize - 2;
+        CloseR.Top := ARect.Top + 2;
+        CloseR.Bottom := CloseR.Top + GripSize - 2;
+        Dec(GripR.Right, GripSize - 1);
       end
       else begin
-        CloseR.Left := ARect.Left + SpDpiScale(2);
-        CloseR.Right := CloseR.Left + GripSize - SpDpiScale(2);
-        CloseR.Top := ARect.Top + SpDpiScale(2);
-        CloseR.Bottom := CloseR.Top + GripSize - SpDpiScale(2);
-        Inc(GripR.Top, GripSize - SpDpiScale(1));
+        CloseR.Left := ARect.Left + 2;
+        CloseR.Right := CloseR.Left + GripSize - 2;
+        CloseR.Top := ARect.Top + 2;
+        CloseR.Bottom := CloseR.Top + GripSize - 2;
+        Inc(GripR.Top, GripSize - 1);
       end;
     end;
 
     case SkinManager.GetSkinType of
       sknNone:
         begin
-          OffsetRect(CloseR, -SpDpiScale(1), -SpDpiScale(1));
+          OffsetRect(CloseR, -1, -1);
           if Vertical then begin
             if Toolbar.CloseButtonWhenDocked then
-              if Toolbar.DragHandleStyle = dhDouble then Inc(GripR.Top, SpDpiScale(1))
-              else Inc(GripR.Top, SpDpiScale(3));
-            Inc(GripR.Top, SpDpiScale(3));
-            GripR.Bottom := GripR.Top + SpDpiScale(3);
+              if Toolbar.DragHandleStyle = dhDouble then Inc(GripR.Top, 1)
+              else Inc(GripR.Top, 3);
+            Inc(GripR.Top, 3);
+            GripR.Bottom := GripR.Top + 3;
           end
           else begin
             if Toolbar.CloseButtonWhenDocked then
-              if Toolbar.DragHandleStyle = dhDouble then Inc(GripR.Left, SpDpiScale(1))
-              else Inc(GripR.Left, SpDpiScale(3));
-            Inc(GripR.Left, SpDpiScale(3));
-            GripR.Right := GripR.Left + SpDpiScale(3);
+              if Toolbar.DragHandleStyle = dhDouble then Inc(GripR.Left, 1)
+              else Inc(GripR.Left, 3);
+            Inc(GripR.Left, 3);
+            GripR.Right := GripR.Left + 3;
           end;
           Windows.DrawEdge(ACanvas.Handle, GripR, BDR_RAISEDINNER, BF_RECT);
           ACanvas.Pixels[GripR.Left, GripR.Bottom - 1] := clBtnHighlight;
           if Toolbar.DragHandleStyle = dhDouble then begin
-            if Vertical then OffsetRect(GripR, 0, SpDpiScale(3))
-            else OffsetRect(GripR, SpDpiScale(3), 0);
+            if Vertical then OffsetRect(GripR, 0, 3)
+            else OffsetRect(GripR, 3, 0);
             Windows.DrawEdge(ACanvas.Handle, GripR, BDR_RAISEDINNER, BF_RECT);
             ACanvas.Pixels[GripR.Left, GripR.Bottom - 1] := clBtnHighlight;
           end;
@@ -3122,67 +3532,71 @@ begin
             else
               if Toolbar. CloseButtonHover then
                 Windows.DrawEdge(ACanvas.Handle, CloseR, BDR_RAISEDINNER, BF_RECT);
-            if Toolbar.CloseButtonDown then OffsetRect(CloseR, SpDpiScale(1), SpDpiScale(1));
-            SpDrawGlyphPattern(ACanvas, CloseR, gptToolbarClose, clBtnText);
+            if Toolbar.CloseButtonDown then OffsetRect(CloseR, 1, 1);
+            SpDrawGlyphPattern(ACanvas.Handle, CloseR, 7, 7, Pattern[0], clBtnText);
           end;
         end;
       sknWindows, sknDelphiStyle:
-        begin
-          if SkinManager.GetSkinType = sknDelphiStyle then begin
-            if Vertical then begin
-              Details := SpTBXThemeServices.GetElementDetails(trGripperVert);
-              Inc(GripR.Left, SpDpiScale(2));
-              OffsetRect(GripR, 0, SpDPIScale(2));
-            end
-            else begin
-              Details := SpTBXThemeServices.GetElementDetails(trGripper);
-              Inc(GripR.Top, SpDpiScale(2));
-              OffsetRect(GripR, SpDPIScale(2), 0);
-            end;
+        if SkinManager.GetSkinType = sknDelphiStyle then begin  // XE2 Styles
+          if Vertical then begin
+            Details := SpTBXThemeServices.GetElementDetails(trGripperVert);
+            OffsetRect(GripR, 1, 0);
           end
           else begin
-            // Since GetThemePartSize does not seem to work properly, assume we use default
-            // WindowsXP themes where the gripper pattern repeats itself every 4 pixels
-            if Vertical then begin
-              Details := SpTBXThemeServices.GetElementDetails(trGripperVert);
-              GripR := SpCenterRectVert(GripR, 6);  // Do not use SpDPIScale, Windows paints the grip with 4 pixels
-              GripR.Right := GripR.Left + ((GripR.Right - GripR.Left) div 4) * 4;
-              OffsetRect(GripR, 0, SpDPIScale(1));
-            end
-            else begin
-              Details := SpTBXThemeServices.GetElementDetails(trGripper);
-              GripR := SpCenterRectHoriz(GripR, 6);  // Do not use SpDPIScale, Windows paints the grip with 4 pixels
-              GripR.Bottom := GripR.Top + ((GripR.Bottom - GripR.Top) div 4) * 4;
-              OffsetRect(GripR, SpDPIScale(1), 0);
-            end;
+            Details := SpTBXThemeServices.GetElementDetails(trGripper);
+            OffsetRect(GripR, 0, 1);
           end;
-
-          // Weird Delphi styles painting bug, we need to clip the bottom
-          SaveIndex := SaveDC(ACanvas.Handle);
-          try
-            ExcludeClipRect(ACanvas.Handle, ARect.Left, ARect.Bottom - SpDPIScale(3), ARect.Right, ARect.Bottom);
-            SpTBXThemeServices.DrawElement(ACanvas.Handle, Details, GripR);
-          finally
-            RestoreDC(ACanvas.Handle, SaveIndex);
-          end;
+          SpTBXThemeServices.DrawElement(ACanvas.Handle, Details, GripR);
 
           // Close button
           if Toolbar.CloseButtonWhenDocked then begin
             CurrentSkin.PaintThemedElementBackground(ACanvas, CloseR, skncToolbarItem, True, Toolbar.CloseButtonDown, Toolbar.CloseButtonHover, False, False, False, False);
-            SpDrawGlyphPattern(ACanvas, CloseR, gptToolbarClose, CurrentSkin.GetThemedSystemColor(clBtnText));
+            if Toolbar.CloseButtonDown then OffsetRect(CloseR, 1, 1);
+            SpDrawGlyphPattern(ACanvas.Handle, CloseR, 7, 7, Pattern[0], CurrentSkin.GetThemedSystemColor(clBtnText));
+          end;
+        end
+        else begin
+          // Since GetThemePartSize does not seem to work properly, assume we use default
+          // WindowsXP themes where the gripper pattern repeats itself every 4 pixels
+          if Vertical then begin
+            Details := SpTBXThemeServices.GetElementDetails(trGripperVert);
+            OffsetRect(GripR, -1, 0);
+            GripR := SpCenterRectVert(GripR, 6);
+            Z := GripR.Right - GripR.Left;
+            GripR.Left := GripR.Left - 1 + (Z and $3) shr 1;
+            GripR.Right := GripR.Left + Z and not $3 + 2;
+          end
+          else begin
+            Details := SpTBXThemeServices.GetElementDetails(trGripper);
+            OffsetRect(GripR, 0, -1);
+            GripR := SpCenterRectHoriz(GripR, 6);
+            Z := GripR.Bottom - GripR.Top;
+            GripR.Top := GripR.Top  - 1 + (Z and $3) shr 1;
+            GripR.Bottom := GripR.Top + Z and not $3 + 1;
+          end;
+          SpTBXThemeServices.DrawElement(ACanvas.Handle, Details, GripR);
+
+          // Close button
+          if Toolbar.CloseButtonWhenDocked then begin
+            Flags := TS_NORMAL;
+            if Toolbar.CloseButtonDown then Flags := TS_PRESSED
+            else if Toolbar.CloseButtonHover then Flags := TS_HOT;
+            DrawThemeBackground(SpTBXThemeServices.Theme[teToolbar], ACanvas.Handle, TP_BUTTON, Flags, CloseR, nil);
+            if Toolbar.CloseButtonDown then OffsetRect(CloseR, 1, 1);
+            SpDrawGlyphPattern(ACanvas.Handle, CloseR, 7, 7, Pattern[0], clBtnText);
           end;
         end;
       sknSkin:
         begin
           if Vertical then begin
-            InflateRect(GripR, SpDpiScale(-3), 0);
-            OffsetRect(GripR, 0, SpDpiScale(2));
-            GripR := SpCenterRectVert(GripR, SpDpiScale(4));
+            InflateRect(GripR, -3, 0);
+            OffsetRect(GripR, 0, 2);
+            GripR := SpCenterRectVert(GripR, 4);
           end
           else begin
-            InflateRect(GripR, 0, SpDpiScale(-3));
-            OffsetRect(GripR, SpDpiScale(2), 0);
-            GripR := SpCenterRectHoriz(GripR, SpDpiScale(4));
+            InflateRect(GripR, 0, -3);
+            OffsetRect(GripR, 2, 0);
+            GripR := SpCenterRectHoriz(GripR, 4);
           end;
           C1 := SkinManager.CurrentSkin.Options(skncToolbarGrip).Body.Color1;
           C2 := SkinManager.CurrentSkin.Options(skncToolbarGrip).Body.Color2;
@@ -3194,8 +3608,9 @@ begin
             if Toolbar.CloseButtonDown then State := sknsPushed
             else if Toolbar.CloseButtonHover then State := sknsHotTrack;
             CurrentSkin.PaintBackground(ACanvas, CloseR, skncToolbarItem, State, True, True);
-            if Toolbar.CloseButtonDown then OffsetRect(CloseR, SpDpiScale(1), SpDpiScale(1));
-            SpDrawGlyphPattern(ACanvas, CloseR, gptToolbarClose, CurrentSkin.GetTextColor(skncToolbarItem, State));
+            if Toolbar.CloseButtonDown then OffsetRect(CloseR, 1, 1);
+            PatternColor := CurrentSkin.GetTextColor(skncToolbarItem, State);
+            SpDrawGlyphPattern(ACanvas.Handle, CloseR, 7, 7, Pattern[0], PatternColor);
           end;
         end;
     end;
@@ -3234,41 +3649,6 @@ begin
     end
     else
       ACanvas.FillRect(ARect);
-end;
-
-procedure SpInvalidateSpTBXControl(AControl: TWinControl; InvalidateChildren: Boolean);
-var
-  I: Integer;
-  ChildW: TWinControl;
-begin
-  // Invalidate will not fire WM_ERASEBKGND, because csOpaque is setted
-  if Assigned(AControl) and not (csDestroying in AControl.ComponentState) and AControl.HandleAllocated then
-  begin
-    if InvalidateChildren then begin
-      RedrawWindow(AControl.Handle, nil, 0, RDW_ERASE or RDW_INVALIDATE);
-      // Only invalidate SpTBXControls
-      for I := 0 to AControl.ControlCount - 1 do
-        if AControl.Controls[I] is TWinControl then begin
-          ChildW := TWinControl(AControl.Controls[I]);
-          if not (csDestroying in ChildW.ComponentState) and
-            {not (csFreeNotification in ChildW.ComponentState) and} ChildW.HandleAllocated then
-          begin
-            if (ChildW.Anchors = [akLeft, akTop, akRight, akBottom]) or
-               (ChildW.Anchors = [akLeft, akTop, akRight]) or (ChildW.Anchors = [akLeft, akTop, akBottom]) or
-               (ChildW.Anchors = [akLeft, akRight, akBottom]) or (ChildW.Anchors = [akTop, akRight, akBottom]) then
-              Continue;
-
-            if (ChildW is TSpTBXCustomContainer) and (csParentBackground in ChildW.ControlStyle) then
-              RedrawWindow(ChildW.Handle, nil, 0, RDW_ERASE or RDW_INVALIDATE or RDW_ALLCHILDREN)
-            else
-              if not (ChildW is TSpTBXDock) and not (ChildW is TSpTBXToolbar) then
-                RedrawWindow(ChildW.Handle, nil, 0, RDW_ERASE or RDW_INVALIDATE);
-          end;
-        end;
-    end
-    else
-      RedrawWindow(AControl.Handle, nil, 0, RDW_ERASE or RDW_INVALIDATE);
-  end;
 end;
 
 //WMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWM
@@ -3323,7 +3703,7 @@ begin
   end;
 end;
 
-function SpHMenuGetCaption(Menu: HMenu; Index: Integer): string;
+function SpHMenuGetCaption(Menu: HMenu; Index: Integer): WideString;
 var
   WideBuf: array[0..MAX_PATH] of WideChar;
   Size: Integer;
@@ -3523,9 +3903,12 @@ end;
 { Misc helpers }
 
 procedure SpActivateDwmNC(WinControl: TWinControl; Activate: Boolean);
+{$IFDEF JR_D11}
 var
   ncrp: Cardinal;
+{$ENDIF}
 begin
+  {$IFDEF JR_D11}
   // Use the new API on Windows Vista
   if DwmCompositionEnabled and WinControl.HandleAllocated then begin
     if Activate then
@@ -3534,12 +3917,17 @@ begin
       ncrp := DWMNCRP_DISABLED;
     DwmSetWindowAttribute(WinControl.Handle, DWMWA_NCRENDERING_POLICY, @ncrp, SizeOf(ncrp));
   end;
+  {$ENDIF}
 end;
 
 function SpIsDwmCompositionEnabled: Boolean;
 begin
+  {$IFDEF JR_D11}
   // Use the new API on Windows Vista
   Result := DwmCompositionEnabled;
+  {$ELSE}
+  Result := False;
+  {$ENDIF}
 end;
 
 function SpCanFocus(WinControl: TWinControl): Boolean;
@@ -3759,6 +4147,18 @@ begin
 end;
 
 //WMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWM
+{ Unicode helpers }
+
+procedure SpPersistent_AfterInherited_DefineProperties(Filer: TFiler; Instance: TPersistent);
+begin
+  {$IFNDEF UNICODE}
+  // Don't let the streaming system store the WideStrings,
+  // we need to store them manually
+  TntPersistent_AfterInherited_DefineProperties(Filer, Instance);
+  {$ENDIF}
+end;
+
+//WMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWM
 { TSpTBXFontSettings }
 
 constructor TSpTBXFontSettings.Create;
@@ -3865,6 +4265,111 @@ begin
 end;
 
 //WMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWM
+{ TSpTBXCustomItemActionLink }
+
+{$IFNDEF UNICODE}
+procedure TSpTBXCustomItemActionLink.AssignClient(AClient: TObject);
+begin
+  inherited AssignClient(AClient);
+  FUnicodeClient := AClient as TSpTBXCustomItem;
+end;
+
+function TSpTBXCustomItemActionLink.IsCaptionLinked: Boolean;
+begin
+  if (Action is TCustomAction) and Supports(Action, ITntAction) then
+    Result := FUnicodeClient.Caption = TntActnList.TntAction_GetCaption(Action as TCustomAction)
+  else
+    Result := inherited IsCaptionLinked;
+end;
+
+function TSpTBXCustomItemActionLink.IsHintLinked: Boolean;
+begin
+  if (Action is TCustomAction) and Supports(Action, ITntAction) then
+    Result := FUnicodeClient.Hint = TntActnList.TntAction_GetHint(Action as TCustomAction)
+  else
+    Result := inherited IsCaptionLinked;
+end;
+
+procedure TSpTBXCustomItemActionLink.SetCaption(const Value: String);
+begin
+  if IsCaptionLinked then
+    if (Action is TCustomAction) and Supports(Action, ITntAction) then
+      FUnicodeClient.Caption := TntActnList.TntAction_GetNewCaption(Action as TCustomAction, Value)
+    else
+      FUnicodeClient.Caption := Value;
+end;
+
+procedure TSpTBXCustomItemActionLink.SetHint(const Value: String);
+begin
+  if IsHintLinked then
+    if (Action is TCustomAction) and Supports(Action, ITntAction) then
+      FUnicodeClient.Hint := TntActnList.TntAction_GetNewHint(Action as TCustomAction, Value)
+    else
+      FUnicodeClient.Hint := Value;
+end;
+{$ENDIF}
+
+//WMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWM
+{ TSpTBXCustomControl }
+
+{$IFNDEF UNICODE}
+procedure TSpTBXCustomControl.CreateWindowHandle(const Params: TCreateParams);
+begin
+  CreateUnicodeHandle(Self, Params, '');
+end;
+
+procedure TSpTBXCustomControl.DefineProperties(Filer: TFiler);
+begin
+  inherited;
+  // Don't let the streaming system store the WideStrings,
+  // we need to store them manually
+  SpPersistent_AfterInherited_DefineProperties(Filer, Self);
+end;
+
+procedure TSpTBXCustomControl.ActionChange(Sender: TObject; CheckDefaults: Boolean);
+begin
+  if (Action is TCustomAction) and Supports(Action, ITntAction) then begin
+    if not CheckDefaults or (Self.Caption = '') then
+      Self.Caption := TntActnList.TntAction_GetCaption(Action as TCustomAction);
+    if not CheckDefaults or (Self.Hint = '') then
+      Self.Hint := TntActnList.TntAction_GetHint(Action as TCustomAction);
+  end;
+  // Call inherited after we changed the unicode Caption and Hint
+  inherited;
+end;
+
+function TSpTBXCustomControl.IsCaptionStored: Boolean;
+begin
+  Result := TntControl_IsCaptionStored(Self);
+end;
+
+function TSpTBXCustomControl.IsHintStored: Boolean;
+begin
+  Result := TntControl_IsHintStored(Self);
+end;
+
+function TSpTBXCustomControl.GetCaption: TWideCaption;
+begin
+  Result := TntControl_GetText(Self);
+end;
+
+function TSpTBXCustomControl.GetHint: WideString;
+begin
+  Result := TntControl_GetHint(Self);
+end;
+
+procedure TSpTBXCustomControl.SetCaption(const Value: TWideCaption);
+begin
+  TntControl_SetText(Self, Value);
+end;
+
+procedure TSpTBXCustomControl.SetHint(const Value: WideString);
+begin
+  TntControl_SetHint(Self, Value);
+end;
+{$ENDIF}
+
+//WMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWM
 { TSpTBXCustomItem }
 
 constructor TSpTBXCustomItem.Create(AOwner: TComponent);
@@ -3872,6 +4377,10 @@ begin
   inherited;
   FFontSettings := TSpTBXFontSettings.Create;
   FFontSettings.OnChange := FontSettingsChanged;
+
+  {$IFNDEF UNICODE}
+  FCaption := '';
+  {$ENDIF}
   FAlignment := taCenter;
   FCaptionGlowColor := clYellow;
   FCustomWidth := -1;
@@ -3894,8 +4403,27 @@ begin
   if (Operation = opRemove) and (AComponent = Control) then Control := nil;
 end;
 
+procedure TSpTBXCustomItem.DefineProperties(Filer: TFiler);
+begin
+  inherited;
+  // Don't let the streaming system store the WideStrings,
+  // we need to store them manually
+  SpPersistent_AfterInherited_DefineProperties(Filer, Self);
+end;
+
 procedure TSpTBXCustomItem.ActionChange(Sender: TObject; CheckDefaults: Boolean);
 begin
+  {$IFNDEF UNICODE}
+  if (Action is TCustomAction) and Supports(Action, ITntAction) then begin
+    if not CheckDefaults or (Self.Caption = '') then
+      Self.Caption := TntActnList.TntAction_GetCaption(Action as TCustomAction);
+    if not CheckDefaults or (Self.Hint = '') then
+      Self.Hint := TntActnList.TntAction_GetHint(Action as TCustomAction);
+    inherited;
+    Exit;
+  end;
+  {$ENDIF}
+
   if Action is TCustomAction then
     with TCustomAction(Sender) do begin
       if not CheckDefaults or (Self.Caption = '') then
@@ -3916,7 +4444,7 @@ begin
   // Do nothing
 end;
 
-procedure TSpTBXCustomItem.DoDrawHint(AHintBitmap: TBitmap; var AHint: string; var PaintDefault: Boolean);
+procedure TSpTBXCustomItem.DoDrawHint(AHintBitmap: TBitmap; var AHint: Widestring; var PaintDefault: Boolean);
 begin
   if Assigned(FOnDrawHint) then FOnDrawHint(Self, AHintBitmap, AHint, PaintDefault);
 end;
@@ -3928,7 +4456,7 @@ begin
 end;
 
 procedure TSpTBXCustomItem.DoDrawCaption(ACanvas: TCanvas; ClientAreaRect: TRect;
-  State: TSpTBXSkinStatesType; var ACaption: string; var CaptionRect: TRect; var CaptionFormat: Cardinal;
+  State: TSpTBXSkinStatesType; var ACaption: WideString; var CaptionRect: TRect; var CaptionFormat: Cardinal;
   IsTextRotated: Boolean; const PaintStage: TSpTBXPaintStage; var PaintDefault: Boolean);
 begin
   if Assigned(FOnDrawCaption) then FOnDrawCaption(Self, ACanvas, ClientAreaRect,
@@ -3977,6 +4505,21 @@ begin
   Result := TSpTBXPopupWindow;
 end;
 
+function TSpTBXCustomItem.GetShortCutText: WideString;
+var
+  P: Integer;
+begin
+  P := Pos(#9, Caption);
+  if (P = 0) or (P = Length(Caption)) then begin
+    if ShortCut <> 0 then
+      Result := ShortCutToText(ShortCut)
+    else
+      Result := '';
+  end
+  else
+    Result := Copy(Caption, P+1, Maxint);
+end;
+
 procedure TSpTBXCustomItem.Click;
 begin
   if Assigned(FControl) then ToggleControl;
@@ -3993,6 +4536,44 @@ procedure TSpTBXCustomItem.Invalidate;
 begin
   Change(False);
 end;
+
+{$IFNDEF UNICODE}
+function TSpTBXCustomItem.IsCaptionStored: Boolean;
+begin
+  Result := (ActionLink = nil) or not TActionLinkAccess(ActionLink).IsCaptionLinked;
+end;
+
+function TSpTBXCustomItem.IsHintStored: Boolean;
+begin
+  Result := (ActionLink = nil) or not TActionLinkAccess(ActionLink).IsHintLinked;
+end;
+
+procedure TSpTBXCustomItem.SetCaption(const Value: WideString);
+var
+  S, PrevS: string;
+begin
+  if FCaption <> Value then begin
+    FCaption := Value;
+    // We need to compare the Ansi inherited Caption
+    // to force the change.
+    // Sometimes '???' = '???' and the change is not executed.
+    S := inherited Caption;
+    PrevS := Value;
+    if S <> PrevS then
+      inherited Caption := Value
+    else
+      Change(True);
+  end;
+end;
+
+procedure TSpTBXCustomItem.SetHint(const Value: WideString);
+begin
+  if FHint <> Value then begin
+    FHint := Value;
+    inherited Hint := Value;
+  end;
+end;
+{$ENDIF}
 
 procedure TSpTBXCustomItem.SetAlignment(const Value: TAlignment);
 begin
@@ -4179,7 +4760,7 @@ begin
 end;
 
 procedure TSpTBXItemViewer.DoDrawCaption(ACanvas: TCanvas; ClientAreaRect: TRect;
-  State: TSpTBXSkinStatesType; var ACaption: string; var CaptionRect: TRect; var CaptionFormat: Cardinal;
+  State: TSpTBXSkinStatesType; var ACaption: WideString; var CaptionRect: TRect; var CaptionFormat: Cardinal;
   IsTextRotated: Boolean; const PaintStage: TSpTBXPaintStage; var PaintDefault: Boolean);
 begin
   Item.DoDrawCaption(ACanvas, ClientAreaRect, State, ACaption, CaptionRect,
@@ -4187,7 +4768,7 @@ begin
 end;
 
 procedure TSpTBXItemViewer.DoDrawHint(AHintBitmap: TBitmap; CursorPos: TPoint;
-  var CursorRect: TRect; var AHint: string; var PaintDefault: Boolean);
+  var CursorRect: TRect; var AHint: Widestring; var PaintDefault: Boolean);
 begin
   Item.DoDrawHint(AHintBitmap, AHint, PaintDefault);
 end;
@@ -4230,7 +4811,7 @@ begin
         PatternColor := clMenuText
       else
         PatternColor := GetTextColor(ItemInfo.State);
-      SpDrawGlyphPattern(ACanvas, ARect, TSpTBXGlyphPattern(ImgIndex), PatternColor);
+      SpDrawGlyphPattern(ACanvas, ARect, ImgIndex, PatternColor);
     end
     else
       if (ImgIndex >= 0) and (ImgIndex < ImgList.Count) then
@@ -4252,7 +4833,7 @@ var
   DropDownArrowSize, DropDownArrowMargin, SplitBtnArrowSize: Integer;
   ImgSize, RightImgSize: TSize;
   GlyphTop, ToolbarStyle: Boolean;
-  WS: string;
+  WS: WideString;
   TextMetric: TTextMetric;
   MenuMargins: TSpTBXMenuItemMarginsInfo;
   State: TSpTBXSkinStatesType;
@@ -4288,14 +4869,14 @@ begin
 
   // Measure size
   if ToolbarStyle then begin
-    AWidth := SpDpiScale(6);
-    AHeight := SpDpiScale(6);
+    AWidth := 6;
+    AHeight := 6;
 
     if CaptionShown then begin
       Inc(AWidth, TextInfo.TextSize.CX);
       Inc(AHeight, TextInfo.TextSize.CY);
-      if not TextInfo.IsTextRotated then Inc(AWidth, SpDpiScale(4))
-      else Inc(AHeight, SpDpiScale(4));
+      if not TextInfo.IsTextRotated then Inc(AWidth, 4)
+      else Inc(AHeight, 4);
     end;
 
     if GetImageShown and (ImgSize.CX > 0) and (ImgSize.CY > 0) then begin
@@ -4303,25 +4884,25 @@ begin
         if not TextInfo.IsTextRotated then begin
           Inc(AWidth, ImgSize.CX);
           Inc(AWidth);
-          if AHeight < ImgSize.CY + SpDpiScale(6) then AHeight := ImgSize.CY + SpDpiScale(6);
+          if AHeight < ImgSize.CY + 6 then AHeight := ImgSize.CY + 6;
         end
         else begin
           Inc(AHeight, ImgSize.CY);
           Inc(AHeight);
-          if AWidth < ImgSize.CX + SpDpiScale(6) then AWidth := ImgSize.CX + SpDpiScale(6);
+          if AWidth < ImgSize.CX + 6 then AWidth := ImgSize.CX + 6;
         end;
       end
       else begin
         Inc(AHeight, ImgSize.CY);
-        if AWidth < ImgSize.CX + SpDpiScale(7) then AWidth := ImgSize.CX + SpDpiScale(7);
+        if AWidth < ImgSize.CX + 7 then AWidth := ImgSize.CX + 7;
       end;
     end;
 
     if (RightImgSize.cx > 0) and (RightImgSize.cy > 0) then begin
       if View.Orientation = tbvoVertical then
-        Inc(AHeight, SpDpiScale(4) + RightImgSize.cy)
+        Inc(AHeight, 4 + RightImgSize.cy)
       else
-        Inc(AWidth, SpDpiScale(4) + RightImgSize.cx);
+        Inc(AWidth, 4 + RightImgSize.cx);
     end;
 
     if (tbisSubmenu in Item.ItemStyle) and (tbisCombo in Item.ItemStyle) then
@@ -4334,18 +4915,18 @@ begin
         end
         else
           if GlyphTop and (TextInfo.IsTextRotated xor (View.Orientation <> tbvoVertical)) then begin
-            W := ImgSize.CX + DropDownArrowSize + SpDpiScale(2);
-            if W > AWidth - SpDpiScale(7) then AWidth := W + SpDpiScale(7);
+            W := ImgSize.CX + DropDownArrowSize + 2;
+            if W > AWidth - 7 then AWidth := W + 7;
           end
           else begin
-            H := ImgSize.CY + DropDownArrowSize + SpDpiScale(2);
-            if H > AHeight - SpDpiScale(7) then AHeight := H + SpDpiScale(7);
+            H := ImgSize.CY + DropDownArrowSize + 2;
+            if H > AHeight - 7 then AHeight := H + 7;
           end;
     end;
 
     // Widen MenuBar SubMenuItems
     if (tbisSubmenu in Item.ItemStyle) and (vsMenuBar in View.Style) then
-      Inc(AWidth, SpDpiScale(6));
+      Inc(AWidth, 6);
 
     // Toolbar.Stretch property doesn't work correctly, I don't know how to fix
     // it without changing the TB2K source.
@@ -4365,7 +4946,7 @@ begin
     AWidth := TextInfo.TextSize.cx;
     AHeight := TextInfo.TextSize.cy;
 
-    if ImgSize.cy = 0 then ImgSize.cy := SpDpiScale(16);
+    if ImgSize.cy = 0 then ImgSize.cy := 16;
     if AHeight < ImgSize.cy then AHeight := ImgSize.cy;
 
     if View.Window is TSpTBXPopupWindow then
@@ -4379,7 +4960,7 @@ begin
     Inc(AWidth, MenuMargins.GutterSize + MenuMargins.ImageTextSpace + MenuMargins.LeftCaptionMargin + MenuMargins.RightCaptionMargin);
     WS := Item.GetShortCutText;
     if Length(WS) > 0 then
-      Inc(AWidth, (AHeight - SpDpiScale(6)) + SpGetTextSize(Canvas.Handle, WS, True).cx);
+      Inc(AWidth, (AHeight - 6) + SpGetTextSize(Canvas.Handle, WS, True).cx);
     Inc(AWidth, AHeight); { Note: maybe this should be controlled by the theme }
   end;
 
@@ -4463,6 +5044,11 @@ begin
   InternalCalcSize(Canvas, True, AWidth, AHeight);
 end;
 
+function TSpTBXItemViewer.GetCaptionText: WideString;
+begin
+  Result := SpStripShortcut(Item.Caption);
+end;
+
 function TSpTBXItemViewer.GetTextColor(State: TSpTBXSkinStatesType): TColor;
 begin
   Result := Item.FontSettings.Color;
@@ -4470,14 +5056,8 @@ begin
     if IsToolbarStyle then begin
       if View.Window is TSpTBXToolbar then
         Result := TSpTBXToolbar(View.Window).GetItemsTextColor(State);
-      if Result = clNone then begin
-        if IsOnToolBoxPopup and not (State in [sknsHotTrack, sknsCheckedAndHotTrack]) then
-          // If it's on a toolbox popup and it's not in a hottrack state then
-          // the background is the popup, get the text color of the menu items
-          Result := CurrentSkin.GetTextColor(skncMenuItem, State)
-        else
-          Result := CurrentSkin.GetTextColor(skncToolbarItem, State);
-      end;
+      if Result = clNone then
+        Result := CurrentSkin.GetTextColor(skncToolbarItem, State);
     end
     else
       Result := CurrentSkin.GetTextColor(skncMenuItem, State);
@@ -4502,7 +5082,7 @@ const
     if (TextFlags and (DT_WORDBREAK or DT_END_ELLIPSIS or DT_PATH_ELLIPSIS)) <> 0 then begin
       // will never get here, TextFlags doesn't have wrapping
       CaptionRect := BoundsRect;
-      R := Rect(0, 0, CaptionRect.Right - CaptionRect.Left, SpDPIScale(80));
+      R := Rect(0, 0, CaptionRect.Right - CaptionRect.Left, 80);
     end
     else
       R := Rect(0, 0, 1, 1);
@@ -4567,7 +5147,7 @@ var
   P: TPoint;
 
   DropDownArrowSize, DropDownArrowMargin, SplitBtnArrowSize, ImgAndArrowWidth: Integer;
-  WS: string;
+  WS: WideString;
   TextC, DropDownC: TColor;
 
   GlyphLayout: TSpGlyphLayout;
@@ -4619,10 +5199,10 @@ begin
         else begin
           // Special DropDown, toolbar item with arrow, image and text. The Image is above the caption
           // the arrow must be aligned with the image, above the text
-          ImgAndArrowWidth := ItemInfo.ImageSize.cx + DropDownArrowSize + SpDPIScale(2);
-          ItemInfo.ComboRect.Right := (R.Left + R.Right + ImgAndArrowWidth + SpDPIScale(2)) div 2;
+          ImgAndArrowWidth := ItemInfo.ImageSize.cx + DropDownArrowSize + 2;
+          ItemInfo.ComboRect.Right := (R.Left + R.Right + ImgAndArrowWidth + 2) div 2;
           ItemInfo.ComboRect.Left := ItemInfo.ComboRect.Right - DropDownArrowSize;
-          ItemInfo.ComboRect.Top := (R.Top + R.Bottom - ItemInfo.ImageSize.cy - SpDPIScale(2) - TextInfo.TextSize.CY) div 2;
+          ItemInfo.ComboRect.Top := (R.Top + R.Bottom - ItemInfo.ImageSize.cy - 2 - TextInfo.TextSize.CY) div 2;
           ItemInfo.ComboRect.Bottom := ItemInfo.ComboRect.Top + ItemInfo.ImageSize.cy;
         end;
     end;
@@ -4636,8 +5216,8 @@ begin
 
     // Draw dropdown arrow
     if PaintDefault and ItemInfo.HasArrow then begin
-      P.X := (ItemInfo.ComboRect.Left + ItemInfo.ComboRect.Right) div 2 - SpDPIScale(1);
-      P.Y := (ItemInfo.ComboRect.Top + ItemInfo.ComboRect.Bottom) div 2 - SpDPIScale(1);
+      P.X := (ItemInfo.ComboRect.Left + ItemInfo.ComboRect.Right) div 2 - 1;
+      P.Y := (ItemInfo.ComboRect.Top + ItemInfo.ComboRect.Bottom) div 2 - 1;
       // Don't draw the arrow if is a split button in Windows, it's
       // painted by the Windows theme.
       if not (ItemInfo.IsSplit and (ItemInfo.SkinType in [sknWindows, sknDelphiStyle])) then begin
@@ -4645,8 +5225,8 @@ begin
         if ItemInfo.IsSplit and ItemInfo.Enabled then
           DropDownC := GetTextColor(ItemInfo.ComboState);
         if ItemInfo.IsSunkenCaption then
-          P := Point(P.X + SpDPIScale(1), P.Y + SpDPIScale(1));
-        SpDrawArrow(Canvas, P.X, P.Y, DropDownC, not ItemInfo.IsVertical, False, SpDPIScale(2));
+          P := Point(P.X + 1, P.Y + 1);
+        SpDrawArrow(Canvas, P.X, P.Y, DropDownC, not ItemInfo.IsVertical, False, 2);
       end;
       if not ItemInfo.IsSplit and not IsSpecialDropDown then begin
         if View.Orientation <> tbvoVertical then Dec(R.Right, DropDownArrowSize)
@@ -4654,7 +5234,7 @@ begin
       end;
     end;
 
-    InflateRect(R, -SpDPIScale(4), -SpDPIScale(4));  // Adjust
+    InflateRect(R, -4, -4);  // Adjust
   end
   else begin // Menu items
     PaintDefault := True;
@@ -4666,7 +5246,7 @@ begin
 
     // Draw the submenu arrows
     if PaintDefault and (tbisSubmenu in Item.ItemStyle) then
-      SpDrawArrow(Canvas, R.Right - SpDPIScale(10), R.Bottom div 2, TextC, False, False, SpDPIScale(3));
+      SpDrawArrow(Canvas, R.Right - 10, R.Bottom div 2, TextC, False, False, 3);
 
     // Don't apply the margins if the menu item has
     // tbisClicksTransparent itemstyle (like a SpTBXLabelItem)
@@ -4698,7 +5278,7 @@ begin
       SpCalcXPText(Canvas, R, WS, TextAlignment, TextInfo.TextFlags, ItemInfo.ImageSize, ItemInfo.RightImageSize, GlyphLayout, False, CaptionRect, ImageRect, RightImageRect, TextInfo.TextAngle);
 
       if ItemInfo.IsSunkenCaption then
-        OffsetRect(CaptionRect, SpDPIScale(1), SpDPIScale(1));
+        OffsetRect(CaptionRect, 1, 1);
     end
     else begin
       if tbisClicksTransparent in Item.ItemStyle then begin
@@ -4726,10 +5306,10 @@ begin
       if (not IsSelected or ItemInfo.ToolbarStyle) and
         (ItemInfo.State = sknsDisabled) and (ItemInfo.SkinType = sknNone) then
       begin
-        OffsetRect(CaptionRect, SpDPIScale(1), SpDPIScale(1));
+        OffsetRect(CaptionRect, 1, 1);
         Canvas.Font.Color := clBtnHighlight;
         SpDrawXPText(Canvas, WS, CaptionRect, TextInfo.TextFlags, Item.CaptionGlow, Item.CaptionGlowColor, TextInfo.TextAngle);
-        OffsetRect(CaptionRect, -SpDPIScale(1), -SpDPIScale(1));
+        OffsetRect(CaptionRect, -1, -1);
         Canvas.Font.Color := clGrayText;
       end;
 
@@ -4768,7 +5348,7 @@ begin
     if ItemInfo.ToolBarStyle then begin
       if IsRectEmpty(ImageRect) then
         ImageRect := R;
-      if IsSpecialDropDown then OffsetRect(ImageRect, (-DropDownArrowSize + SpDPIScale(1)) div 2, 0);
+      if IsSpecialDropDown then OffsetRect(ImageRect, (-DropDownArrowSize + 1) div 2, 0);
     end
     else begin
       ImageRect := R;
@@ -4782,9 +5362,9 @@ begin
     else begin
       if not ItemInfo.ToolbarStyle and Item.Checked then begin
         if Item.RadioItem then
-          CurrentSkin.PaintMenuRadioMark(Canvas, ImageRect, True, ItemInfo.State)
+          CurrentSkin.PaintMenuRadioMark(Canvas, ImageRect, True, True, ItemInfo.State)
         else
-          CurrentSkin.PaintMenuCheckMark(Canvas, ImageRect, True, False, ItemInfo.State);
+          CurrentSkin.PaintMenuCheckMark(Canvas, ImageRect, True, False, True, ItemInfo.State);
       end;
     end;
   end;
@@ -4812,12 +5392,70 @@ begin
     Result := nil;
 end;
 
+function TSpTBXItemViewer.GetHintText: Widestring;
+var
+  I: Integer;
+  S: string;
+begin
+  // Get the short hint
+  I := Pos('|', Item.Hint);
+  if I = 0 then
+    Result := Item.Hint
+  else
+    Result := Copy(Item.Hint, 1, I - 1);
+  // Use the caption if there is no hint
+  if (Result = '') and not(tboNoAutoHint in Item.EffectiveOptions) and
+     (not(tbisSubmenu in Item.ItemStyle) or (tbisCombo in Item.ItemStyle) or
+      not CaptionShown) then
+  begin
+    Result := SpStripAccelChars(SpStripTrailingPunctuation(Item.Caption));
+  end;
+
+  // Call associated action's OnHint event handler to post-process the hint
+  if Assigned(Item.ActionLink) and (Item.ActionLink.Action is TCustomAction) and
+    Assigned(TCustomAction(Item.ActionLink.Action).OnHint) then
+  begin
+    S := Result;
+    if TCustomAction(Item.ActionLink.Action).DoHint(S) then
+      Result := S
+    else
+      Result := '';
+    // Note: TControlActionLink.DoShowHint actually misinterprets the result of DoHint, but we get it right...
+  end;
+
+  // Add shortcut text
+  if (Result <> '') and Application.HintShortCuts and (Item.ShortCut <> scNone) then
+    Result := Result + ' (' + ShortCutToText(Item.ShortCut) + ')';
+end;
+
+procedure TSpTBXItemViewer.Entering;
+begin
+  // When a Popupmenu is opened the TB2K modal handler will reset
+  // the TApplication.Hint in UpdateAppHint subprocedure of
+  // TTBModalHandler.Create, this in turn sets TTntApplication.Hint
+  // to AnsiString:
+  // ...
+  // if Assigned(View.FSelected) then
+  //    Application.Hint := GetLongHint(View.FSelected.Item.Hint)
+  //  else
+  //    Application.Hint := '';
+  // ...
+  // We need to set TTntApplication.Hint before TB2K.
+  // TTntStatusBar uses TTntApplication.Hint when AutoHint is true.
+
+  inherited;
+  {$IFNDEF UNICODE}
+  if View.IsPopup then
+    TntApplication.Hint := Item.Hint;
+  {$ENDIF}
+end;
+
 procedure TSpTBXItemViewer.CMHintShow(var Message: TMessage);
 // Handle the CM_HINTSHOW message to show unicode hints using
 // a custom THintWindow.
 var
   HintInfo: PHintInfo;
-  WideHint, PrevWideHint: string;
+  WideHint, PrevWideHint: Widestring;
   R, TextR, CursorR: TRect;
   PaintDefault: Boolean;
   {$IF CompilerVersion >= 23} //for Delphi XE2 and up
@@ -4850,7 +5488,8 @@ begin
   SpStockHintBitmap.Canvas.Brush.Color := clInfoBk;
   TextR := Rect(0, 0, 1, 1);
   SpDrawXPText(SpStockHintBitmap.Canvas, WideHint, TextR, DT_NOPREFIX or DT_CALCRECT);
-  SpStockHintBitmap.SetSize(TextR.Right + 8, TextR.Bottom + 4);
+  SpStockHintBitmap.Width := TextR.Right + 8;
+  SpStockHintBitmap.Height := TextR.Bottom + 4;
   R := Rect(0, 0, SpStockHintBitmap.Width, SpStockHintBitmap.Height);
   SpDrawXPTooltipBackground(SpStockHintBitmap.Canvas, R);
 
@@ -4866,7 +5505,8 @@ begin
     if WideHint <> PrevWideHint then begin
       TextR := Rect(0, 0, 1, 1);
       SpDrawXPText(SpStockHintBitmap.Canvas, WideHint, TextR, DT_NOPREFIX or DT_CALCRECT);
-      SpStockHintBitmap.SetSize(TextR.Right + 8, TextR.Bottom + 4);
+      SpStockHintBitmap.Width := TextR.Right + 8;
+      SpStockHintBitmap.Height := TextR.Bottom + 4;
       R := Rect(0, 0, SpStockHintBitmap.Width, SpStockHintBitmap.Height);
       SpDrawXPTooltipBackground(SpStockHintBitmap.Canvas, R);
     end
@@ -4995,12 +5635,12 @@ end;
 function TSpTBXColorItemViewer.GetImageSize: TSize;
 begin
   if IsToolbarStyle then begin
-    Result.cx := SpDpiScale(12);
-    Result.cy := SpDPIScale(12);
+    Result.cx := 12;
+    Result.cy := 12;
   end
   else begin
-    Result.cx := SpDpiScale(16);
-    Result.cy := SpDpiScale(16);
+    Result.cx := 16;
+    Result.cy := 16;
   end;
 end;
 
@@ -5093,13 +5733,13 @@ procedure TSpTBXSeparatorItemViewer.CalcSize(const Canvas: TCanvas; var AWidth,
 begin
   if not IsToolbarStyle then begin
     if CurrentSkin.OfficeMenu then
-      AHeight := SpDpiScale(4)  // For Office XP, 2003, 2007
+      AHeight := 4  // For Office XP, 2003, 2007
     else
-      AHeight := SpDpiScale(10);
+      AHeight := 10;
   end
   else begin
-    AWidth := SpDpiScale(6);
-    AHeight := SpDpiScale(6);
+    AWidth := 6;
+    AHeight := 6;
   end;
 end;
 
@@ -5163,7 +5803,7 @@ begin
   inherited;
   FDefaultIndex := 0;
   FLastClickedIndex := 0;
-  FStrings := TStringList.Create;
+  FStrings := TTntStringList.Create;
 end;
 
 destructor TSpTBXRadioGroupItem.Destroy;
@@ -5246,19 +5886,8 @@ begin
 end;
 
 procedure TSpTBXSkinGroupItem.DoClick(AItem: TSpTBXItem);
-var
-  S: string;
 begin
-  S := FStrings[AItem.Tag];
-  {$IF CompilerVersion >= 23} // for Delphi XE2 and up
-  if SkinManager.IsValidDelphiStyle(S) then
-    SkinManager.SetDelphiStyle(S)  // Set Delphi Style
-  else
-    SkinManager.SetSkin(S); // Set Skin
-  {$ELSE}
-  SkinManager.SetSkin(S); // Set Skin
-  {$IFEND}
-
+  SkinManager.SetSkin(FStrings[AItem.Tag]);
   inherited;
 end;
 
@@ -5266,15 +5895,7 @@ procedure TSpTBXSkinGroupItem.DoSkinChange;
 var
   I: Integer;
 begin
-  {$IF CompilerVersion >= 23} // for Delphi XE2 and up
-  if TStyleManager.IsCustomStyleActive then
-    I := FStrings.IndexOf(TStyleManager.ActiveStyle.Name)
-  else
-    I := FStrings.IndexOf(SkinManager.CurrentSkinName);
-  {$ELSE}
   I := FStrings.IndexOf(SkinManager.CurrentSkinName);
-  {$IFEND}
-
   if I > -1 then
     Items[I].Click;
 
@@ -5282,8 +5903,19 @@ begin
 end;
 
 procedure TSpTBXSkinGroupItem.DoFillStrings;
+var
+  I: Integer;
 begin
-  SkinManager.GetSkinsAndDelphiStyles(FStrings);
+  {$IFNDEF UNICODE}
+  SkinManager.SkinsList.GetSkinNames(FStrings.AnsiStrings);
+  {$ELSE}
+  SkinManager.SkinsList.GetSkinNames(FStrings);
+  {$ENDIF}
+
+  // Sort the list and move the Default skin to the top
+  FStrings.Sort;
+  I := FStrings.IndexOf('Default');
+  if I > -1 then FStrings.Move(I, 0);
   inherited;
   FDefaultIndex := FStrings.IndexOf(SkinManager.CurrentSkinName);
 end;
@@ -5359,8 +5991,8 @@ end;
 procedure TSpTBXSystemMenuItemViewer.CalcSize(const Canvas: TCanvas;
   var AWidth, AHeight: Integer);
 begin
-  AWidth := GetSystemMetrics(SM_CXSMICON) + SpDpiScale(2);
-  AHeight := GetSystemMetrics(SM_CYSMICON) + SpDpiScale(2);
+  AWidth := GetSystemMetrics(SM_CXSMICON) + 2;
+  AHeight := GetSystemMetrics(SM_CYSMICON) + 2;
 end;
 
 procedure TSpTBXSystemMenuItemViewer.Paint(const Canvas: TCanvas;
@@ -5429,7 +6061,7 @@ begin
       ItemInfo.HotTrack, ItemInfo.Enabled);
 end;
 
-procedure TSpTBXCustomToolPalette.DoGetCellHint(ACol, ARow: Integer; var AHint: string);
+procedure TSpTBXCustomToolPalette.DoGetCellHint(ACol, ARow: Integer; var AHint: WideString);
 begin
   if Assigned(FOnGetCellHint) then FOnGetCellHint(Self, ACol, ARow, AHint);
 end;
@@ -5483,8 +6115,8 @@ var
   ImageSize: TSize;
 begin
   ImageSize := GetImageSize;
-  AWidth := ImageSize.cx + SpDpiScale(6);
-  AHeight := ImageSize.cy + SpDpiScale(6);
+  AWidth := ImageSize.cx + 6;
+  AHeight := ImageSize.cy + 6;
 end;
 
 procedure TSpTBXToolViewer.CalcSize(const Canvas: TCanvas; var AWidth, AHeight: Integer);
@@ -5509,12 +6141,12 @@ begin
   if not IsToolbarStyle then
     Inc(AWidth, MarginsInfo.RightCaptionMargin);
   AHeight := H * FRowCount;
-  if AWidth < SpDpiScale(8) then AWidth := SpDpiScale(8);
-  if AHeight < SpDpiScale(8) then AHeight := SpDpiScale(8);
+  if AWidth < 8 then AWidth := 8;
+  if AHeight < 8 then AHeight := 8;
 end;
 
 procedure TSpTBXToolViewer.DoDrawHint(AHintBitmap: TBitmap; CursorPos: TPoint;
-  var CursorRect: TRect; var AHint: string; var PaintDefault: Boolean);
+  var CursorRect: TRect; var AHint: Widestring; var PaintDefault: Boolean);
 var
   Col, Row: Integer;
 begin
@@ -5570,7 +6202,7 @@ begin
   Result := (Col >= 0) and (Row >= 0) and (Col < FColCount) and (Row < FRowCount);
 end;
 
-function TSpTBXToolViewer.GetCellHint(Col, Row: Integer): string;
+function TSpTBXToolViewer.GetCellHint(Col, Row: Integer): WideString;
 begin
   Result := '';
   Item.DoGetCellHint(Col, Row, Result);
@@ -5605,8 +6237,8 @@ begin
     Result.cy := IL.Height;
   end
   else begin
-    Result.cx := SpDpiScale(12);
-    Result.cy := SpDpiScale(12);
+    Result.cx := 12;
+    Result.cy := 12;
   end;
 end;
 
@@ -5816,7 +6448,7 @@ begin
   end;
 end;
 
-procedure TSpTBXColorPalette.DoGetCellHint(ACol, ARow: Integer; var AHint: string);
+procedure TSpTBXColorPalette.DoGetCellHint(ACol, ARow: Integer; var AHint: WideString);
 var
   C: TColor;
 begin
@@ -5847,13 +6479,13 @@ end;
 
 function TSpTBXColorPalette.GetCellColor(ACol, ARow: Integer): TColor;
 var
-  S: string;
+  W: WideString;
 begin
-  GetCellInfo(ACol, ARow, Result, S);
+  GetCellInfo(ACol, ARow, Result, W);
 end;
 
 procedure TSpTBXColorPalette.GetCellInfo(ACol, ARow: Integer;
-  out AColor: TColor; out AName: string);
+  out AColor: TColor; out AName: WideString);
 var
   I: Integer;
 begin
@@ -6212,12 +6844,14 @@ end;
 constructor TSpTBXToolbar.Create(AOwner: TComponent);
 begin
   inherited;
+  ControlStyle := ControlStyle - [csOpaque];
   Color := clNone;
 
   Items.RegisterNotification(DoItemNotification);
   FAnchoredControlItems := TSpTBXItemCacheCollection.Create(TSpTBXItemCache);
   FChevronVertical := True;
   FCustomizable := True;
+  FDefaultToolbarBorderSize := CDefaultToolbarBorderSize;
   FDisplayMode := tbdmSelectiveCaption;
   SkinManager.AddSkinNotification(Self);
 end;
@@ -6228,6 +6862,23 @@ begin
   Items.UnRegisterNotification(DoItemNotification);
   FAnchoredControlItems.Free;
   inherited;
+end;
+
+procedure TSpTBXToolbar.CreateWindowHandle(const Params: TCreateParams);
+begin
+  {$IFNDEF UNICODE}
+  CreateUnicodeHandle(Self, Params, '');
+  {$ELSE}
+  inherited;
+  {$ENDIF}
+end;
+
+procedure TSpTBXToolbar.DefineProperties(Filer: TFiler);
+begin
+  inherited;
+  // Don't let the streaming system store the WideStrings,
+  // we need to store them manually
+  SpPersistent_AfterInherited_DefineProperties(Filer, Self);
 end;
 
 procedure TSpTBXToolbar.DoDrawBackground(ACanvas: TCanvas; ARect: TRect;
@@ -6512,7 +7163,6 @@ end;
 
 procedure TSpTBXToolbar.DrawNCArea(const DrawToDC: Boolean; const ADC: HDC;
   const Clip: HRGN);
-// Same as TSpTBXCustomToolWindow.DrawNCArea
 var
   DC: HDC;
   R, ExcludeR: TRect;
@@ -6531,7 +7181,7 @@ begin
     if not DrawToDC then begin
       SelectNCUpdateRgn(Handle, DC, Clip);
       ExcludeR := R;
-      InflateRect(ExcludeR, -CDefaultToolbarBorderSize, -CDefaultToolbarBorderSize);
+      InflateRect(ExcludeR, -DefaultToolbarBorderSize, -DefaultToolbarBorderSize);
       if IsVertical then
         Inc(ExcludeR.Top, GripSize)
       else
@@ -6662,42 +7312,21 @@ begin
     RedrawWindow(Handle, nil, 0, RDW_ERASE or RDW_INVALIDATE or RDW_ALLCHILDREN or RDW_FRAME);
 end;
 
-procedure TSpTBXToolbar.WMEraseBkgnd(var Message: TMessage);
-// Same as TSpTBXCustomToolWindow.WMEraseBkgnd
+procedure TSpTBXToolbar.WMEraseBkgnd(var Message: TWMEraseBkgnd);
+// Same as TSpTBXToolWindow.WMEraseBkgnd
 var
   ACanvas: TCanvas;
   R: TRect;
-  WindowOrg: TPoint;
 begin
-  Message.Result := 1;
   if (csDestroying in ComponentState) then Exit;
 
-  // Only erase background if we're not double buffering or painting to memory
-  // TTBCustomDockableWindow doesn't support DoubleBuffered property, we need to
-  // change this line in TTBView.DrawItem:
-  //   FWindow.Perform(WM_ERASEBKGND, WPARAM(BmpDC), 0);
-  // To:
-  //   FWindow.Perform(WM_ERASEBKGND, WPARAM(BmpDC), LPARAM(BmpDC)); // Pass BmpDC on LParam to support DoubleBuffered property
-//  if not DoubleBuffered or (Message.wParam = WPARAM(Message.lParam)) then
-  if DoubleBuffered and (TMessage(Message).wParam <> WPARAM(TMessage(Message).lParam)) then
-  begin
-    // When using VCL Styles and a VCL control is inside a Toolbar, DrawControlBackground in StyleAPI.inc calls:
-    // Control.Parent.Perform(WM_ERASEBKGND, WPARAM(DC), 1);
-    // We need to check if the WindowOrg is 0 to discard
-    if Message.LParam <> 1 then begin
-      GetWindowOrgEx(TWMEraseBkgnd(Message).DC, WindowOrg);
-      if WindowOrg.x = 0 then
-        Exit;
-    end;
-  end;
-
+  Message.Result := 1;
   ACanvas := TCanvas.Create;
-  ACanvas.Handle := TWMEraseBkgnd(Message).DC;
+  ACanvas.Handle := Message.DC;
   try
-    ACanvas.Lock;
     R := ClientRect;
     if Docked then begin
-      InflateRect(R, CDefaultToolbarBorderSize, CDefaultToolbarBorderSize);
+      InflateRect(R, DefaultToolbarBorderSize, DefaultToolbarBorderSize);
       if IsVertical then
         Dec(R.Top, SpGetDragHandleSize(Self))
       else
@@ -6706,7 +7335,6 @@ begin
 
     InternalDrawBackground(ACanvas, R, False);
   finally
-    ACanvas.Unlock;
     ACanvas.Handle := 0;
     ACanvas.Free;
   end;
@@ -6737,6 +7365,33 @@ begin
     end;
   end;
 end;
+
+{$IFNDEF UNICODE}
+function TSpTBXToolbar.IsCaptionStored: Boolean;
+begin
+  Result := TntControl_IsCaptionStored(Self);
+end;
+
+function TSpTBXToolbar.GetCaption: TWideCaption;
+begin
+  Result := TntControl_GetText(Self);
+end;
+
+procedure TSpTBXToolbar.SetCaption(const Value: TWideCaption);
+begin
+  TntControl_SetText(Self, Value);
+end;
+
+function TSpTBXToolbar.GetHint: WideString;
+begin
+  Result := TntControl_GetHint(Self);
+end;
+
+procedure TSpTBXToolbar.SetHint(const Value: WideString);
+begin
+  TntControl_SetHint(Self, Value);
+end;
+{$ENDIF}
 
 procedure TSpTBXToolbar.SetCustomizable(const Value: Boolean);
 begin
@@ -7012,8 +7667,9 @@ end;
 constructor TSpTBXCustomToolWindow.Create(AOwner: TComponent);
 begin
   inherited;
-  FMinClientWidth := SpDpiScale(32);
-  FMinClientHeight := SpDpiScale(32);
+  FDefaultToolbarBorderSize := CDefaultToolbarBorderSize;
+  FMinClientWidth := 32;
+  FMinClientHeight := 32;
   SetBounds(Left, Top, FMinClientWidth, FMinClientHeight);
 
   Color := clNone;
@@ -7024,6 +7680,23 @@ destructor TSpTBXCustomToolWindow.Destroy;
 begin
   SkinManager.RemoveSkinNotification(Self);
   inherited;
+end;
+
+procedure TSpTBXCustomToolWindow.CreateWindowHandle(const Params: TCreateParams);
+begin
+  {$IFNDEF UNICODE}
+  CreateUnicodeHandle(Self, Params, '');
+  {$ELSE}
+  inherited;
+  {$ENDIF}
+end;
+
+procedure TSpTBXCustomToolWindow.DefineProperties(Filer: TFiler);
+begin
+  inherited;
+  // Don't let the streaming system store the WideStrings,
+  // we need to store them manually
+  SpPersistent_AfterInherited_DefineProperties(Filer, Self);
 end;
 
 function TSpTBXCustomToolWindow.CalcSize(ADock: TTBDock): TPoint;
@@ -7139,7 +7812,7 @@ begin
     if not DrawToDC then begin
       SelectNCUpdateRgn(Handle, DC, Clip);
       ExcludeR := R;
-      InflateRect(ExcludeR, -CDefaultToolbarBorderSize, -CDefaultToolbarBorderSize);
+      InflateRect(ExcludeR, -DefaultToolbarBorderSize, -DefaultToolbarBorderSize);
       if IsVertical then
         Inc(ExcludeR.Top, GripSize)
       else
@@ -7223,6 +7896,23 @@ begin
   Result := TSpTBXFloatingWindowParent;
 end;
 
+{$IFNDEF UNICODE}
+function TSpTBXCustomToolWindow.IsCaptionStored: Boolean;
+begin
+  Result := TntControl_IsCaptionStored(Self);
+end;
+
+function TSpTBXCustomToolWindow.GetCaption: TWideCaption;
+begin
+  Result := TntControl_GetText(Self);
+end;
+
+procedure TSpTBXCustomToolWindow.SetCaption(const Value: TWideCaption);
+begin
+  TntControl_SetText(Self, Value);
+end;
+{$ENDIF}
+
 function TSpTBXCustomToolWindow.GetClientAreaWidth: Integer;
 begin
   if Assigned(Parent) then Result := ClientWidth
@@ -7252,41 +7942,21 @@ begin
     TSpTBXFloatingWindowParent(Parent).RedrawCloseButton;
 end;
 
-procedure TSpTBXCustomToolWindow.WMEraseBkgnd(var Message: TMessage);
+procedure TSpTBXCustomToolWindow.WMEraseBkgnd(var Message: TWMEraseBkgnd);
 // Same as TSpTBXToolbar.WMEraseBkgnd
 var
   ACanvas: TCanvas;
   R: TRect;
-  WindowOrg: TPoint;
 begin
-  Message.Result := 1;
   if (csDestroying in ComponentState) then Exit;
 
-  // Only erase background if we're not double buffering or painting to memory
-  // TTBCustomDockableWindow doesn't support DoubleBuffered property, we need to
-  // change this line in TTBView.DrawItem:
-  //   FWindow.Perform(WM_ERASEBKGND, WPARAM(BmpDC), 0);
-  // To:
-  //   FWindow.Perform(WM_ERASEBKGND, WPARAM(BmpDC), LPARAM(BmpDC)); // Pass BmpDC on LParam to support DoubleBuffered property
-//  if not DoubleBuffered or (Message.wParam = WPARAM(Message.lParam)) then
-  if DoubleBuffered and (TMessage(Message).wParam <> WPARAM(TMessage(Message).lParam)) then
-  begin
-    // When using VCL Styles and a VCL control is inside a Toolbar, DrawControlBackground in StyleAPI.inc calls:
-    // Control.Parent.Perform(WM_ERASEBKGND, WPARAM(DC), 1);
-    // We need to check if the WindowOrg is 0 to discard
-    if Message.LParam <> 1 then begin
-      GetWindowOrgEx(TWMEraseBkgnd(Message).DC, WindowOrg);
-      if WindowOrg.x = 0 then
-        Exit;
-    end;
-  end;
-
+  Message.Result := 1;
   ACanvas := TCanvas.Create;
-  ACanvas.Handle := TWMEraseBkgnd(Message).DC;
+  ACanvas.Handle := Message.DC;
   try
     R := ClientRect;
     if Docked then begin
-      InflateRect(R, CDefaultToolbarBorderSize, CDefaultToolbarBorderSize);
+      InflateRect(R, DefaultToolbarBorderSize, DefaultToolbarBorderSize);
       if IsVertical then
         Dec(R.Top, SpGetDragHandleSize(Self))
       else
@@ -7341,13 +8011,15 @@ end;
 
 procedure TSpTBXFloatingWindowParent.DrawNCArea(const DrawToDC: Boolean;
   const ADC: HDC; const Clip: HRGN; RedrawWhat: TTBToolWindowNCRedrawWhat);
+const
+  Pattern: array [0..15] of Byte = ($C6, 0, $EE, 0, $7C, 0, $38, 0, $7C, 0, $EE, 0, $C6, 0, 0, 0);
 var
   DC: HDC;
   R, CaptionR, CloseR: TRect;
   ACanvas: TCanvas;
   DockWindow: TTBCustomDockableWindowAccess;
   FloatingBorderSize: TPoint;
-  S: string;
+  WideCaption: WideString;
   IsActive: Boolean;
   Details: TThemedElementDetails;
   CloseButtonWidth: Integer;
@@ -7405,14 +8077,15 @@ begin
               ACanvas.Font.Color := CurrentSkin.GetTextColor(skncWindowTitleBar, sknsNormal)
             else
               ACanvas.Font.Color := CurrentSkin.GetTextColor(skncWindowTitleBar, sknsDisabled);
+
             if DockableWindow is TSpTBXToolbar then
-              S := TSpTBXToolbar(DockWindow).Caption
+              WideCaption := TSpTBXToolbar(DockWindow).Caption
             else
               if DockableWindow is TSpTBXCustomToolWindow then
-                S := TSpTBXCustomToolWindow(DockWindow).Caption
+                WideCaption := TSpTBXCustomToolWindow(DockWindow).Caption
               else
-                S := '';
-            SpDrawXPText(ACanvas, S, CaptionR, DT_SINGLELINE or DT_VCENTER or DT_END_ELLIPSIS or DT_HIDEPREFIX);
+                WideCaption := '';
+            SpDrawXPText(ACanvas, WideCaption, CaptionR, DT_SINGLELINE or DT_VCENTER or DT_END_ELLIPSIS or DT_HIDEPREFIX);
           finally
             ACanvas.Brush.Style := bsSolid;
           end;
@@ -7422,10 +8095,10 @@ begin
         if (twrdCloseButton in RedrawWhat) and DockWindow.CloseButton then begin
           CloseR := R;
           Dec(CloseR.Bottom);
-          CloseButtonWidth := (CloseR.Bottom - CloseR.Top) - SpDpiScale(2) - SpDpiScale(2);
-          CloseR.Left := CloseR.Right - CloseButtonWidth - SpDpiScale(2); // TB2Dock.GetCloseButtonRect
+          CloseButtonWidth := (CloseR.Bottom - CloseR.Top) - 2 - 2;
+          CloseR.Left := CloseR.Right - CloseButtonWidth - 2; // TB2Dock.GetCloseButtonRect
           CloseR.Right := CloseR.Left + CloseButtonWidth;
-          CloseR.Top := CloseR.Top + SpDpiScale(2);
+          CloseR.Top := CloseR.Top + 2;
           CloseR.Bottom := CloseR.Top + CloseButtonWidth;
 
           case SkinManager.GetSkinType of
@@ -7450,7 +8123,7 @@ begin
                 if PatternColor = clNone then
                   PatternColor := CurrentSkin.GetTextColor(skncToolbarItem, SkinState);
                 CurrentSkin.PaintBackground(ACanvas, CloseR, skncToolbarItem, SkinState, True, True);
-                SpDrawGlyphPattern(ACanvas, CloseR, gptClose, PatternColor);
+                SpDrawGlyphPattern(ACanvas, CloseR, 0, PatternColor);
               end;
           end;
         end;
@@ -7649,7 +8322,7 @@ begin
     // If it's used by WM_ERASEBKGND offset the rect
     if PopupWindow.FPaintingClientArea then begin
       PopupWindow.FPaintingClientArea := False;
-      OffsetRect(R, -TB2Common.PopupMenuWindowNCSize, -TB2Common.PopupMenuWindowNCSize);
+      OffsetRect(R, -3, -3);
     end;
 
     PopupWindow.PaintBackground(ACanvas, R);
@@ -7685,7 +8358,7 @@ begin
         OpenIVRect.BottomRight := View.ParentView.Window.ClientToScreen(OpenIVRect.BottomRight);
         OpenIVRect.TopLeft := ScreenToClient(OpenIVRect.TopLeft);
         OpenIVRect.BottomRight := ScreenToClient(OpenIVRect.BottomRight);
-        OffsetRect(OpenIVRect, TB2Common.PopupMenuWindowNCSize, TB2Common.PopupMenuWindowNCSize); // Offset to get it on window coordinates
+        OffsetRect(OpenIVRect, 3, 3); // Offset to get it on window coordinates
         OpenIVSize := OpenIVRect.Right - OpenIVRect.Left;
 
         // Get the Clip rect based on OpenIVRect
@@ -7745,7 +8418,7 @@ begin
       inherited;
     sknWindows, sknDelphiStyle:
       // If it's Windows theme and we're not on Vista do default painting
-      if not SpIsWinVistaOrUp and (SkinManager.GetSkinType = sknWindows) then
+      if not SpIsWinVistaOrUp then
         inherited
       else begin
         Message.Result := 1;
@@ -7838,56 +8511,50 @@ end;
 procedure TSpTBXChevronItemViewer.Paint(const Canvas: TCanvas;
   const ClientAreaRect: TRect; IsSelected, IsPushed,
   UseDisabledShadow: Boolean);
+const
+  Pattern: array[Boolean, 0..15] of Byte = (
+    ($CC, 0, $66, 0, $33, 0, $66, 0, $CC, 0, 0, 0, 0, 0, 0, 0),
+    ($88, 0, $D8, 0, $70, 0, $20, 0, $88, 0, $D8, 0, $70, 0, $20, 0));
 var
   ItemInfo: TSpTBXMenuItemInfo;
   R2: TRect;
+  P: PByte;
+  W, H: Integer;
+  DC: HDC;
   PatternColor: TColor;
 begin
+  DC := Canvas.Handle;
   SpFillItemInfo(Canvas, Self, ItemInfo);
   SpDrawXPMenuItem(Canvas, ClientAreaRect, ItemInfo);
 
   // Chevron glyph
   R2 := ClientAreaRect;
   if not ItemInfo.IsVertical then begin
-    Inc(R2.Top, SpDPIScale(4));
-    R2.Bottom := R2.Top + SpDPIScale(5);
+    Inc(R2.Top, 4);
+    R2.Bottom := R2.Top + 5;
+    W := 8;
+    H := 5;
   end
   else begin
-    R2.Left := R2.Right - SpDPIScale(9);
-    R2.Right := R2.Left + SpDPIScale(5);
+    R2.Left := R2.Right - 9;
+    R2.Right := R2.Left + 5;
+    W := 5;
+    H := 8;
   end;
-  if ItemInfo.Pushed then OffsetRect(R2, SpDPIScale(1), SpDPIScale(1));
+  if ItemInfo.Pushed then OffsetRect(R2, 1, 1);
 
-  if ItemInfo.Enabled then begin
-    if SkinManager.GetSkinType = sknSkin then
-      PatternColor := GetTextColor(ItemInfo.State)
-    else
-      PatternColor := CurrentSkin.GetThemedSystemColor(clBtnText);
-    if not ItemInfo.IsVertical then
-      SpDrawGlyphPattern(Canvas, R2, gptChevron, PatternColor)
-    else
-      SpDrawGlyphPattern(Canvas, R2, gptVerticalChevron, PatternColor);
-  end
+  if SkinManager.GetSkinType = sknSkin then
+    PatternColor := GetTextColor(ItemInfo.State)
+  else
+    PatternColor := clBtnText;
+  P := @Pattern[ItemInfo.IsVertical][0];
+  if ItemInfo.Enabled then
+    SpDrawGlyphPattern(DC, R2, W, H, P^, PatternColor)
   else begin
-    if SkinManager.GetSkinType = sknSkin then
-      PatternColor := GetTextColor(ItemInfo.State)
-    else
-      PatternColor := CurrentSkin.GetThemedSystemColor(clBtnHighlight);
-    OffsetRect(R2, SpDPIScale(1), SpDPIScale(1));
-    if not ItemInfo.IsVertical then
-      SpDrawGlyphPattern(Canvas, R2, gptChevron, PatternColor)
-    else
-      SpDrawGlyphPattern(Canvas, R2, gptVerticalChevron, PatternColor);
-
-    if SkinManager.GetSkinType = sknSkin then
-      PatternColor := GetTextColor(ItemInfo.State)
-    else
-      PatternColor := CurrentSkin.GetThemedSystemColor(clBtnShadow);
-    OffsetRect(R2, -SpDPIScale(1), -SpDPIScale(1));
-    if not ItemInfo.IsVertical then
-      SpDrawGlyphPattern(Canvas, R2, gptChevron, PatternColor)
-    else
-      SpDrawGlyphPattern(Canvas, R2, gptVerticalChevron, PatternColor);
+    OffsetRect(R2, 1, 1);
+    SpDrawGlyphPattern(DC, R2, W, H, P^, clBtnHighlight);
+    OffsetRect(R2, -1, -1);
+    SpDrawGlyphPattern(DC, R2, W, H, P^, clBtnShadow);
   end;
 end;
 
@@ -7950,7 +8617,13 @@ begin
   Result := True;
   FClickedItem := nil;
   P := Point(X, Y);
+
+  {$IFDEF JR_D9}
   SetPopupPoint(P);
+  {$ELSE}
+  PPoint(@PopupPoint)^ := P;
+  {$ENDIF}
+
   WinPopupControl := nil;
   if Assigned(PopupControl) and Assigned(PopupControl.Parent) then begin
     PopupControlRect := PopupControl.BoundsRect;
@@ -8008,300 +8681,11 @@ begin
 end;
 
 //WMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWM
-{ TSpTBXCustomContainer }
-
-constructor TSpTBXCustomContainer.Create(AOwner: TComponent);
-begin
-  inherited;
-  ControlStyle := ControlStyle + [csAcceptsControls, csOpaque] - [csParentBackground];
-  Color := clNone;
-  ParentColor := False;
-  SkinManager.AddSkinNotification(Self);
-
-  DoubleBuffered := True;
-end;
-
-procedure TSpTBXCustomContainer.CreateParams(var Params: TCreateParams);
-begin
-  inherited CreateParams(Params);
-  if not (csDesigning in ComponentState) then begin
-    // Disable complete redraws when size changes. CS_HREDRAW and CS_VREDRAW
-    // cause flicker and are not necessary for this control at run time
-    // Invalidate in WMWindowPosChanged message instead.
-    with Params do
-      Style := Style or WS_CLIPCHILDREN;
-    with Params.WindowClass do
-      Style := Style and not (CS_HREDRAW or CS_VREDRAW);
-
-    {
-    Do not set WS_EX_COMPOSITED, using it causes incorrect painting when
-    child controls use TScrollingStyleHook.
-    To reproduce:
-    - Drop a TMemo inside a TSpTBXPanel
-    - Change Memo.ScrollBars to ssVertical
-    - Run and try to resize using a VCL Style.
-    The problem seems to be that TScrollingStyleHook.WndProc gets called    non stop, even when the window is not visible.    TScrollingStyleHook.WndProc calls TScrollingStyleHook.PaintNC which
-    constantly shows and repaints the scrollbars.
-    Seems to be a VCL bug.
-
-    // WS_EX_COMPOSITED flag to enable double buffering.
-    // Possible issues with GDI+
-    // https://docs.microsoft.com/en-us/windows/desktop/winmsg/extended-window-styles
-    // This only works on Windows XP and above
-    if CheckWin32Version(5, 1) then
-      Params.ExStyle := Params.ExStyle or WS_EX_COMPOSITED;
-      }
-  end;
-end;
-
-destructor TSpTBXCustomContainer.Destroy;
-begin
-  SkinManager.RemoveSkinNotification(Self);
-  inherited;
-end;
-
-procedure TSpTBXCustomContainer.CMColorChanged(var Message: TMessage);
-begin
-  inherited;
-  InvalidateBackground(False);
-end;
-
-procedure TSpTBXCustomContainer.CMFontChanged(var Message: TMessage);
-begin
-  inherited;
-  InvalidateBackground(False);
-end;
-
-procedure TSpTBXCustomContainer.CMTextChanged(var Message: TMessage);
-begin
-  inherited;
-  InvalidateBackground(False);
-  Realign;
-end;
-
-procedure TSpTBXCustomContainer.DoDrawBackground(ACanvas: TCanvas; ARect: TRect;
-  const PaintStage: TSpTBXPaintStage; var PaintDefault: Boolean);
-begin
-  if Assigned(FOnDrawBackground) then FOnDrawBackground(Self, ACanvas, ARect,
-    PaintStage, PaintDefault);
-end;
-
-procedure TSpTBXCustomContainer.DrawBackground(ACanvas: TCanvas; ARect: TRect);
-begin
-  //
-end;
-
-procedure TSpTBXCustomContainer.InvalidateBackground(InvalidateChildren: Boolean);
-begin
-  // Force background repaint, calling invalidate doesn't repaint children controls
-  // Invalidate will not fire WM_ERASEBKGND, because csOpaque is setted
-  if FIsResizing then
-    SpInvalidateSpTBXControl(Self, InvalidateChildren)
-  else
-    if not (csDestroying in ComponentState) and HandleAllocated then
-      if InvalidateChildren then
-        RedrawWindow(Handle, nil, 0, RDW_ERASE or RDW_INVALIDATE or RDW_ALLCHILDREN)
-      else
-        RedrawWindow(Handle, nil, 0, RDW_ERASE or RDW_INVALIDATE);
-end;
-
-procedure TSpTBXCustomContainer.WMEraseBkgnd(var Message: TMessage);
-var
-  R: TRect;
-
-  ACanvas: TCanvas;
-  PaintDefault: Boolean;
-  SaveIndex: Integer;
-
-  WindowOrg: TPoint;
-begin
-  Message.Result := 1;
-
-  // Only erase background if we're not double buffering or painting to memory
-  //  if not DoubleBuffered or (TMessage(Message).wParam = WPARAM(TMessage(Message).lParam)) then
-  if DoubleBuffered and (TMessage(Message).wParam <> WPARAM(TMessage(Message).lParam)) then
-  begin
-    // When using VCL Styles and a VCL control is inside a Panel, DrawControlBackground in StyleAPI.inc calls:
-    // Control.Parent.Perform(WM_ERASEBKGND, WPARAM(DC), 1);
-    // We need to check if the WindowOrg is 0 to discard
-    if Message.LParam <> 1 then begin
-      GetWindowOrgEx(TWMEraseBkgnd(Message).DC, WindowOrg);
-      if WindowOrg.x = 0 then
-        Exit;
-    end;
-  end;
-
-  R := ClientRect;
-  ACanvas := TCanvas.Create;
-  ACanvas.Handle := TWMEraseBkgnd(Message).DC;
-  SaveIndex := SaveDC(TWMEraseBkgnd(Message).DC);
-  try
-    ACanvas.Lock;
-
-    if (Color = clNone) and Assigned(Parent) and SkinManager.IsXPThemesEnabled and
-      ((csDesigning in ComponentState) or (csParentBackground in ControlStyle)) then
-    begin
-      if SpIsGlassPainting(Self) then
-        // When painting on Glass fill the bitmap with the transparent color
-        SpFillRect(ACanvas, R, clBlack) // Transparent color
-      else begin
-        // The Panel is a special component, it has the ability
-        // to paint the parent background on its children controls.
-        // For that it receives WM_ERASEBKGND messages from its children
-        // via SpDrawParentBackground.
-        SpDrawParentBackground(Self, ACanvas.Handle, R);
-      end;
-    end
-    else
-      if Color = clNone then
-        SpFillRect(ACanvas, R, CurrentSkin.GetThemedSystemColor(clBtnFace))
-      else
-        SpFillRect(ACanvas, R, Color);
-
-    // Set the Font after SpDrawParentBackground, DrawThemeParentBackground,
-    // or PerformEraseBackground.
-    // The API messes the font, it seems it destroys it.
-    // For more info see:
-    // - TCustomActionControl.DrawBackground for more info.
-    // - Theme Explorer Main.pas TMainForm.ControlMessage
-    //   (http://www.soft-gems.net:8080/browse/Demos)
-    ACanvas.Font.Handle := 0;  // Reset the font, it gets destroyed
-    ACanvas.Font.Color := $010101;  // Force a change
-    ACanvas.Font.Assign(Self.Font);
-
-    PaintDefault := True;
-    DoDrawBackground(ACanvas, R, pstPrePaint, PaintDefault);
-    if PaintDefault then
-      DrawBackground(ACanvas, R);
-    PaintDefault := True;
-    DoDrawBackground(ACanvas, R, pstPostPaint, PaintDefault);
-  finally
-    ACanvas.Unlock;
-    ACanvas.Handle := 0;
-    ACanvas.Free;
-    RestoreDC(TWMEraseBkgnd(Message).DC, SaveIndex);
-  end;
-end;
-
-{
-Can't use internal double buffering.
-Seems there's a bug in VCL Styles, to reproduce:
-- Drop a TCheckbox inside a SpTBXPanel
-- Run using a VCL Style
-The checkbox is painted with a white background.
-This doesn't happen when using the default Windows theme or when using Skins.
-
-procedure TSpTBXCustomContainer.WMEraseBkgnd(var Message: TMessage);
-var
-  R: TRect;
-  ACanvas: TCanvas;
-  PaintDefault: Boolean;
-
-  B: TBitmap;
-  SaveIndex: Integer;
-  DC2: HDC;
-begin
-  Message.Result := 1;
-  if (TWMEraseBkgnd(Message).DC = 0) then
-    Exit;
-
-  R := ClientRect;
-
-  DC2 := 0;
-  B := TBitmap.Create;
-  ACanvas := TCanvas.Create;
-  SaveIndex := SaveDC(TWMEraseBkgnd(Message).DC);
-  try
-    // Create ACanvas based on a mem DC
-    B.SetSize(R.Right - R.Left, R.Bottom - R.Top);
-    DC2 := CreateCompatibleDC(TWMEraseBkgnd(Message).DC);
-    SelectObject(DC2, B.Handle);
-    ACanvas.Handle := DC2;
-    ACanvas.Lock;
-
-    if (Color = clNone) and Assigned(Parent) and SkinManager.IsXPThemesEnabled and
-      ((csDesigning in ComponentState) or (csParentBackground in ControlStyle)) then
-    begin
-      if SpIsGlassPainting(Self) then
-        // When painting on Glass fill the bitmap with the transparent color
-        SpFillRect(ACanvas, R, clBlack) // Transparent color
-      else begin
-        // The Panel is a special component, it has the ability
-        // to paint the parent background on its children controls.
-        // For that it receives WM_ERASEBKGND messages from its children
-        // via SpDrawParentBackground.
-        SpDrawParentBackground(Self, ACanvas.Handle, R);
-      end;
-    end
-    else
-      // Only erase background if we're not double buffering or painting to memory
-      if not DoubleBuffered or (TMessage(Message).wParam = WPARAM(TMessage(Message).lParam)) then
-        if Color = clNone then
-          SpFillRect(ACanvas, R, CurrentSkin.GetThemedSystemColor(clBtnFace))
-        else
-          SpFillRect(ACanvas, R, Color);
-
-    // Set the Font after SpDrawParentBackground, DrawThemeParentBackground,
-    // or PerformEraseBackground.
-    // The API messes the font, it seems it destroys it.
-    // For more info see:
-    // - TCustomActionControl.DrawBackground for more info.
-    // - Theme Explorer Main.pas TMainForm.ControlMessage
-    //   (http://www.soft-gems.net:8080/browse/Demos)
-    ACanvas.Font.Handle := 0;  // Reset the font, it gets destroyed
-    ACanvas.Font.Color := $010101;  // Force a change
-    ACanvas.Font.Assign(Self.Font);
-
-    PaintDefault := True;
-    DoDrawBackground(ACanvas, R, pstPrePaint, PaintDefault);
-    if PaintDefault then
-      DrawBackground(ACanvas, R);
-    PaintDefault := True;
-    DoDrawBackground(ACanvas, R, pstPostPaint, PaintDefault);
-
-    BitBlt(TWMEraseBkgnd(Message).DC, R.Left, R.Top, B.Width, B.Height,
-      ACanvas.Handle, 0, 0, SRCCOPY);
-  finally
-    ACanvas.Unlock;
-    ACanvas.Handle := 0;
-    ACanvas.Free;
-    if DC2 <> 0 then
-      DeleteDC(DC2);
-    B.Free;
-    RestoreDC(TWMEraseBkgnd(Message).DC, SaveIndex);
-  end;
-end;
-}
-
-procedure TSpTBXCustomContainer.WMSpSkinChange(var Message: TMessage);
-begin
-  InvalidateBackground(True);
-end;
-
-procedure TSpTBXCustomContainer.WMWindowPosChanged(var Message: TWMWindowPosChanged);
-begin
-  inherited;
-  FIsResizing := True;
-  try
-    InvalidateBackground(True);
-  finally
-    FIsResizing := False;
-  end;
-
-  if (Message.WindowPos.flags and SWP_NOSIZE) = 0 then begin
-    Realign;
-    Update;
-  end;
-end;
-
-//WMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWM
 { TSpTBXCompoundItemsControl }
 
 constructor TSpTBXCompoundItemsControl.Create(AOwner: TComponent);
 begin
   inherited;
-  Color := clBtnFace;
-  ParentColor := False;
 
   FDock := GetDockClass.Create(Self);
   FDock.Parent := Self;
@@ -8319,10 +8703,27 @@ begin
   FToolbar.Stretch := True;
   FToolbar.ShrinkMode := tbsmNone;
   FToolbar.ShowCaption := False;
+
+  SkinManager.AddSkinNotification(Self);
+end;
+
+procedure TSpTBXCompoundItemsControl.CreateParams(var Params: TCreateParams);
+begin
+  // Disable complete redraws when size changes. CS_HREDRAW and CS_VREDRAW
+  // cause flicker and are not necessary for this control at run time
+  // Invalidate in WMWindowPosChanged message instead.
+  inherited CreateParams(Params);
+  if not (csDesigning in ComponentState) then begin
+    with Params do
+      Style := Style or WS_CLIPCHILDREN;
+    with Params do
+      WindowClass.Style := WindowClass.Style and not (CS_HREDRAW or CS_VREDRAW);
+  end;
 end;
 
 destructor TSpTBXCompoundItemsControl.Destroy;
 begin
+  SkinManager.RemoveSkinNotification(Self);
   FToolbar.Free;
   FDock.Free;
   inherited;
@@ -8413,6 +8814,16 @@ begin
     Result := nil;
 end;
 
+procedure TSpTBXCompoundItemsControl.InvalidateBackground(InvalidateChildren: Boolean);
+begin
+  // Invalidate will not fire WM_ERASEBKGND, because csOpaque is setted
+  if not (csDestroying in ComponentState) and HandleAllocated then
+    if InvalidateChildren then
+      RedrawWindow(Handle, nil, 0, RDW_ERASE or RDW_INVALIDATE or RDW_ALLCHILDREN)
+    else
+      RedrawWindow(Handle, nil, 0, RDW_ERASE or RDW_INVALIDATE);
+end;
+
 procedure TSpTBXCompoundItemsControl.SetImages(const Value: TCustomImageList);
 begin
   if Assigned(FToolbar) then FToolbar.Images := Value;
@@ -8426,13 +8837,17 @@ begin
       FToolbar.Name := Name + 'Toolbar';
 end;
 
+procedure TSpTBXCompoundItemsControl.WMSpSkinChange(var Message: TMessage);
+begin
+  InvalidateBackground;
+end;
+
 //WMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWMWM
 { TSpTBXCompoundBar }
 
 constructor TSpTBXCompoundBar.Create(AOwner: TComponent);
 begin
   inherited;
-
   Height := FDock.Height;
   FDock.OnDrawBackground := DrawDockBackground;
   FDock.OnResize := DockResize;
@@ -8503,7 +8918,7 @@ begin
   FMinimizeImageIndex := -1;
   FMaximizeImageIndex := -1;
   FRestoreImageIndex := -1;
-  FTitleBarMaxSize := SpDpiScale(21);
+  FTitleBarMaxSize := 21;
   FButtonBorders := True;
   CreateButtons;
 end;
@@ -8547,7 +8962,7 @@ end;
 
 procedure TSpTBXButtonOptions.SetupButton(B: TSpTBXCustomItem);
 begin
-  B.CustomWidth := SpDPIScale(17);
+  B.CustomWidth := 17;
   B.CustomHeight := FTitleBarMaxSize;
   B.DisplayMode := nbdmImageAndText;
   B.OnDrawImage := ButtonsDrawImage;
@@ -8628,7 +9043,7 @@ begin
     PaintDefault := False;
 end;
 
-procedure TSpTBXButtonOptions.SetCaptionLabel(const Value: string);
+procedure TSpTBXButtonOptions.SetCaptionLabel(const Value: WideString);
 begin
   if FCaptionLabel <> Value then begin
     FCaptionLabel := Value;
@@ -8806,7 +9221,7 @@ begin
   R := GetGripRect;
   Result := R.Right - R.Left;
   if Result = 0 then
-    Result := SpDPIScale(4);
+    Result := 4;
 end;
 
 function TSpTBXStatusToolbar.NeedsSeparatorRepaint: Boolean;
@@ -8892,7 +9307,6 @@ end;
 constructor TSpTBXCustomStatusBar.Create(AOwner: TComponent);
 begin
   inherited;
-  ControlStyle := ControlStyle - [csAcceptsControls];
   Align := alBottom;
 end;
 
@@ -8909,6 +9323,7 @@ procedure TSpTBXCustomStatusBar.DoDrawDockBackground(ACanvas: TCanvas;
   var PaintDefault: Boolean);
 var
   G: TRect;
+  OfficeSeparators: Boolean;
 begin
   inherited DoDrawDockBackground(ACanvas, ARect, PaintStage, PaintDefault);
   if (PaintStage = pstPrePaint) and PaintDefault then begin
@@ -8916,12 +9331,13 @@ begin
     G := Toolbar.GetGripRect;
     if not IsRectEmpty(G) then begin
       // When it's called by the Toolbar the Gripper position should be corrected
-      if (ARect.Left = SpDPIScale(-2)) and (ARect.Top = SpDPIScale(-2)) then
-        OffsetRect(G, SpDPIScale(-2), SpDPIScale(-2));
+      if (ARect.Left = -2) and (ARect.Top = -2) then
+        OffsetRect(G, -2, -2);
     end;
 
+    OfficeSeparators := Toolbar.NeedsSeparatorRepaint;
     SpDrawXPStatusBar(ACanvas, ARect, G);
-    if Toolbar.NeedsSeparatorRepaint then
+    if OfficeSeparators then
       DrawSeparators(ACanvas, ARect);
   end;
 end;
@@ -8943,10 +9359,10 @@ begin
         if IsRectEmpty(R) then
           Continue;
 
-        OffsetRect(R, ARect.Left + SpDpiScale(2), ARect.Top + SpDpiScale(2));
+        OffsetRect(R, ARect.Left + 2, ARect.Top + 2);
         R.Top := ARect.Top;
         R.Bottom := ARect.Bottom;
-        R.Left := ((R.Right + R.Left) div 2) - SpDpiScale(2);
+        R.Left := ((R.Right + R.Left) div 2) - 2;
         R.Right := R.Left + 3;
 
         if SkinManager.GetSkinType = sknNone then begin
@@ -8997,9 +9413,6 @@ end;
 
 procedure TSpTBXCustomStatusBar.WMEraseBkgnd(var Message: TWMEraseBkgnd);
 begin
-  // Prevent background painting, not needed, it is painted by the Dock/Toolbar
-  // Since csAcceptsControls is not setted the control is clipped on resize causing
-  // incorrect background painting
   Message.Result := 1;
 end;
 
@@ -9092,10 +9505,12 @@ var
 begin
   inherited;
 
+  FDefaultToolbarBorderSize := CDefaultToolbarBorderSize;
   if Docked then begin
     TitleBar := GetTitleBar;
     if Assigned(TitleBar) and (TitleBar.WindowState = wsMaximized) then begin
-      InflateRect(Message.CalcSize_Params.rgrc[0], CDefaultToolbarBorderSize, CDefaultToolbarBorderSize);
+      InflateRect(Message.CalcSize_Params.rgrc[0], 2, 2);
+      FDefaultToolbarBorderSize := 0;
     end;
   end;
 end;
@@ -9172,10 +9587,9 @@ constructor TSpTBXCustomTitleBar.Create(AOwner: TComponent);
 begin
   inherited;
 
-  FRegion := 0;
-
   FActive := True;
   FMouseActive := True;
+  ControlStyle := ControlStyle + [csAcceptsControls];
 
   Align := alClient;
   FDock.OnResize := nil;
@@ -9206,11 +9620,6 @@ begin
     {$IFEND}
     Classes.FreeObjectInstance(FNewAppWndProc);
     FNewAppWndProc := nil;
-  end;
-
-  if FRegion <> 0 then begin
-    DeleteObject(FRegion);
-    FRegion := 0;
   end;
 
   inherited;
@@ -9260,34 +9669,6 @@ begin
     SpRecalcNCArea(Self);
     Realign;
   end;
-end;
-
-procedure TSpTBXCustomTitleBar.UpdateRegion;
-{$IF CompilerVersion >= 23} //for Delphi XE2 and up
-var
-  TempRegion: HRGN;
-  R: TRect;
-{$IFEND}
-begin
-  {$IF CompilerVersion >= 23} //for Delphi XE2 and up
-  // Update the NC region of the Main form when using Delphi styles
-  if not Assigned(FParentForm) then Exit;
-  FUpdateRegionCalled := True;
-  TempRegion := FRegion;
-  try
-    if (WindowState = wsMaximized) or (SkinManager.GetSkinType = sknSkin) then
-      FRegion := 0
-    else begin
-      R := Rect(0, 0, Width, Height);
-      SpTBXThemeServices.GetElementRegion(SpTBXThemeServices.GetElementDetails(twCaptionActive), R, FRegion);
-    end;
-    SetWindowRgn(FParentForm.Handle, FRegion, True);
-  finally
-    FUpdateRegionCalled := False;
-    if TempRegion <> 0 then
-      DeleteObject(TempRegion);
-  end;
-  {$IFEND}
 end;
 
 procedure TSpTBXCustomTitleBar.AppWndProc(var Msg: TMessage);
@@ -9355,8 +9736,8 @@ begin
         if SpGetTaskBar(TaskBarState, TaskBarEdge, TaskBarBounds) then begin
           if (TaskBarState and ABS_AUTOHIDE) = ABS_AUTOHIDE then
             case TaskBarEdge of
-              ABE_LEFT, ABE_RIGHT: MMI^.ptMaxSize.X :=  MMI^.ptMaxSize.X - SpDpiScale(2);
-              ABE_TOP, ABE_BOTTOM: MMI^.ptMaxSize.Y :=  MMI^.ptMaxSize.Y - SpDpiScale(2);
+              ABE_LEFT, ABE_RIGHT: MMI^.ptMaxSize.X :=  MMI^.ptMaxSize.X - 2;
+              ABE_TOP, ABE_BOTTOM: MMI^.ptMaxSize.Y :=  MMI^.ptMaxSize.Y - 2;
             end;
         end;
 
@@ -9449,6 +9830,7 @@ var
   WState: TWindowState;
   OnParentFormShow: TNotifyEvent;
 begin
+  FParentForm := GetParentForm(Self);
   if Assigned(FParentForm) and (FParentForm.HandleAllocated) and ([csDesigning, csDestroying] * FParentForm.ComponentState = []) then begin
 
     if FMouseActive then begin
@@ -9530,31 +9912,10 @@ begin
   end;
 end;
 
-procedure TSpTBXCustomTitleBar.DrawBackground(ACanvas: TCanvas; ARect: TRect);
-var
-  DockAreaR: TRect;
-  FloatingBorderSize: TPoint;
-  Maximized: Boolean;
+procedure TSpTBXCustomTitleBar.DoDrawBackground(ACanvas: TCanvas; ARect: TRect;
+  const PaintStage: TSpTBXPaintStage; var PaintDefault: Boolean);
 begin
-  ACanvas.Brush.Color := Color; // SpDrawXPTitleBarBody needs it to paint the background
-  ACanvas.FillRect(ARect);
-
-  Maximized := (WindowState = wsMaximized) and FMouseActive;
-  if Maximized then
-    InflateRect(ARect, SpDpiScale(4), SpDpiScale(4));
-  if Active then begin
-    FloatingBorderSize := GetFloatingBorderSize;
-    SpDrawXPTitleBarBody(ACanvas, ARect, True, FloatingBorderSize);
-
-    // [Theme-Change]
-    // On WindowsXP make sure we paint the titlebar on the NC area
-    // TSpTBXCustomTitleBar.WMEraseBkgnd and TSpTBXCustomTitleBar.DoDrawDockBackground handles this issue
-    if Assigned(FDock) and not Maximized and (SkinManager.GetSkinType in [sknWindows, sknDelphiStyle]) then begin
-      DockAreaR := ARect;
-      DockAreaR.Bottom := FDock.Height + FloatingBorderSize.Y; // don't multiply by 2
-      SpDrawXPTitleBar(ACanvas, DockAreaR, True);
-    end;
-  end;
+  if Assigned(FOnDrawBackground) then FOnDrawBackground(Self, ACanvas, ARect, PaintStage, PaintDefault);
 end;
 
 function TSpTBXCustomTitleBar.GetClientAreaRect: TRect;
@@ -9629,14 +9990,14 @@ begin
   InflateRect(R, -FloatingBorderSize.X, -FloatingBorderSize.Y);
   Pt := MousePos;
   if not PtInRect(R, Pt) then begin
-    if (Pt.X < SpDpiScale(10)) and (Pt.Y < SpDpiScale(10)) then SizeCode := SC_SizeUpLeft
-    else if (Pt.X > Width - SpDpiScale(10)) and (Pt.Y < SpDpiScale(10)) then SizeCode := SC_SizeUpRight
-    else if (Pt.X < SpDpiScale(10)) and (Pt.Y > Height - SpDpiScale(10)) then SizeCode := SC_SizeDownLeft
-    else if (Pt.X > Width - SpDpiScale(10)) and (Pt.Y > Height - SpDpiScale(10)) then SizeCode := SC_SizeDownRight
-    else if (Pt.X > SpDpiScale(10)) and (Pt.X < Width - SpDpiScale(10)) and (Pt.Y < SpDpiScale(10)) then SizeCode := SC_SizeUp
-    else if (Pt.X > SpDpiScale(10)) and (Pt.X < Width - SpDpiScale(10)) and (Pt.Y > Height - SpDpiScale(10)) then SizeCode := SC_SizeDown
-    else if (Pt.Y > SpDpiScale(10)) and (Pt.Y < Height - SpDpiScale(10)) and (Pt.X < SpDpiScale(10)) then SizeCode := SC_SizeLeft
-    else if (Pt.Y > SpDpiScale(10)) and (Pt.Y < Height - SpDpiScale(10)) and (Pt.X > Width - SpDpiScale(10)) then SizeCode := SC_SizeRight;
+    if (Pt.X < 10) and (Pt.Y < 10) then SizeCode := SC_SizeUpLeft
+    else if (Pt.X > Width - 10) and (Pt.Y < 10) then SizeCode := SC_SizeUpRight
+    else if (Pt.X < 10) and (Pt.Y > Height - 10) then SizeCode := SC_SizeDownLeft
+    else if (Pt.X > Width - 10) and (Pt.Y > Height - 10) then SizeCode := SC_SizeDownRight
+    else if (Pt.X > 10) and (Pt.X < Width - 10) and (Pt.Y < 10) then SizeCode := SC_SizeUp
+    else if (Pt.X > 10) and (Pt.X < Width - 10) and (Pt.Y > Height - 10) then SizeCode := SC_SizeDown
+    else if (Pt.Y > 10) and (Pt.Y < Height - 10) and (Pt.X < 10) then SizeCode := SC_SizeLeft
+    else if (Pt.Y > 10) and (Pt.Y < Height - 10) and (Pt.X > Width - 10) then SizeCode := SC_SizeRight;
 
     case SizeCode of
       SC_SizeLeft, SC_SizeRight: SizeCursor := -9;
@@ -9742,21 +10103,62 @@ begin
   inherited;
 end;
 
-{$IF CompilerVersion >= 23} //for Delphi XE2 and up
-procedure TSpTBXCustomTitleBar.CMStyleChanged(var Message: TMessage);
-begin
-  inherited;
-  // If the Windows theme or Delphi style is changed repaint the NC area
-  if HandleAllocated then
-    RedrawWindow(Handle, nil, 0, RDW_FRAME or RDW_INVALIDATE or RDW_ERASE);
-end;
-{$IFEND}
-
 procedure TSpTBXCustomTitleBar.CMTextChanged(var Message: TMessage);
 begin
   inherited;
   if Assigned(FOptions) then
     FOptions.CaptionLabel := Caption;
+end;
+
+procedure TSpTBXCustomTitleBar.WMEraseBkgnd(var Message: TMessage);
+var
+  ARect, DockAreaR: TRect;
+  FloatingBorderSize: TPoint;
+  Maximized, PaintDefault: Boolean;
+  B: TBitmap;
+begin
+  Message.Result := 1;
+  // Only erase background if we are not Doublebuffering or painting to memory
+  // On Delphi XE2 WParam and LParam are different in size, WParam is
+  // UINT_PTR (64 bit) and LParam is INT_PTR (32 bit)
+  if not DoubleBuffered or (Message.wParam = WPARAM(Message.lParam)) then begin
+    B := TBitmap.Create;
+    try
+      ARect := GetClientRect;
+      B.Width := ARect.Right;
+      B.Height := ARect.Bottom;
+      B.Canvas.Brush.Color := Color; // SpDrawXPTitleBarBody needs it to paint the background
+      B.Canvas.FillRect(ARect);
+
+      PaintDefault := True;
+      DoDrawBackground(B.Canvas, ARect, pstPrePaint, PaintDefault);
+      if PaintDefault then begin
+        Maximized := (WindowState = wsMaximized) and FMouseActive;
+        if Maximized then
+          InflateRect(ARect, 4, 4);
+        if Active then begin
+          FloatingBorderSize := GetFloatingBorderSize;
+          SpDrawXPTitleBarBody(B.Canvas, ARect, True, FloatingBorderSize);
+
+          // [Theme-Change]
+          // On WindowsXP make sure we paint the titlebar on the NC area
+          // TSpTBXCustomTitleBar.WMEraseBkgnd and TSpTBXCustomTitleBar.DoDrawDockBackground handles this issue
+          if Assigned(FDock) and not Maximized and (SkinManager.GetSkinType in [sknWindows, sknDelphiStyle]) then begin
+            DockAreaR := ARect;
+            DockAreaR.Bottom := FDock.Height + FloatingBorderSize.Y; // don't multiply by 2
+            SpDrawXPTitleBar(B.Canvas, DockAreaR, True);
+          end;
+        end;
+      end;
+
+      PaintDefault := True;
+      DoDrawBackground(B.Canvas, ARect, pstPostPaint, PaintDefault);
+
+      BitBlt(TWMEraseBkgnd(Message).DC, 0, 0, B.Width, B.Height, B.Canvas.Handle, 0, 0, SRCCOPY);
+    finally
+      B.Free;
+    end;
+  end;
 end;
 
 procedure TSpTBXCustomTitleBar.WMSetCursor(var Message: TWMSetCursor);
@@ -9784,10 +10186,7 @@ end;
 procedure TSpTBXCustomTitleBar.WMWindowPosChanged(var Message: TWMWindowPosChanged);
 begin
   inherited;
-
-  if not FUpdateRegionCalled then
-    UpdateRegion;
-
+  InvalidateBackground(False);
   if [csDesigning, csDestroying] * ComponentState = [] then begin
     if FOptions.Maximize then
       FOptions.SetupButtonIcon(FOptions.MaximizeButton);
@@ -9805,7 +10204,23 @@ end;
 procedure TBitmapHint.ActivateHint(Rect: TRect; const AHint: string);
 var
   SaveActivating: Boolean;
+  // Detect Delphi 7
+  {$IF CompilerVersion < 17}
+  MonitorR: TRect;
+  Delta: TPoint;
+  {$IFEND}
 begin
+  // [Bugfix] Delphi 7 bug, D7 hints doesn't support multi-monitors
+  {$IF CompilerVersion < 17}
+  MonitorR := GetRectOfMonitorContainingPoint(Point(Rect.Left, Rect.Top), True);
+  Delta := Point(0, 0);
+  if (Rect.Left < MonitorR.Right) and (Rect.Right > MonitorR.Right) then
+    Delta.X := - (Rect.Right - MonitorR.Right);
+  if (Rect.Top < MonitorR.Bottom) and (Rect.Bottom > MonitorR.Bottom) then
+    Delta.Y := - (Rect.Bottom - MonitorR.Bottom);
+  OffsetRect(Rect, Delta.X, Delta.Y);
+  {$IFEND}
+
   SaveActivating := FActivating;
   try
     FActivating := True;
@@ -9856,14 +10271,12 @@ begin
 
   // Dummy ImageList, used by TSpTBXItemViewer and TSpTBXButtonOptions
   MDIButtonsImgList := TImageList.Create(nil);
-  MDIButtonsImgList.SetSize(8, 8);
 
   {$IF CompilerVersion >= 23}
   // XE2 and up
   // When Styles are used WM_NCHITTEST and WM_NCCALCSIZE are handled by
   // TFormStyleHook. We need to override the handling by re-registering
   // the hook by using an empty style hook (TStyleHook)
-  TCustomStyleEngine.UnRegisterStyleHook(TSpTBXFloatingWindowParent, TStyleHook); // Re-register
   TCustomStyleEngine.RegisterStyleHook(TSpTBXFloatingWindowParent, TStyleHook);
   {$IFEND}
 end;

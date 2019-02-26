@@ -1,7 +1,7 @@
 unit SpTBXMDIMRU;
 
 {==============================================================================
-Version 2.5.4
+Version 2.4.8
 
 The contents of this file are subject to the SpTBXLib License; you may
 not use or distribute this file except in compliance with the
@@ -29,20 +29,87 @@ the specific language governing rights and limitations under the License.
 The initial developer of this code is Robert Lee.
 
 Requirements:
+For Delphi/C++Builder 2009 or newer:
   - Jordan Russell's Toolbar 2000
     http://www.jrsoftware.org
+For Delphi/C++Builder 7-2007:
+  - Jordan Russell's Toolbar 2000
+    http://www.jrsoftware.org
+  - Troy Wolbrink's TNT Unicode Controls
+    http://www.tntware.com/delphicontrols/unicode/
 
 Development notes:
   - All the theme changes and adjustments are marked with '[Theme-Change]'.
+
+History:
+15 April 2013 - version 2.4.8
+  - No changes.
+
+7 February 2012 - version 2.4.7
+  - Minor bug fixes.
+  - Added support for Delphi XE2.
+  - Added support for 64 bit Delphi compiler.
+
+25 June 2011 - version 2.4.6
+  - No changes.
+
+12 March 2010 - version 2.4.5
+  - No changes.
+
+2 December 2009 - version 2.4.4
+  - No changes.
+
+13 September 2009 - version 2.4.3
+  - Fixed TSpTBXMRUListItem.LoadFromIni/SaveToIni bug, in Delphi
+    2009, some strings are not stored correctly (Surrogate Pair),
+    thanks to Totonica for reporting this.
+  - Fixed incorrect TSpTBXMDIHandler MDI buttons painting when
+    using the default Windows theme, thanks to Cybrus for
+    reporting this.
+
+8 May 2009 - version 2.4.2
+  - Fixed incorrect MRU saving on TSpTBXMRUListItem, the
+    items were not correctly encoded when saving to an Ini
+    file, thanks to Dirk for reporting this.
+
+15 March 2009 - version 2.4.1
+  - No changes.
+
+17 January 2009 - version 2.4
+  - Added GetMRUFilenames and MRUClick methods to
+    TSpTBXMRUListItem.
+  - Added Hints to the items of TSpTBXMRUListItem.
+
+26 September 2008 - version 2.3
+  - No changes.
+
+29 July 2008 - version 2.2
+  - No changes.
+
+26 June 2008 - version 2.1
+  - No changes.
+
+3 May 2008 - version 2.0
+  - No changes.
+
+2 April 2008 - version 1.9.5
+  - Fixed incorrect MRU loading on TSpTBXMRUListItem, thanks
+    to Pete for reporting this.
+  - Fixed incorrect TSpTBXMRUListItem behavior, MaxItems
+    had no effect when new files were added, thanks to
+    Senfore for reporting this.
+
+3 February 2008 - version 1.9.4
+  - Added HidePathExtension property to TSpTBXMRUListItem.
+
+19 January 2008 - version 1.9.3
+  - Initial release.
 
 ==============================================================================}
 
 interface
 
-{$BOOLEVAL OFF}   // Unit depends on short-circuit boolean evaluation
-{$IF CompilerVersion >= 25} // for Delphi XE4 and up
-  {$LEGACYIFEND ON} // XE4 and up requires $IF to be terminated with $ENDIF instead of $IFEND
-{$IFEND}
+{$BOOLEVAL OFF} // Unit depends on short-circuit boolean evaluation
 
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
@@ -51,7 +118,7 @@ uses
 type
   TSpTBXMDIButtonsItem = class;
 
-  TSpTBXMRUListClickEvent = procedure(Sender: TObject; const Filename: string) of object;
+  TSpTBXMRUListClickEvent = procedure(Sender: TObject; const Filename: WideString) of object;
 
   { TSpTBXMDIHandler }
 
@@ -124,10 +191,10 @@ type
   public
     constructor Create(AOwner: TComponent); override;
     procedure GetMRUFilenames(MRUFilenames: TStrings);
-    function IndexOfMRU(Filename: string): Integer;
-    function MRUAdd(Filename: string): Integer;
-    function MRUClick(Filename: string): Boolean;
-    procedure MRURemove(Filename: string);
+    function IndexOfMRU(Filename: WideString): Integer;
+    function MRUAdd(Filename: WideString): Integer;
+    function MRUClick(Filename: WideString): Boolean;
+    procedure MRURemove(Filename: WideString);
     procedure MRUUpdateCaptions;
     procedure LoadFromIni(Ini: TCustomIniFile; const Section: string);
     procedure SaveToIni(Ini: TCustomIniFile; const Section: string);
@@ -141,15 +208,16 @@ type
 
   TSpTBXMRUItem = class(TSpTBXCustomItem)
   private
-    FMRUString: string;
+    FMRUString: WideString;
   public
-    property MRUString: string read FMRUString write FMRUString;
+    property MRUString: WideString read FMRUString write FMRUString;
   end;
 
 implementation
 
 uses
   Themes, UxTheme,
+  {$IFNDEF UNICODE} TntSysUtils, {$ENDIF}
   TB2Common, TB2Consts;
 
 type
@@ -341,13 +409,11 @@ begin
       sknNone:
         begin
           PaintDefault := False;
-          ARect := SpCenterRect(ARect, SpDPIScale(16), SpDPIScale(16));
           DrawFrameControl(ACanvas.Handle, ARect, DFC_CAPTION, ButtonIndexFlags[AImageIndex] or NoneFlags[State]);
         end;
       sknWindows:
         begin
           PaintDefault := False;
-          ARect := SpCenterRect(ARect, SpDPIScale(16), SpDPIScale(16));
           DrawThemeBackground(SpTBXThemeServices.Theme[teWindow], ACanvas.Handle, XPPart[AImageIndex], XPFlags[State], ARect, nil);
         end;
     end;
@@ -586,20 +652,20 @@ begin
       MRUFilenames.Add(TSpTBXMRUItem(Items[I]).MRUString);
 end;
 
-function TSpTBXMRUListItem.IndexOfMRU(Filename: string): Integer;
+function TSpTBXMRUListItem.IndexOfMRU(Filename: WideString): Integer;
 var
   I: Integer;
 begin
   Result := -1;
   for I := 0 to Count - 1 do
     if Items[I] is TSpTBXMRUItem then
-      if SameText(TSpTBXMRUItem(Items[I]).MRUString, Filename) then begin
+      if SpSameText(TSpTBXMRUItem(Items[I]).MRUString, Filename) then begin
         Result := I;
         Break;
       end;
 end;
 
-function TSpTBXMRUListItem.MRUAdd(Filename: string): Integer;
+function TSpTBXMRUListItem.MRUAdd(Filename: WideString): Integer;
 var
   A: TSpTBXMRUItem;
   I: Integer;
@@ -625,7 +691,7 @@ begin
   end;
 end;
 
-function TSpTBXMRUListItem.MRUClick(Filename: string): Boolean;
+function TSpTBXMRUListItem.MRUClick(Filename: WideString): Boolean;
 var
   I: Integer;
 begin
@@ -637,7 +703,7 @@ begin
   end;
 end;
 
-procedure TSpTBXMRUListItem.MRURemove(Filename: string);
+procedure TSpTBXMRUListItem.MRURemove(Filename: WideString);
 var
   I: Integer;
 begin
@@ -652,14 +718,18 @@ procedure TSpTBXMRUListItem.MRUUpdateCaptions;
 var
   I: Integer;
   A: TSpTBXMRUItem;
-  S: string;
+  S: WideString;
 begin
   for I := 0 to Count - 1 do
     if Items[I] is TSpTBXMRUItem then begin
       A := TSpTBXMRUItem(Items[I]);
       S := A.MRUString;
       if FHidePathExtension then begin
+        {$IFDEF UNICODE}
         S := ExtractFileName(S);
+        {$ELSE}
+        S := TntSysUtils.WideExtractFileName(S);
+        {$ENDIF}
       end;
       A.Caption := '&' + IntToStr(I + 1) + ' ' + S;
     end;
@@ -668,11 +738,14 @@ end;
 procedure TSpTBXMRUListItem.LoadFromIni(Ini: TCustomIniFile; const Section: string);
 var
   I: Integer;
-  S: string;
+  S: WideString;
 begin
   Clear;
   for I := FMaxItems downto 1 do begin
     S := Ini.ReadString(Section, IntToStr(I), '');
+    {$IFNDEF UNICODE}
+    S := UTF8Decode(S);
+    {$ENDIF}
     if S <> '' then
       MRUAdd(S);
   end;
@@ -683,8 +756,11 @@ var
   I: Integer;
   A: TSpTBXMRUItem;
   S: string;
+  {$IFDEF UNICODE}
   L: TStringList;
+  {$ENDIF}
 begin
+  {$IFDEF UNICODE}
   // If the IniFile doesn't exist create it with Unicode encoding
   // otherwise we can't write Unicode strings.
   if (Ini is TIniFile) and not FileExists(Ini.FileName) then begin
@@ -695,10 +771,15 @@ begin
       L.Free;
     end;
   end;
+  {$ENDIF}
   for I := 1 to FMaxItems do begin
     if I <= Count then begin
       A := TSpTBXMRUItem(Items[I - 1]);
+      {$IFDEF UNICODE}
       S := A.MRUString;
+      {$ELSE}
+      S := UTF8Encode(A.MRUString);
+      {$ENDIF}
       Ini.WriteString(Section, IntToStr(I), S);
     end
     else

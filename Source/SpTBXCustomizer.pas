@@ -1,7 +1,7 @@
 unit SpTBXCustomizer;
 
 {==============================================================================
-Version 2.5.4
+Version 2.4.8
 
 The contents of this file are subject to the SpTBXLib License; you may
 not use or distribute this file except in compliance with the
@@ -29,26 +29,157 @@ the specific language governing rights and limitations under the License.
 The initial developer of this code is Robert Lee.
 
 Requirements:
+For Delphi/C++Builder 2009 or newer:
   - Jordan Russell's Toolbar 2000
     http://www.jrsoftware.org
+For Delphi/C++Builder 7-2007:
+  - Jordan Russell's Toolbar 2000
+    http://www.jrsoftware.org
+  - Troy Wolbrink's TNT Unicode Controls
+    http://www.tntware.com/delphicontrols/unicode/
+
+History:
+15 April 2013 - version 2.4.8
+  - No changes.
+
+7 February 2012 - version 2.4.7
+  - Minor bug fixes.
+  - Added support for Delphi XE2.
+  - Added support for 64 bit Delphi compiler.
+
+25 June 2011 - version 2.4.6
+  - No changes.
+
+12 March 2010 - version 2.4.5
+  - No changes.
+
+2 December 2009 - version 2.4.4
+  - No changes.
+
+13 September 2009 - version 2.4.3
+  - Fixed incorrect Customizer shortcut processing when the
+    shortcut text contains a space, thanks to Jim Kueneman
+    for reporting this.
+
+8 May 2009 - version 2.4.2
+  - No changes.
+
+15 March 2009 - version 2.4.1
+  - Fixed incorrect Customizer loading and saving when Frames
+    were used, thanks to Eduardo Mauro for reporting this.
+
+17 January 2009 - version 2.4
+  - No changes.
+
+26 September 2008 - version 2.3
+  - No changes.
+
+29 July 2008 - version 2.2
+  - No changes.
+
+26 June 2008 - version 2.1
+  - No changes.
+
+3 May 2008 - version 2.0
+  - No changes.
+
+2 April 2008 - version 1.9.5
+  - No changes.
+
+3 February 2008 - version 1.9.4
+  - No changes.
+
+19 January 2008 - version 1.9.3
+  - Added BlankSeparators property to TSpTBXCustomizer.
+  - Fixed AV on TSpTBXCustomizer when ShorcutsList was nil
+    when calling ApplyItemOptions, thanks to PyScripter for
+    reporting this.
+
+26 December 2007 - version 1.9.2
+  - No changes.
+
+1 December 2007 - version 1.9.1
+  - No changes.
+
+20 November 2007 - version 1.9
+  - Removed TBX dependency.
+  - Added Reset method to TSpTBXCustomizer, used to reinitialize
+    the toolbars.
+
+8 February 2007 - version 1.8.3
+  - Added DeleteLayout method to TSpTBXCustomizer.
+  - The customizer now closes when ESC is pressed, thanks to
+    Jim Kueneman for reporting this.
+  - The customizer now saves the Toolbar's DisplayMode, thanks to
+    Jim Kueneman for reporting this.
+
+17 December 2006 - version 1.8.2
+  - No changes.
+
+24 November 2006 - version 1.8.1
+  - No changes.
+
+27 August 2006 - version 1.8
+  - Fixed TSpTBXCustomizer items saving when the MenuBar items are
+    nested in more than 3 subitems levels, thanks to Jim Kueneman
+    for reporting this.
+
+15 June 2006 - version 1.7
+  - Added SaveFormState property to TSpTBXCustomizer, when SaveFormState
+    is true the main form position and WindowState are saved.
+  - Added Load and Save methods to TSpTBXCustomizer that loads/saves
+    the customizer options to a StringList, thanks to Philipp Hechter
+    for reporting this.
+
+4 May 2006 - version 1.6
+  - No changes.
+
+12 April 2006 - version 1.5
+  - No changes.
+
+27 February 2006 - version 1.4
+  - No changes.
+
+10 February 2006 - version 1.3
+  - No changes.
+
+28 December 2005 - version 1.2
+  - Fixed incorrect ShortCut processing.
+
+18 October 2005 - version 1.1
+  - Fixed TSpTBXCustomizer ShortCut processing method when
+    loading from file or registry.
+  - Fixed TSpTBXCustomizer support for separators items.
+  - Fixed TSpTBXCustomizer support for anchored items.
+  - Added OnGetShortcutsList event to the TSpTBXCustomizer to
+    allow the shortcuts list filtering.
+  - Added separator cloning support to the TSpTBXCustomizer.
+
+10 August 2005 - version 1.0
+  - Initial release.
 
 ==============================================================================}
 
 interface
 
-{$BOOLEVAL OFF}   // Unit depends on short-circuit boolean evaluation
-{$IF CompilerVersion >= 25} // for Delphi XE4 and up
-  {$LEGACYIFEND ON} // XE4 and up requires $IF to be terminated with $ENDIF instead of $IFEND
-{$IFEND}
+{$BOOLEVAL OFF} // Unit depends on short-circuit boolean evaluation
 
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, StdCtrls, ExtCtrls, ImgList, IniFiles,
+  {$IFNDEF UNICODE}
+  TntClasses,
+  {$ENDIF}
   TB2Dock, TB2Toolbar, TB2Item,
   SpTBXSkins, SpTBXItem, SpTBXEditors;
 
 
 type
+
+{$IFDEF UNICODE}
+  TTntStringList = TStringList;
+{$ENDIF}
+
   TSpTBXCustomizer = class;
 
   TShortCutsProcessor = class
@@ -61,7 +192,7 @@ type
     property Active: Boolean read FActive write FActive;
   end;
 
-  TSpTBXMenuBarShortcuts = class(TStringList)
+  TSpTBXMenuBarShortcuts = class(TTntStringList)
   private
     FMenuBarName: string;
   public
@@ -73,12 +204,12 @@ type
     FEmbedded: Boolean;
   protected
     FCustomizer: TSpTBXCustomizer;
-    FToolbarList: TStringList;
-    FItemList: TStringList;
-    FShortcutList: TStringList;
-    FSeparatorList: TStringList;
-    FBlankSeparatorList: TStringList;
-    procedure DoFillCommands(ToolbarList, ItemList, ShortcutsList: TStringList); virtual; abstract;
+    FToolbarList: TTntStringList;
+    FItemList: TTntStringList;
+    FShortcutList: TTntStringList;
+    FSeparatorList: TTntStringList;
+    FBlankSeparatorList: TTntStringList;
+    procedure DoFillCommands(ToolbarList, ItemList, ShortcutsList: TTntStringList); virtual; abstract;
     procedure DoShow; override;
     procedure DoClose(var Action: TCloseAction); override;
     procedure DoIconOptionsChange(UseSmallImages: Boolean); virtual;
@@ -138,7 +269,7 @@ type
     procedure DoSkinChange; virtual;
     procedure GetChildren(Proc: TGetChildProc; Root: TComponent); override;  // For ITBItems interface
     function GetCustomizeFormClass: TSpTBXCustomizeFormClass; virtual;
-    procedure GetShortcutList(ShortcutsList: TStringList);
+    procedure GetShortcutList(ShortcutsList: TTntStringList);
     procedure Notification(AComponent: TComponent; Operation: TOperation); override;
     procedure SetupForm; virtual;
     procedure ValidateContainer(AComponent: TComponent); override;
@@ -216,7 +347,7 @@ function SpCreateUniqueSeparator(Blank: Boolean): TSpTBXSeparatorItem;
 implementation
 
 uses
-  TypInfo, Registry, Menus, ActnList, Themes, TB2ExtItems,
+  TypInfo, Registry, Menus, ActnList, TB2ExtItems,
   SpTBXTabs, SpTBXDkPanels, SpTBXCustomizerForm;
 
 type
@@ -236,7 +367,6 @@ const
   rvItemsList = 'Items';
   rvCount = 'Count';
   rvSkin = 'Skin';
-  rvVCLStyle = 'VCLStyle';
   rvMainFormWindowState = 'MainForm.WindowState';
   rvMainFormBounds = 'MainForm.Bounds';
   rvMainFormRestoreBounds = 'MainForm.RestoreBounds';
@@ -814,12 +944,12 @@ begin
     Result := TSpTBXCustomizeForm;
 end;
 
-procedure TSpTBXCustomizer.GetShortcutList(ShortcutsList: TStringList);
+procedure TSpTBXCustomizer.GetShortcutList(ShortcutsList: TTntStringList);
 var
   I: Integer;
   Item: TTBCustomItem;
   ItemStyle: TTBItemStyle;
-  L: TStringList;
+  L: TTntStringList;
 begin
   ShortcutsList.Clear;
 
@@ -827,7 +957,7 @@ begin
     if ShortcutsList is TSpTBXMenuBarShortcuts then
       TSpTBXMenuBarShortcuts(ShortcutsList).MenuBarName := MenuBar.Name;
 
-    L := TStringList.Create;
+    L := TTntStringList.Create;
     try
       SpGetAllItems(MenuBar.Items, L);
       for I := 0 to L.Count - 1 do begin
@@ -953,16 +1083,7 @@ begin
     DoLoad(ExtraL);
     if FSaveFormState then
       SpLoadFormState(Application.MainForm, ExtraL);
-    {$IF CompilerVersion >= 23} //for Delphi XE2 and up
-    if SkinManager.IsValidDelphiStyle(ExtraL.Values[rvVCLStyle]) then begin
-      TStyleManager.TrySetStyle(ExtraL.Values[rvVCLStyle]);
-      SkinManager.BroadcastSkinNotification;
-    end
-    else
-      SkinManager.SetSkin(ExtraL.Values[rvSkin]);
-    {$ELSE}
     SkinManager.SetSkin(ExtraL.Values[rvSkin]);
-    {$IFEND}
 
     // Load Layouts
     SpLoadLayoutList(IniFile, FLayouts);
@@ -1024,11 +1145,6 @@ begin
   try
     // Fill Extra Options, SpSaveItems will save it
     ExtraL.Values[rvSkin] := SkinManager.CurrentSkinName;
-    {$IF CompilerVersion >= 23} // for Delphi XE2 and up
-    if TStyleManager.IsCustomStyleActive then
-      ExtraL.Values[rvVCLStyle] := TStyleManager.ActiveStyle.Name;
-    {$IFEND}
-
     if FSaveFormState then
       SpSaveFormState(Application.MainForm, ExtraL);
     DoSave(ExtraL);
@@ -1406,11 +1522,11 @@ begin
 
   inherited Create(AOwner);
 
-  FToolbarList := TStringList.Create;
-  FItemList := TStringList.Create;
-  FShortcutList := TStringList.Create;
-  FSeparatorList := TStringList.Create;
-  FBlankSeparatorList := TStringList.Create;
+  FToolbarList := TTntStringList.Create;
+  FItemList := TTntStringList.Create;
+  FShortcutList := TTntStringList.Create;
+  FSeparatorList := TTntStringList.Create;
+  FBlankSeparatorList := TTntStringList.Create;
 
   // Hook to the Application's message loop to disable ShortCut messages processing.
   // Otherwise the TApplication.MainForm Actions are executed.
@@ -1443,7 +1559,7 @@ var
   W: TWinControl;
   TB: TSpTBXToolbar;
   Item: TTBCustomItem;
-  WS: string;
+  WS: WideString;
   UseBlankSeparators: Boolean;
 begin
   // Get the main form

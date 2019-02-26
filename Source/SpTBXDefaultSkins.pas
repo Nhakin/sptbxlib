@@ -1,7 +1,7 @@
 unit SpTBXDefaultSkins;
 
 {==============================================================================
-Version 2.5.4
+Version 2.4.8
 
 The contents of this file are subject to the SpTBXLib License; you may
 not use or distribute this file except in compliance with the
@@ -29,17 +29,86 @@ the specific language governing rights and limitations under the License.
 The initial developer of this code is Robert Lee.
 
 Requirements:
+For Delphi/C++Builder 2009 or newer:
   - Jordan Russell's Toolbar 2000
     http://www.jrsoftware.org
+For Delphi/C++Builder 7-2007:
+  - Jordan Russell's Toolbar 2000
+    http://www.jrsoftware.org
+  - Troy Wolbrink's TNT Unicode Controls
+    http://www.tntware.com/delphicontrols/unicode/
+
+History:
+15 April 2013 - version 2.4.8
+  - No changes.
+
+7 February 2012 - version 2.4.7
+  - Minor bug fixes.
+  - Added support for Delphi XE2.
+  - Added support for 64 bit Delphi compiler.
+
+25 June 2011 - version 2.4.6
+  - No changes.
+
+12 March 2010 - version 2.4.5
+  - No changes.
+
+2 December 2009 - version 2.4.4
+  - No changes.
+
+13 September 2009 - version 2.4.3
+  - No changes.
+
+8 May 2009 - version 2.4.2
+  - No changes.
+
+15 March 2009 - version 2.4.1
+  - No changes.
+
+17 January 2009 - version 2.4
+  - No changes.
+
+26 September 2008 - version 2.3
+  - No changes.
+
+29 July 2008 - version 2.2
+  - Fixed incorrect TRGBQuadArray declaration, thanks to Arvid
+    for reporting this.
+  - Fixed incorrect gradients in Office 2003 skins, thanks to
+    David for reporting this.
+  - Fixed Vista painting bug, the menu checkboxes are stretched
+    by the themes API, this doesn't happen on XP, thanks to
+    Arvid for reporting this.
+
+26 June 2008 - version 2.1
+  - New skin added: Aluminum, thanks to Pete for his contribution.
+
+3 May 2008 - version 2.0
+  - No changes.
+
+2 April 2008 - version 1.9.5
+  - No changes.
+
+3 February 2008 - version 1.9.4
+  - No changes.
+
+19 January 2008 - version 1.9.3
+  - New skin added: Human.
+  
+26 December 2007 - version 1.9.2
+  - No changes.
+
+1 December 2007 - version 1.9.1
+  - No changes.
+
+20 November 2007 - version 1.9
+  - Initial release.
 
 ==============================================================================}
 
 interface
 
-{$BOOLEVAL OFF}   // Unit depends on short-circuit boolean evaluation
-{$IF CompilerVersion >= 25} // for Delphi XE4 and up
-  {$LEGACYIFEND ON} // XE4 and up requires $IF to be terminated with $ENDIF instead of $IFEND
-{$IFEND}
+{$BOOLEVAL OFF} // Unit depends on short-circuit boolean evaluation
 
 uses
   Windows, Messages, Classes, SysUtils, Graphics, Controls, SpTBXSkins;
@@ -2101,18 +2170,18 @@ begin
 end;
 
 initialization
-  SkinManager.AddSkin('Aluminum', TSpTBXAluminumSkin);
-  SkinManager.AddSkin('Athen', TSpTBXAthenSkin);
-  SkinManager.AddSkin('Dream', TSpTBXDreamSkin);
-  SkinManager.AddSkin('Eos', TSpTBXEosSkin);
-  SkinManager.AddSkin('Human', TSpTBXHumanSkin);
-  SkinManager.AddSkin('Leopard', TSpTBXLeopardSkin);
-  SkinManager.AddSkin('Xito', TSpTBXXitoSkin);
-  // Office
-  SkinManager.AddSkin('Office XP', TSpTBXOfficeXPSkin);
-  SkinManager.AddSkin('Office 2003', TSpTBXOffice2003Skin);
-  SkinManager.AddSkin('Office 2007 Blue', TSpTBXOffice2007BlueSkin);
-  SkinManager.AddSkin('Office 2007 Black', TSpTBXOffice2007BlackSkin);
-  SkinManager.AddSkin('Office 2007 Silver', TSpTBXOffice2007SilverSkin);
+  SkinManager.SkinsList.AddSkin('Aluminum', TSpTBXAluminumSkin);
+  SkinManager.SkinsList.AddSkin('Athen', TSpTBXAthenSkin);
+  SkinManager.SkinsList.AddSkin('Dream', TSpTBXDreamSkin);
+  SkinManager.SkinsList.AddSkin('Eos', TSpTBXEosSkin);
+  SkinManager.SkinsList.AddSkin('Human', TSpTBXHumanSkin);
+  SkinManager.SkinsList.AddSkin('Leopard', TSpTBXLeopardSkin);
+  SkinManager.SkinsList.AddSkin('Xito', TSpTBXXitoSkin);
+  { Office }
+  SkinManager.SkinsList.AddSkin('Office XP', TSpTBXOfficeXPSkin);
+  SkinManager.SkinsList.AddSkin('Office 2003', TSpTBXOffice2003Skin);
+  SkinManager.SkinsList.AddSkin('Office 2007 Blue', TSpTBXOffice2007BlueSkin);
+  SkinManager.SkinsList.AddSkin('Office 2007 Black', TSpTBXOffice2007BlackSkin);
+  SkinManager.SkinsList.AddSkin('Office 2007 Silver', TSpTBXOffice2007SilverSkin);
 
 end.
